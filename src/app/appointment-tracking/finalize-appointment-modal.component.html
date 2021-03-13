@@ -1,0 +1,23 @@
+<form *ngIf="appointment" name="deleteForm" (ngSubmit)="confirm(appointment?.id!)">
+    <div class="modal-header">
+        <h4 class="modal-title">Confirmar operación</h4>
+
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+        <p>
+            ¿Está seguro que desea Finalizar el Turno?
+        </p>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
+            <fa-icon icon="ban"></fa-icon>&nbsp;Cancelar
+        </button>
+
+        <button type="submit" class="btn btn-primary">
+            <fa-icon icon="times"></fa-icon>&nbsp;Confirmar
+        </button>
+    </div>
+</form>

@@ -1,0 +1,36 @@
+<div class="container">
+  <h2>Detalle</h2>
+
+  <dl *ngIf="profile">
+    <dt>Descripción</dt>
+    <dd>{{ profile.description }}</dd>
+    <dt>Activo</dt>
+    <dd>{{ profile.active ? 'Si' : 'No' }}</dd>
+  </dl>
+
+  <h3>Permisos</h3>
+  <table class="table table-striped" aria-describedby="page-heading">
+    <thead>
+      <tr>
+        <th scope="col">Descripción</th>
+        <th scope="col">Código</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let permission of profile.permissions">
+        <td>{{ permission.description }}</td>
+        <td>{{ permission.code }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="button-form">
+    <button type="button" class="btn btn-secondary" (click)="previousState()">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp;Volver
+    </button>
+
+    <button type="button" [routerLink]="['../../', profile?.id, 'edit']" class="btn btn-primary">
+      <fa-icon icon="pencil-alt"></fa-icon>&nbsp;Editar
+    </button>
+  </div>
+</div>

@@ -1,0 +1,72 @@
+<div class="form-public">
+  <div class="card text-white bg-dark">
+    <div class="card-header">
+      <h2>Registrar Organización</h2>
+    </div>
+    <div class="card-body">
+      <form name="myForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="myForm">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label class="form-control-label required" for="firstName">Nombre</label>
+              <input type="text" class="form-control" name="firstName" id="firstName" formControlName="firstName" />
+              <div
+                *ngIf="myForm.get('firstName')!.invalid && (myForm.get('firstName')!.dirty || myForm.get('firstName')!.touched)">
+                <small class="form-text text-danger" *ngIf="myForm.get('firstName')?.errors?.required">
+                  El campo es requerido.
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label class="form-control-label required" for="lastName">Apellido</label>
+              <input type="text" class="form-control" name="lastName" id="lastName" formControlName="lastName" />
+              <div
+                *ngIf="myForm.get('lastName')!.invalid && (myForm.get('lastName')!.dirty || myForm.get('lastName')!.touched)">
+                <small class="form-text text-danger" *ngIf="myForm.get('lastName')?.errors?.required">
+                  El campo es requerido.
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label class="form-control-label required" for="username">Email</label>
+              <input type="email" class="form-control" name="username" id="username" formControlName="username" />
+              <div *ngIf="myForm.get('username')!.invalid && (myForm.get('username')!.dirty || myForm.get('username')!.touched)">
+                <small class="form-text text-danger" *ngIf="myForm.get('username')?.errors?.required">
+                  El campo es requerido.
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label class="form-control-label required" for="businessName">Razón Social</label>
+              <input type="text" class="form-control" name="businessName" id="businessName" formControlName="businessName" />
+              <div
+                *ngIf="myForm.get('businessName')!.invalid && (myForm.get('businessName')!.dirty || myForm.get('businessName')!.touched)">
+                <small class="form-text text-danger" *ngIf="myForm.get('businessName')?.errors?.required">
+                  El campo es requerido.
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="button-form">
+          <button type="button" class="btn btn-secondary" (click)="previousState()">
+            <fa-icon icon="arrow-left"></fa-icon>&nbsp;Volver
+          </button>
+          <button type="submit" [disabled]="myForm.invalid || isSaving" class="btn btn-primary">Registrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

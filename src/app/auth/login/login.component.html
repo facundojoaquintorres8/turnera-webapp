@@ -1,0 +1,51 @@
+<div class="form-public">
+  <div class="card text-white bg-dark">
+    <div class="card-header">
+      <h2>Iniciar sesión</h2>
+    </div>
+    <div class="card-body">
+      <form name="myForm" role="form" novalidate (ngSubmit)="login()" [formGroup]="myForm">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label class="form-control-label required" for="username">Nombre</label>
+              <input type="email" class="form-control" name="username" id="username" formControlName="username" />
+              <div
+                *ngIf="myForm.get('username')!.invalid && (myForm.get('username')!.dirty || myForm.get('username')!.touched)">
+                <small class="form-text text-danger" *ngIf="myForm.get('username')?.errors?.required">
+                  El campo es requerido.
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label class="form-control-label required" for="password">Contraseña</label>
+              <input type="password" class="form-control" name="password" id="password" formControlName="password" />
+              <div
+                *ngIf="myForm.get('password')!.invalid && (myForm.get('password')!.dirty || myForm.get('password')!.touched)">
+                <small class="form-text text-danger" *ngIf="myForm.get('password')?.errors?.required">
+                  El campo es requerido.
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="button-form">
+          <div class="row">
+            <div class="col-sm-6 small text-left">
+              <a href="/account/register" class="text-white d-block">Registrar Organización</a>
+              <a href="/account/password-reset/request" class="text-white d-block">Olvidé mi contraseña</a>
+            </div>
+            <div class="col-sm-6">
+              <button type="submit" [disabled]="myForm.invalid || isSaving" class="btn btn-primary">Iniciar
+                sesión</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

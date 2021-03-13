@@ -1,0 +1,18 @@
+@media (min-width: 768px) {
+  .dropdown:hover>.dropdown-menu {
+    display: block;
+  }
+}
+
+.dropdown-menu {
+  border: 1px solid white;
+}
+
+.dropdown-item {
+  color: white;
+}
+
+.dropdown-item:hover {
+  color: #343a40;
+  background-color: white;
+}

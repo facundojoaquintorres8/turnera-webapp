@@ -1,0 +1,121 @@
+<div class="container">
+    <form name="myForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="myForm">
+        <h2 *ngIf="!myForm.get('id')!.value">Crear Cliente</h2>
+        <h2 *ngIf="myForm.get('id')!.value">Editar Cliente</h2>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="form-control-label required" for="businessName">Razón Social</label>
+                    <input type="text" class="form-control" name="businessName" id="businessName"
+                        formControlName="businessName" />
+                    <div
+                        *ngIf="myForm.get('businessName')!.invalid && (myForm.get('businessName')!.dirty || myForm.get('businessName')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('businessName')?.errors?.required">
+                            El campo es requerido.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="form-control-label" for="brandName">Marca</label>
+                    <input type="text" class="form-control" name="brandName" id="brandName"
+                        formControlName="brandName" />
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="form-control-label" for="cuit">CUIT</label>
+                    <input type="text" class="form-control" name="cuit" id="cuit" formControlName="cuit" />
+                    <div
+                        *ngIf="myForm.get('cuit')!.invalid && (myForm.get('cuit')!.dirty || myForm.get('cuit')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('cuit')?.errors?.maxlength">
+                            El CUIT no puede contener más de 11 caracteres.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="form-control-label required" for="email">Email</label>
+                    <input type="email" class="form-control" name="email" id="email" formControlName="email" />
+                    <div
+                        *ngIf="myForm.get('email')!.invalid && (myForm.get('email')!.dirty || myForm.get('email')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('email')?.errors?.required">
+                            El campo es requerido.
+                        </small>
+                    </div>
+                    <div
+                        *ngIf="myForm.get('email')!.invalid && (myForm.get('email')!.dirty || myForm.get('email')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('email')?.errors?.maxlength">
+                            El Email no puede contener más de 50 caracteres.
+                        </small>
+                        <small class="form-text text-danger" *ngIf="myForm.get('email')?.errors?.minlength">
+                            El Email debe contener al menos 5 caracteres.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="form-control-label required" for="phone1">Teléfono 1</label>
+                    <input type="text" class="form-control" name="phone1" id="phone1" formControlName="phone1" />
+                    <div
+                        *ngIf="myForm.get('phone1')!.invalid && (myForm.get('phone1')!.dirty || myForm.get('phone1')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('phone1')?.errors?.maxlength">
+                            El Teléfono no puede contener más de 50 caracteres.
+                        </small>
+                    </div>
+
+                    <div
+                        *ngIf="myForm.get('phone1')!.invalid && (myForm.get('phone1')!.dirty || myForm.get('phone1')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('phone1')?.errors?.required">
+                            El campo es requerido.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="form-control-label" for="phone2">Teléfono 2</label>
+                    <input type="text" class="form-control" name="phone2" id="phone2" formControlName="phone2" />
+                    <div
+                        *ngIf="myForm.get('phone2')!.invalid && (myForm.get('phone2')!.dirty || myForm.get('phone2')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('phone2')?.errors?.maxlength">
+                            El Teléfono no puede contener más de 50 caracteres.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="form-group">
+                    <label class="form-control-label" for="address">Dirección</label>
+                    <input type="text" class="form-control" name="address" id="address" formControlName="address" />
+                </div>
+            </div>
+            <div class="col-sm-1" *ngIf="myForm.get('id')!.value">
+                <div class="form-group">
+                    <label class="form-control-label" for="active">Activo</label>
+                    <input type="checkbox" class="form-control checkbox-size-5" name="active" id="active"
+                        formControlName="active" />
+                </div>
+            </div>
+        </div>
+
+        <div class="button-form">
+            <button type="button" class="btn btn-secondary" (click)="previousState()">
+                <fa-icon icon="ban"></fa-icon>&nbsp;Cancelar
+            </button>
+            <button type="submit" [disabled]="myForm.invalid || isSaving" class="btn btn-primary">
+                <fa-icon icon="save"></fa-icon>&nbsp;Guardar
+            </button>
+        </div>
+    </form>
+</div>

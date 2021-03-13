@@ -1,0 +1,20 @@
+<div class="container">
+  <h2>Detalle</h2>
+
+  <dl *ngIf="resourceType">
+    <dt>Descripción</dt>
+    <dd>{{ resourceType.description }}</dd>
+    <dt>Activo</dt>
+    <dd>{{ resourceType.active ? 'Si' : 'No' }}</dd>
+  </dl>
+
+  <div class="button-form">
+    <button type="button" class="btn btn-secondary" (click)="previousState()">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp;Volver
+  </button>
+
+    <button type="button" [routerLink]="['../../', resourceType?.id, 'edit']" class="btn btn-primary">
+      <fa-icon icon="pencil-alt"></fa-icon>&nbsp;Editar
+    </button>
+  </div>
+</div>

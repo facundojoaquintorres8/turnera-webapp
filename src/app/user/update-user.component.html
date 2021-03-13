@@ -1,0 +1,98 @@
+<div class="container">
+    <form name="myForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="myForm">
+        <h2 *ngIf="!myForm.get('id')!.value">Crear Usuario</h2>
+        <h2 *ngIf="myForm.get('id')!.value">Editar Usuario</h2>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="form-control-label required" for="firstName">Nombre</label>
+                    <input type="text" class="form-control" name="firstName" id="firstName"
+                        formControlName="firstName" />
+                    <div
+                        *ngIf="myForm.get('firstName')!.invalid && (myForm.get('firstName')!.dirty || myForm.get('firstName')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('firstName')?.errors?.required">
+                            El campo es requerido.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="form-control-label required" for="lastName">Apellido</label>
+                    <input type="text" class="form-control" name="lastName" id="lastName" formControlName="lastName" />
+                    <div
+                        *ngIf="myForm.get('lastName')!.invalid && (myForm.get('lastName')!.dirty || myForm.get('lastName')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('lastName')?.errors?.required">
+                            El campo es requerido.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="form-control-label required" for="email">Email</label>
+                    <input type="email" class="form-control" name="email" id="email" formControlName="email" />
+
+                    <div
+                        *ngIf="myForm.get('email')!.invalid && (myForm.get('email')!.dirty || myForm.get('email')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('email')?.errors?.required">
+                            El campo es requerido.
+                        </small>
+                        <small class="form-text text-danger" *ngIf="myForm.get('email')?.errors?.maxlength">
+                            El Email no puede contener más de 50 caracteres.
+                        </small>
+                        <small class="form-text text-danger" *ngIf="myForm.get('email')?.errors?.minlength">
+                            El Email debe contener al menos 5 caracteres.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-1" *ngIf="myForm.get('id')!.value">
+                <div class="form-group">
+                    <label class="form-control-label" for="active">Activo</label>
+                    <input type="checkbox" class="form-control checkbox-size-5" name="active" id="active"
+                        formControlName="active" />
+                </div>
+            </div>
+        </div>
+
+        <h3>Perfiles</h3>
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-striped" aria-describedby="page-heading">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                <input type="checkbox" class="form-control checkbox-size-5" name="selectAll"
+                                    id="selectAll" formControlName="selectAll" (change)="selectAll()" />
+                            </th>
+                            <th scope="col">Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let profile of profiles; let i = index">
+                            <td>
+                                <input type="checkbox" class="form-control checkbox-size-5" [checked]="profile['selected']"
+                                    name="selectProfile{{i}}" id="selectProfile"
+                                    (change)="selectProfile(profile)" />
+                            </td>
+                            <td>{{ profile.description }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="button-form mt-4">
+            <button type="button" class="btn btn-secondary" (click)="previousState()">
+                <fa-icon icon="ban"></fa-icon>&nbsp;Cancelar
+            </button>
+            <button type="submit" [disabled]="myForm.invalid || isSaving" class="btn btn-primary">
+                <fa-icon icon="save"></fa-icon>&nbsp;Guardar
+            </button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,39 @@
+<div class="container">
+  <h2>
+    <button type="button" [routerLink]="['./../agendas','new']" class="btn btn-primary btn-sm" title="Agregar Agenda">
+      <fa-icon icon="calendar-plus"></fa-icon>
+    </button> Agenda
+  </h2>
+
+  <div class="row text-center">
+    <div class="col-md-8">
+      <div class="btn-group">
+        <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="agendaService.viewDate"
+          (viewDateChange)="closeOpenMonthViewDay()">
+          <fa-icon icon="arrow-left"></fa-icon>
+        </div>
+        <div class="btn btn-outline-primary" mwlCalendarToday [(viewDate)]="agendaService.viewDate" title="{{today}}"
+          (click)="onCalendarChange()">
+          Hoy
+        </div>
+        <div class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="agendaService.viewDate"
+          (viewDateChange)="closeOpenMonthViewDay()">
+          <fa-icon icon="arrow-right"></fa-icon>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <h3>{{ agendaService.viewDate | calendarDate:(view + 'ViewTitle'):'es' }}</h3>
+    </div>
+  </div>
+  <br />
+  <div class="position-relative">
+    <div *ngIf="loading"
+      class="calendar-loading bg-dark position-absolute w-100 h-100 d-flex justify-content-center align-items-center">
+      <div class="spinner-border text-light" role="status"></div>
+    </div>
+    <mwl-calendar-month-view [viewDate]="agendaService.viewDate" [events]="events" (dayClicked)="dayClicked()"
+      (beforeViewRender)="beforeMonthViewRender($event)" (eventClicked)="handleEvent($event.event)">
+    </mwl-calendar-month-view>
+  </div>
+</div>

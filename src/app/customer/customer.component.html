@@ -1,0 +1,45 @@
+<div class="container">
+  <h2>
+    <button type="button" [routerLink]="['new']" class="btn btn-primary btn-sm">
+      <fa-icon icon="plus"></fa-icon>
+    </button> Clientes
+  </h2>
+
+  <table class="table table-striped" aria-describedby="page-heading">
+    <thead>
+      <tr>
+        <th scope="col">Razón Social</th>
+        <th scope="col">Marca</th>
+        <th scope="col">Email</th>
+        <th scope="col">Teléfono 1</th>
+        <th scope="col">Activo</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let customer of customers">
+        <td>{{ customer.businessName }}</td>
+        <td>{{ customer.brandName }}</td>
+        <td>{{ customer.email }}</td>
+        <td>{{ customer.phone1 }}</td>
+        <td>
+          <fa-icon *ngIf="customer.active" [icon]="['far', 'check-square']" class="text-success"></fa-icon>
+          <fa-icon *ngIf="!customer.active" [icon]="['far', 'square']" class="text-danger outline"></fa-icon>
+        </td>
+        <td class="text-right">
+          <button type="button" [routerLink]="[customer.id, 'view']" class="btn btn-info btn-sm mr-1">
+            <fa-icon icon="eye"></fa-icon>
+          </button>
+
+          <button type="button" [routerLink]="[customer.id, 'edit']" class="btn btn-primary btn-sm mr-1">
+            <fa-icon icon="pencil-alt"></fa-icon>
+          </button>
+
+          <button type="button" (click)="delete(customer)" class="btn btn-danger btn-sm mr-1">
+            <fa-icon icon="times"></fa-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

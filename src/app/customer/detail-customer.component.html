@@ -1,0 +1,32 @@
+<div class="container">
+  <h2>Detalle</h2>
+
+  <dl *ngIf="customer">
+    <dt>Razón Social</dt>
+    <dd>{{ customer.businessName }}</dd>
+    <dt>Marca</dt>
+    <dd>{{ customer.brandName ? customer.brandName : '-' }}</dd>
+    <dt>CUIT</dt>
+    <dd>{{ customer.cuit }}</dd>
+    <dt>Email</dt>
+    <dd>{{ customer.email }}</dd>
+    <dt>Teléfono 1</dt>
+    <dd>{{ customer.phone1 }}</dd>
+    <dt>Teléfono 2</dt>
+    <dd>{{ customer.phone2 ? customer.phone2 : '-' }}</dd>
+    <dt>Dirección</dt>
+    <dd>{{ customer.address ? customer.address : '-' }}</dd>
+    <dt>Activo</dt>
+    <dd>{{ customer.active ? 'Si' : 'No' }}</dd>
+  </dl>
+
+  <div class="button-form">
+    <button type="button" class="btn btn-secondary" (click)="previousState()">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp;Volver
+    </button>
+
+    <button type="button" [routerLink]="['../../', customer?.id, 'edit']" class="btn btn-primary">
+      <fa-icon icon="pencil-alt"></fa-icon>&nbsp;Editar
+    </button>
+  </div>
+</div>

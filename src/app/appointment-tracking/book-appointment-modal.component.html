@@ -1,0 +1,101 @@
+<form name="myForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="myForm">
+    <div class="modal-header">
+        <h4 class="modal-title">Reservar Turno</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+        <div class="row" *ngIf="showSelectCustomers">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="form-control-label required" for="customer">
+                        <button type="button" (click)="newCustomer()" class="btn btn-primary btn-sm" title="Agregar nuevo">
+                            <fa-icon icon="plus"></fa-icon>
+                        </button> Cliente
+                    </label>
+                    <select class="form-control" name="customer" id="customer" formControlName="customer">
+                        <option [ngValue]="customer" *ngFor="let customer of customers">
+                            {{ customer.businessName }} {{ customer.cuit }}
+                        </option>
+                    </select>
+                    <div
+                        *ngIf="myForm.get('customer')!.invalid && (myForm.get('customer')!.dirty || myForm.get('customer')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('customer')?.errors?.required">
+                            El campo es requerido.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="!showSelectCustomers">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="form-control-label required" for="businessName">Razón Social</label>
+                    <input type="text" class="form-control" name="businessName" id="businessName"
+                        formControlName="businessName" />
+                    <div
+                        *ngIf="myForm.get('businessName')!.invalid && (myForm.get('businessName')!.dirty || myForm.get('businessName')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('businessName')?.errors?.required">
+                            El campo es requerido.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="form-control-label required" for="email">Email</label>
+                    <input type="email" class="form-control" name="email" id="email" formControlName="email" />
+                    <div
+                        *ngIf="myForm.get('email')!.invalid && (myForm.get('email')!.dirty || myForm.get('email')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('email')?.errors?.required">
+                            El campo es requerido.
+                        </small>
+                    </div>
+                    <div
+                        *ngIf="myForm.get('email')!.invalid && (myForm.get('email')!.dirty || myForm.get('email')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('email')?.errors?.maxlength">
+                            El Email no puede contener más de 50 caracteres.
+                        </small>
+                        <small class="form-text text-danger" *ngIf="myForm.get('email')?.errors?.minlength">
+                            El Email debe contener al menos 5 caracteres.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="form-control-label required" for="phone1">Teléfono 1</label>
+                    <input type="text" class="form-control" name="phone1" id="phone1" formControlName="phone1" />
+                    <div
+                        *ngIf="myForm.get('phone1')!.invalid && (myForm.get('phone1')!.dirty || myForm.get('phone1')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('phone1')?.errors?.maxlength">
+                            El Teléfono no puede contener más de 50 caracteres.
+                        </small>
+                    </div>
+
+                    <div
+                        *ngIf="myForm.get('phone1')!.invalid && (myForm.get('phone1')!.dirty || myForm.get('phone1')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('phone1')?.errors?.required">
+                            El campo es requerido.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 text-right">
+                <button type="button" class="btn btn-secondary" (click)="cancelNewCustomer()">
+                    <fa-icon icon="arrow-left"></fa-icon>&nbsp;Cargar existente
+                </button>        
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
+            <fa-icon icon="ban"></fa-icon>&nbsp;Cancelar
+        </button>
+
+        <button type="submit" [disabled]="myForm.invalid || isSaving" class="btn btn-primary">
+            <fa-icon icon="save"></fa-icon>&nbsp;Reservar
+        </button>
+    </div>
+</form>

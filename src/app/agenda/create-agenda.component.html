@@ -1,0 +1,167 @@
+<div class="container">
+    <form name="myForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="myForm">
+        <h2>Crear Agendas</h2>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="form-control-label required" for="resource">Recurso</label>
+                    <select class="form-control" name="resource" id="resource" formControlName="resource">
+                        <option [ngValue]="resource" *ngFor="let resource of resources">{{ resource.description }}
+                        </option>
+                    </select>
+                    <div
+                        *ngIf="myForm.get('resource')!.invalid && (myForm.get('resource')!.dirty || myForm.get('resource')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('resource')?.errors?.required">
+                            El campo es requerido.
+                        </small>
+                    </div>
+                </div>
+            </div> 
+        </div>
+
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label class="form-control-label required">Fecha Inicio</label>
+                    <div class="input-group">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="startDate"
+                            formControlName="startDate" ngbDatepicker #startDate="ngbDatepicker" [firstDayOfWeek]="7">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" (click)="startDate.toggle()" type="button">
+                                <fa-icon icon="calendar"></fa-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <div
+                        *ngIf="myForm.get('startDate')!.invalid && (myForm.get('startDate')!.dirty || myForm.get('startDate')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('startDate')?.errors?.required">
+                            El campo es requerido.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label class="form-control-label required">Fecha Fin</label>
+                    <div class="input-group">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="endDate" formControlName="endDate"
+                            ngbDatepicker #endDate="ngbDatepicker" [firstDayOfWeek]="7">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" (click)="endDate.toggle()" type="button">
+                                <fa-icon icon="calendar"></fa-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <div
+                        *ngIf="myForm.get('endDate')!.invalid && (myForm.get('endDate')!.dirty || myForm.get('endDate')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('endDate')?.errors?.required">
+                            El campo es requerido.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label class="form-control-label required">Hora Inicio</label>
+                    <ngb-timepicker name="startHour" id="startHour" formControlName="startHour" [spinners]="false">
+                    </ngb-timepicker>
+                    <div
+                        *ngIf="myForm.get('startHour')!.invalid && (myForm.get('startHour')!.dirty || myForm.get('startHour')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('startHour')?.errors?.required">
+                            El campo es requerido.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label class="form-control-label required" for="endHour">Hora Fin</label>
+                    <ngb-timepicker name="endHour" id="endHour" formControlName="endHour" [spinners]="false">
+                    </ngb-timepicker>
+                    <div
+                        *ngIf="myForm.get('endHour')!.invalid && (myForm.get('endHour')!.dirty || myForm.get('endHour')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('endHour')?.errors?.required">
+                            El campo es requerido.
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label class="form-control-label required" for="duration">Duración (min.)</label>
+                    <input type="number" class="form-control text-right" name="duration" id="duration"
+                        formControlName="duration" />
+                    <div
+                        *ngIf="myForm.get('duration')!.invalid && (myForm.get('duration')!.dirty || myForm.get('duration')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('duration')?.errors?.required">
+                            El campo es requerido.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-1">
+                <div class="form-group">
+                    <label class="form-control-label" for="sunday">Domingo</label>
+                    <input type="checkbox" class="form-control checkbox-size-5" name="sunday" id="sunday"
+                        formControlName="sunday" />
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <div class="form-group">
+                    <label class="form-control-label" for="monday">Lunes</label>
+                    <input type="checkbox" class="form-control checkbox-size-5" name="monday" id="monday"
+                        formControlName="monday" />
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <div class="form-group">
+                    <label class="form-control-label" for="tuesday">Martes</label>
+                    <input type="checkbox" class="form-control checkbox-size-5" name="tuesday" id="tuesday"
+                        formControlName="tuesday" />
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <div class="form-group">
+                    <label class="form-control-label" for="wednesday">Miércoles</label>
+                    <input type="checkbox" class="form-control checkbox-size-5" name="wednesday" id="wednesday"
+                        formControlName="wednesday" />
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <div class="form-group">
+                    <label class="form-control-label" for="thursday">Jueves</label>
+                    <input type="checkbox" class="form-control checkbox-size-5" name="thursday" id="thursday"
+                        formControlName="thursday" />
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <div class="form-group">
+                    <label class="form-control-label" for="friday">Viernes</label>
+                    <input type="checkbox" class="form-control checkbox-size-5" name="friday" id="friday"
+                        formControlName="friday" />
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <div class="form-group">
+                    <label class="form-control-label" for="saturday">Sábado</label>
+                    <input type="checkbox" class="form-control checkbox-size-5" name="saturday" id="saturday"
+                        formControlName="saturday" />
+                </div>
+            </div>
+        </div>
+
+        <div class="button-form mt-4">
+            <button type="button" class="btn btn-secondary" (click)="previousState()">
+                <fa-icon icon="ban"></fa-icon>&nbsp;Cancelar
+            </button>
+            <button type="submit" [disabled]="myForm.invalid || isSaving" class="btn btn-primary">
+                <fa-icon icon="save"></fa-icon>&nbsp;Guardar
+            </button>
+        </div>
+    </form>
+</div>

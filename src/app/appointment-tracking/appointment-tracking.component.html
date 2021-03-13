@@ -1,0 +1,155 @@
+<div class="container">
+  <h2>Seguimiento de Turnos</h2>
+
+  <form name="myForm" role="form" novalidate (ngSubmit)="getAgendas()" [formGroup]="myForm" class="mb-2">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label class="form-control-label" for="resourceTypeId">Tipo de Recurso</label>
+          <select class="form-control" name="resourceTypeId" id="resourceTypeId" formControlName="resourceTypeId"
+             (change)="onResourceTypeChange()">
+            <option [ngValue]="null"></option>
+            <option [value]="resourceType.id" *ngFor="let resourceType of resourcesTypes">{{ resourceType.description }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label class="form-control-label" for="resourceId">Recurso</label>
+          <select class="form-control" name="resourceId" id="resourceId" formControlName="resourceId"
+            (change)="onResourceChange()">
+            <option [ngValue]="null"></option>
+            <option [value]="resource.id" *ngFor="let resource of resources">{{ resource.description }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label class="form-control-label" for="customerId">Cliente</label>
+          <select class="form-control" name="customerId" id="customerId" formControlName="customerId">
+            <option [ngValue]="null"></option>
+            <option [value]="customer.id" *ngFor="let customer of customers">{{ customer.businessName }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label class="form-control-label" for="status">Estado</label>
+          <select class="form-control" name="status" id="status" formControlName="status">
+            <option [ngValue]="null"></option>
+            <option [value]="status.id" *ngFor="let status of appointmentStatus">{{ status.value }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="form-group">
+          <label class="form-control-label">Desde</label>
+          <div class="input-group">
+            <input class="form-control" placeholder="yyyy-mm-dd" name="from" formControlName="from" ngbDatepicker
+              #from="ngbDatepicker" [firstDayOfWeek]="7" [maxDate]="maxDate()">
+            <div class="input-group-append">
+              <button class="btn btn-primary" (click)="from.toggle()" type="button">
+                <fa-icon icon="calendar"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="form-group">
+          <label class="form-control-label">Hasta</label>
+          <div class="input-group">
+            <input class="form-control" placeholder="yyyy-mm-dd" name="to" formControlName="to" ngbDatepicker
+              #to="ngbDatepicker" [firstDayOfWeek]="7" [minDate]="minDate()">
+            <div class="input-group-append">
+              <button class="btn btn-primary" (click)="to.toggle()" type="button">
+                <fa-icon icon="calendar"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <div class="form-group">
+          <label class="form-control-label">&nbsp;</label>
+          <div class="text-right">
+            <button type="submit" class="btn btn-outline-dark">
+              <fa-icon icon="filter"></fa-icon>&nbsp;Filtrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </form>
+
+  <table class="table table-striped" aria-describedby="page-heading">
+    <thead>
+      <tr>
+        <th scope="col">Recurso</th>
+        <th scope="col">Inicio</th>
+        <th scope="col">Fin</th>
+        <th scope="col">Cliente</th>
+        <th scope="col">Último Estado</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let agenda of agendas">
+        <td>{{ agenda.resource.description }}</td>
+        <td>{{ agenda.startDate | date: 'dd-MM-yyyy HH:mm' }}</td>
+        <td>{{ agenda.endDate | date: 'dd-MM-yyyy HH:mm' }}</td>
+        <td>{{ agenda.lastAppointment ? agenda.lastAppointment.customerBusinessName : '-'}}</td>
+        <td>
+          <span class="{{ appointmentStatusColor(agenda.lastAppointment) }} appointmentStatus">
+            {{ agenda.lastAppointment ? appointmentStatusObject[agenda.lastAppointment.currentStatus] :
+            appointmentStatusObject.FREE }}
+          </span>
+        </td>
+        <td class="text-right">
+          <button type="button" *ngIf="canBook(agenda)" (click)="book(agenda)" class="btn btn-warning btn-sm mr-1"
+            title="Reservar turno">
+            <fa-icon icon="plus"></fa-icon>
+          </button>
+
+          <button type="button" *ngIf="canAbsent(agenda)" (click)="absent(agenda.lastAppointment)"
+            class="btn btn-dark btn-sm mr-1" title="Ausente">
+            <fa-icon icon="user-slash"></fa-icon>
+          </button>
+
+          <button type="button" *ngIf="canCancel(agenda)" (click)="cancel(agenda.lastAppointment)"
+            class="btn btn-danger btn-sm mr-1" title="Cancelar">
+            <fa-icon icon="ban"></fa-icon>
+          </button>
+
+          <button type="button" *ngIf="canAttend(agenda)" (click)="attend(agenda.lastAppointment)"
+            class="btn btn-info btn-sm mr-1" title="Atender">
+            <fa-icon icon="play"></fa-icon>
+          </button>
+
+          <button type="button" *ngIf="canFinalize(agenda)" (click)="finalize(agenda.lastAppointment)"
+            class="btn btn-success btn-sm mr-1" title="Finalizar">
+            <fa-icon icon="stop"></fa-icon>
+          </button>
+
+          <button type="button" *ngIf="!agenda.lastAppointment" (click)="delete(agenda)"
+            class="btn btn-danger btn-sm mr-1" title="Eliminar disponibilidad">
+            <fa-icon icon="times"></fa-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="button-form">
+    <button type="button" class="btn btn-secondary" (click)="previousState()">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp;Volver
+    </button>
+  </div>
+</div>
