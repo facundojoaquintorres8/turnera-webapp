@@ -20,7 +20,7 @@
           <select class="form-control" name="resourceId" id="resourceId" formControlName="resourceId"
             (change)="onResourceChange()">
             <option [ngValue]="null"></option>
-            <option [value]="resource.id" *ngFor="let resource of resources">{{ resource.description }}
+            <option [value]="resource.id" *ngFor="let resource of resources">{{ resource.description }} - {{ resource.code }}
             </option>
           </select>
         </div>

@@ -29,6 +29,15 @@ export class ScheduleComponent implements OnInit {
     IN_ATTENTION: AppointmentStatusEnum.IN_ATTENTION,
   }
 
+  appointmentStatusTranslate= {
+    FREE: "Libre",
+    BOOKED: "Reservado",
+    ABSENT: "Ausente",
+    CANCELLED: "Cancelado",
+    IN_ATTENTION: "En Atención",
+    FINALIZED: "Finalizado",
+  }
+
   constructor(
     public agendaService: AgendaService,
     private datePipe: DatePipe,
@@ -78,7 +87,7 @@ export class ScheduleComponent implements OnInit {
   getEventTitle(agenda: IAgenda): string {
     let title = this.datePipe.transform(agenda.startDate, 'dd-MM-yyyy HH:mm') + '<br>' + agenda.resource.description;
     if (agenda.lastAppointment && this.appointmentStatus[agenda.lastAppointment.currentStatus] !== AppointmentStatusEnum.CANCELLED) {
-      title = title + '<br>' + agenda.lastAppointment.customerBusinessName + ' (' + this.appointmentStatus[agenda.lastAppointment.currentStatus] + ')';
+      title = title + '<br>' + agenda.lastAppointment.customerBusinessName + ' (' + this.appointmentStatusTranslate[agenda.lastAppointment.currentStatus] + ')';
     }
     return title;
   }
