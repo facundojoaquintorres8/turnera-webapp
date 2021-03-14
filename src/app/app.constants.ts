@@ -1,1 +1,1 @@
-export const SERVER_API_URL = "https://webapp-turnera.herokuapp.com/";
+export const SERVER_API_URL = "https://api-turnera.herokuapp.com/";
