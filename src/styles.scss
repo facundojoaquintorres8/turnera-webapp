@@ -5,34 +5,48 @@
 @import '~angular-calendar/css/angular-calendar.css';
 
 .container {
-    margin-bottom: 50px;
+  margin-bottom: 50px;
+}
+
+@media screen and (max-width: 600px) {
+  .form-public {
+    width: 100% !important;
+  }
 }
 
 .form-public {
-    margin-left: auto;
-    margin-right: auto;
-    width: 40%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 40%;
 }
 
+// .public-layout {
+//     height: 100vh;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+// }
+
 .button-form {
-    border-top: lightgray 0.1rem solid;
-    text-align: right;
-    padding-top: 0.5rem !important;
-    .btn {
-        margin-left: 0.5rem !important;
-    }
+  border-top: lightgray 0.1rem solid;
+  text-align: right;
+  padding-top: 0.5rem !important;
+
+  .btn {
+    margin-left: 0.5rem !important;
+  }
 }
 
 .required:after {
-    content:" (*)";
-    color: #dc3545;
+  content: " (*)";
+  color: #dc3545;
 }
 
 .checkbox-size-5 {
-    font-size: 5px;
-    margin-left: -20px;
+  font-size: 5px;
+  margin-left: -20px;
 }
 
 .appointmentStatus {
-    width: 75px;
+  width: 75px;
 }
