@@ -18,7 +18,7 @@ export class ToastComponent implements OnInit {
   ngOnInit(): void {
     this.toastService.currentMessage.subscribe(
       (message: IToast) => {
-        this.errorMessage = message?.errorMessage ? message.errorMessage : "Hubo un problema al guardar los datos. Por favor reintente nuevamente.";
+        this.errorMessage = message?.errorMessage ? message.errorMessage : "Hubo un problema al procesar la información. Por favor reintente nuevamente.";
         this.successMessage = message?.successMessage ? message.successMessage : "Datos guardados con éxito.";
         this.showErrorToast = message?.showErrorToast!;
         this.showSuccessToast = message?.showSuccessToast!;
