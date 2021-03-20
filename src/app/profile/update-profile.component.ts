@@ -15,6 +15,7 @@ export class UpdateProfileComponent implements OnInit {
   isSaving = false;
 
   permissions: IPermission[] = [];
+  permissionHomeIndex!: IPermission;
 
   myForm = this.fb.group({
     id: [],
@@ -34,6 +35,9 @@ export class UpdateProfileComponent implements OnInit {
     this.profileService.findAllPermissions().subscribe(
       (res1: HttpResponse<IPermission[]>) => {
         this.permissions = res1.body || [];
+        this.permissionHomeIndex = this.permissions.find(x => x.code === 'home.index')!;
+        this.permissionHomeIndex['isPredetermined'] = true;
+
         const id = this.activatedRoute.snapshot.paramMap.get("id");
         if (id) {
           this.profileService.find(parseInt(id)).subscribe(
@@ -66,7 +70,9 @@ export class UpdateProfileComponent implements OnInit {
       });
     } else {
       this.permissions.forEach(p => {
-        p['selected'] = false;
+        if (!p['isPredetermined']) {
+          p['selected'] = false;
+        }
       });
     }
   }

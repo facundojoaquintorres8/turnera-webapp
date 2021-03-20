@@ -13,13 +13,11 @@
     <thead>
       <tr>
         <th scope="col">Descripción</th>
-        <th scope="col">Código</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let permission of profile.permissions">
         <td>{{ permission.description }}</td>
-        <td>{{ permission.code }}</td>
       </tr>
     </tbody>
   </table>

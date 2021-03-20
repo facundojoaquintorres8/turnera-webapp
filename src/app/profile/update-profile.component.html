@@ -37,18 +37,16 @@
                                     id="selectAll" formControlName="selectAll" (change)="selectAll()" />
                             </th>
                             <th scope="col">Descripción</th>
-                            <th scope="col">Código</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let permission of permissions; let i = index">
                             <td>
                                 <input type="checkbox" class="form-control checkbox-size-5" [checked]="permission['selected']"
-                                    name="selectPermission{{i}}" id="selectPermission"
+                                    name="selectPermission{{i}}" id="selectPermission" [disabled]="permission['isPredetermined']"
                                     (change)="selectPermission(permission)" />
                             </td>
                             <td>{{ permission.description }}</td>
-                            <td>{{ permission.code }}</td>
                         </tr>
                     </tbody>
                 </table>
