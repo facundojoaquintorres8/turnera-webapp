@@ -6,7 +6,7 @@ export const agendaRoutes: Routes = [
     path: 'new',
     component: CreateAgendaComponent,
     data: {
-      title: 'Crear Agenda'
+      title: 'Crear Disponibilidad'
     },
   },
 ];
