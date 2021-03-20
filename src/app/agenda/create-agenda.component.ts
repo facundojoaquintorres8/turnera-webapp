@@ -7,8 +7,8 @@ import { AuthService } from '../auth/auth.service';
 import { ISaveAgenda } from '../models/agenda.models';
 import { IResource } from '../models/resource.models';
 import { ResourceService } from '../resource/resource.service';
-import { formatDateFromIDate, formatTimeFromITime } from '../shared/date-format';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { formatDateFromNgbDateStruct, formatTimeFromNgbTimeStruct } from '../shared/date-format';
+import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-create-agenda',
@@ -32,7 +32,7 @@ export class CreateAgendaComponent implements OnInit {
     endDate: [this.today, [Validators.required]],
     startHour: [null, [Validators.required]],
     endHour: [null, [Validators.required]],
-    duration: [null, [Validators.required, Validators.min(1)]],
+    duration: [null, [Validators.required, Validators.min(1), Validators.max(1440)]],
     sunday: [false],
     monday: [false],
     tuesday: [false],
@@ -59,6 +59,23 @@ export class CreateAgendaComponent implements OnInit {
     window.history.back();
   }
 
+  areValidTimes(): boolean {
+    const startHour = this.myForm.get(['startHour'])!.value as NgbTimeStruct;
+    const endHour = this.myForm.get(['endHour'])!.value as NgbTimeStruct;
+    if (startHour && endHour) {
+      if (endHour.hour === 0 && endHour.minute === 0) {
+        return true;
+      }
+      if (startHour.hour > endHour.hour) {
+        return false;
+      }
+      if (startHour.hour === endHour.hour && (startHour.minute === endHour.minute || startHour.minute > endHour.minute)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   hasAnyDaySelected(): boolean {
     return this.myForm.get(['sunday'])!.value || this.myForm.get(['monday'])!.value ||
     this.myForm.get(['tuesday'])!.value || this.myForm.get(['wednesday'])!.value ||
@@ -66,7 +83,22 @@ export class CreateAgendaComponent implements OnInit {
     this.myForm.get(['saturday'])!.value;
   }
 
+  getButtonCreateTitle(validForm: boolean): string {
+    if (validForm) {
+      if (!this.areValidTimes()) {
+        return 'La Hora Inicio debe ser menor a la Hora Fin.';
+      }
+      if (!this.hasAnyDaySelected()) {
+        return 'Debe seleccionar al menos un día de la semana.';
+      }
+    }
+    return '';
+  }
+
   save(): void {
+    if (!this.areValidTimes()) {
+      return;
+    }
     this.isSaving = true;
     this.subscribeToSaveResponse(this.agendaService.create(this.createFromForm()));
   }
@@ -76,10 +108,10 @@ export class CreateAgendaComponent implements OnInit {
       id: this.myForm.get(['id'])!.value,
       organizationId: this.authService.getOrganizationId()!,
       resource: this.myForm.get(['resource'])!.value,
-      startDate: formatDateFromIDate(this.myForm.get(['startDate'])!.value),
-      endDate: formatDateFromIDate(this.myForm.get(['endDate'])!.value),
-      startHour: formatTimeFromITime(this.myForm.get(['startHour'])!.value),
-      endHour: formatTimeFromITime(this.myForm.get(['endHour'])!.value),
+      startDate: formatDateFromNgbDateStruct(this.myForm.get(['startDate'])!.value),
+      endDate: formatDateFromNgbDateStruct(this.myForm.get(['endDate'])!.value),
+      startHour: formatTimeFromNgbTimeStruct(this.myForm.get(['startHour'])!.value),
+      endHour: formatTimeFromNgbTimeStruct(this.myForm.get(['endHour'])!.value),
       duration: this.myForm.get(['duration'])!.value,
       sunday: this.myForm.get(['sunday'])!.value,
       monday: this.myForm.get(['monday'])!.value,

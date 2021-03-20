@@ -99,6 +99,12 @@
                         <small class="form-text text-danger" *ngIf="myForm.get('duration')?.errors?.required">
                             El campo es requerido.
                         </small>
+                        <small class="form-text text-danger" *ngIf="myForm.get('duration')?.errors?.min">
+                            La Duración debe ser mayor a 0.
+                        </small>
+                        <small class="form-text text-danger" *ngIf="myForm.get('duration')?.errors?.max">
+                            La Duración debe ser menor o igual a 1440.
+                        </small>
                     </div>
                 </div>
             </div>
@@ -160,8 +166,8 @@
             <button type="button" class="btn btn-secondary" (click)="previousState()">
                 <fa-icon icon="ban"></fa-icon>&nbsp;Cancelar
             </button>
-            <button type="submit" [disabled]="myForm.invalid || isSaving || !hasAnyDaySelected()" 
-                [title]="!hasAnyDaySelected() && myForm.valid ? 'Debe seleccionar al menos un día de la semana' : ''" class="btn btn-primary">
+            <button type="submit" [disabled]="myForm.invalid || isSaving || !hasAnyDaySelected() || !areValidTimes()" 
+                [title]="getButtonCreateTitle(myForm.valid)" class="btn btn-primary">
                 <fa-icon icon="save"></fa-icon>&nbsp;Guardar
             </button>
         </div>

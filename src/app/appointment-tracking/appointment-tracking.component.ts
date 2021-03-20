@@ -14,7 +14,7 @@ import { IResource } from '../models/resource.models';
 import { IResourceType } from '../models/resourceType.models';
 import { ResourceTypeService } from '../resource-type/resource-type.service';
 import { ResourceService } from '../resource/resource.service';
-import { formatDateFromIDate, formatIDateFromDate } from '../shared/date-format';
+import { formatDateFromNgbDateStruct, formatNgbDateStructFromDate } from '../shared/date-format';
 import { AbsentAppointmentModalComponent } from './absent-appointment-modal.component';
 import { AttendAppointmentModalComponent } from './attend-appointment-modal.component';
 import { BookAppointmentComponent } from './book-appointment-modal.component';
@@ -51,8 +51,8 @@ export class AppointmentTrackingComponent implements OnInit {
     resourceId: [null],
     customerId: [null],
     status: [null],
-    from: [formatIDateFromDate(this.firstDayMonth)],
-    to: [formatIDateFromDate(this.lastDayMonth)],
+    from: [formatNgbDateStructFromDate(this.firstDayMonth)],
+    to: [formatNgbDateStructFromDate(this.lastDayMonth)],
   });
 
   public maxDate = (): NgbDateStruct => { return this.myForm.get(['to'])!.value };
@@ -89,8 +89,8 @@ export class AppointmentTrackingComponent implements OnInit {
 
   clean(): void {
     this.myForm.reset();
-    this.myForm.get('from')?.setValue(formatIDateFromDate(this.firstDayMonth));
-    this.myForm.get('to')?.setValue(formatIDateFromDate(this.lastDayMonth));
+    this.myForm.get('from')?.setValue(formatNgbDateStructFromDate(this.firstDayMonth));
+    this.myForm.get('to')?.setValue(formatNgbDateStructFromDate(this.lastDayMonth));
     this.getAgendas();
   }
 
@@ -106,8 +106,8 @@ export class AppointmentTrackingComponent implements OnInit {
       resourceId: this.myForm.get(['resourceId'])!.value,
       customerId: this.myForm.get(['customerId'])!.value,
       status: this.myForm.get(['status'])!.value,
-      from: formatDateFromIDate(this.myForm.get(['from'])!.value),
-      to: formatDateFromIDate(this.myForm.get(['to'])!.value),
+      from: formatDateFromNgbDateStruct(this.myForm.get(['from'])!.value),
+      to: formatDateFromNgbDateStruct(this.myForm.get(['to'])!.value),
       active: true,
     };
   }

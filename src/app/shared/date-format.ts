@@ -1,4 +1,6 @@
-export function formatDateFromIDate(date: IDate): string {
+import { NgbDateStruct, NgbTimeStruct } from "@ng-bootstrap/ng-bootstrap";
+
+export function formatDateFromNgbDateStruct(date: NgbDateStruct): string {
     return date.year + '-' + formatNumberToTwoDigits(date.month) + '-'
         + formatNumberToTwoDigits(date.day);
 }
@@ -8,7 +10,7 @@ export function formatDateFromDate(date: Date): string {
         + formatNumberToTwoDigits(date.getDate());
 }
 
-export function formatTimeFromITime(time: ITime): string {
+export function formatTimeFromNgbTimeStruct(time: NgbTimeStruct): string {
     return formatNumberToTwoDigits(time.hour) + ':'
         + formatNumberToTwoDigits(time.minute) + ':' + formatNumberToTwoDigits(time.second);
 }
@@ -17,18 +19,6 @@ function formatNumberToTwoDigits(number: number) {
     return ("00" + number).slice(-2);
 }
 
-export function formatIDateFromDate(date: Date): IDate {
+export function formatNgbDateStructFromDate(date: Date): NgbDateStruct {
     return { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() };
-}
-
-export interface IDate {
-    year: number;
-    month: number;
-    day: number;
-}
-
-export interface ITime {
-    hour: number;
-    minute: number;
-    second: number;
 }
