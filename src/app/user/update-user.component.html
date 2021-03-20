@@ -31,7 +31,7 @@
             </div>
             <div class="col-sm-4">
                 <div class="form-group">
-                    <label class="form-control-label required" for="email">Email</label>
+                    <label class="form-control-label required" for="email">Correo Electrónico</label>
                     <input type="email" class="form-control" name="email" id="email" formControlName="email" />
 
                     <div
@@ -40,10 +40,10 @@
                             El campo es requerido.
                         </small>
                         <small class="form-text text-danger" *ngIf="myForm.get('email')?.errors?.maxlength">
-                            El Email no puede contener más de 50 caracteres.
+                            El Correo Electrónico no puede contener más de 50 caracteres.
                         </small>
                         <small class="form-text text-danger" *ngIf="myForm.get('email')?.errors?.minlength">
-                            El Email debe contener al menos 5 caracteres.
+                            El Correo Electrónico debe contener al menos 5 caracteres.
                         </small>
                     </div>
                 </div>

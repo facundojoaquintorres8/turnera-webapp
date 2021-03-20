@@ -36,7 +36,7 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="form-group">
-              <label class="form-control-label required" for="username">Email</label>
+              <label class="form-control-label required" for="username">Correo Electrónico</label>
               <input type="email" class="form-control" name="username" id="username" formControlName="username" />
               <div *ngIf="myForm.get('username')!.invalid && (myForm.get('username')!.dirty || myForm.get('username')!.touched)">
                 <small class="form-text text-danger" *ngIf="myForm.get('username')?.errors?.required">

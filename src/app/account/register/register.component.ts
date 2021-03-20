@@ -46,7 +46,7 @@ export class RegisterComponent implements OnInit {
         this.toastService.changeMessage(
           {
             showSuccessToast: true,
-            successMessage: 'Su Organización ha sido creada con éxito. Revise su email para activar la misma.'
+            successMessage: 'Su Organización ha sido creada con éxito. Revise su Correo Electrónico para activar la misma.'
           }
         );
         this.router.navigate(['/']);

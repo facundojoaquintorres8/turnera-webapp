@@ -43,7 +43,7 @@ export class PasswordResetRequestComponent implements OnInit {
         this.toastService.changeMessage(
           {
             showSuccessToast: true,
-            successMessage: 'Su solicitud ha sido procesada con éxito. Revise su email para continuar.'
+            successMessage: 'Su solicitud ha sido procesada con éxito. Revise su Correo Electrónico para continuar.'
           }
         );
         this.router.navigate(['/']);
