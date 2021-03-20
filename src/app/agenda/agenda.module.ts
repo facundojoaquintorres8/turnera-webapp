@@ -4,10 +4,11 @@ import { RouterModule } from '@angular/router';
 import { agendaRoutes } from './agenda.route';
 import { CreateAgendaComponent } from './create-agenda.component';
 import { DeleteAgendaModalComponent } from './delete-agenda-modal.component';
+import { DesactivateAgendaModalComponent } from './desactivate-agenda-modal.component';
 
 @NgModule({
-  declarations: [CreateAgendaComponent, DeleteAgendaModalComponent],
+  declarations: [CreateAgendaComponent, DeleteAgendaModalComponent, DesactivateAgendaModalComponent],
   imports: [SharedModule, RouterModule.forChild(agendaRoutes)],
-  entryComponents: [DeleteAgendaModalComponent]
+  entryComponents: [DeleteAgendaModalComponent, DesactivateAgendaModalComponent]
 })
 export class AgendaModule { }

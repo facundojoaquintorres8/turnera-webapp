@@ -10,8 +10,10 @@ export class ToastComponent implements OnInit {
 
   errorMessage!: string;
   successMessage!: string;
-  showErrorToast: boolean = true;
+  infoMessage!: string;
+  showErrorToast: boolean = false;
   showSuccessToast: boolean = false;
+  showInfoToast: boolean = false;
 
   constructor(private toastService: ToastService) { }
 
@@ -20,8 +22,10 @@ export class ToastComponent implements OnInit {
       (message: IToast) => {
         this.errorMessage = message?.errorMessage ? message.errorMessage : "Hubo un problema al procesar la información. Por favor reintente nuevamente.";
         this.successMessage = message?.successMessage ? message.successMessage : "Datos guardados con éxito.";
+        this.infoMessage = message?.infoMessage ? message.infoMessage : "No se ha guardado información.";
         this.showErrorToast = message?.showErrorToast!;
         this.showSuccessToast = message?.showSuccessToast!;
+        this.showInfoToast = message?.showInfoToast!;
       }
     );
 
@@ -33,6 +37,7 @@ export class ToastComponent implements OnInit {
       {
         showErrorToast: false,
         showSuccessToast: false,
+        showInfoToast: false,
       }
     );
   }

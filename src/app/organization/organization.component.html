@@ -47,9 +47,6 @@
                         <small class="form-text text-danger" *ngIf="myForm.get('defaultEmail')?.errors?.required">
                             El campo es requerido.
                         </small>
-                    </div>
-                    <div
-                        *ngIf="myForm.get('defaultEmail')!.invalid && (myForm.get('defaultEmail')!.dirty || myForm.get('defaultEmail')!.touched)">
                         <small class="form-text text-danger" *ngIf="myForm.get('defaultEmail')?.errors?.maxlength">
                             El Email no puede contener más de 50 caracteres.
                         </small>

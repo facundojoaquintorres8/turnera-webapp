@@ -26,7 +26,8 @@
                     <label class="form-control-label required">Fecha Inicio</label>
                     <div class="input-group">
                         <input class="form-control" placeholder="yyyy-mm-dd" name="startDate"
-                            formControlName="startDate" ngbDatepicker #startDate="ngbDatepicker" [firstDayOfWeek]="7">
+                            formControlName="startDate" ngbDatepicker #startDate="ngbDatepicker" [firstDayOfWeek]="7"
+                            [maxDate]="maxDate()" [minDate]="today">
                         <div class="input-group-append">
                             <button class="btn btn-primary" (click)="startDate.toggle()" type="button">
                                 <fa-icon icon="calendar"></fa-icon>
@@ -46,7 +47,7 @@
                     <label class="form-control-label required">Fecha Fin</label>
                     <div class="input-group">
                         <input class="form-control" placeholder="yyyy-mm-dd" name="endDate" formControlName="endDate"
-                            ngbDatepicker #endDate="ngbDatepicker" [firstDayOfWeek]="7">
+                            ngbDatepicker #endDate="ngbDatepicker" [firstDayOfWeek]="7" [minDate]="minDate()">
                         <div class="input-group-append">
                             <button class="btn btn-primary" (click)="endDate.toggle()" type="button">
                                 <fa-icon icon="calendar"></fa-icon>
@@ -159,7 +160,8 @@
             <button type="button" class="btn btn-secondary" (click)="previousState()">
                 <fa-icon icon="ban"></fa-icon>&nbsp;Cancelar
             </button>
-            <button type="submit" [disabled]="myForm.invalid || isSaving" class="btn btn-primary">
+            <button type="submit" [disabled]="myForm.invalid || isSaving || !hasAnyDaySelected()" 
+                [title]="!hasAnyDaySelected() && myForm.valid ? 'Debe seleccionar al menos un día de la semana' : ''" class="btn btn-primary">
                 <fa-icon icon="save"></fa-icon>&nbsp;Guardar
             </button>
         </div>

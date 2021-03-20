@@ -48,9 +48,6 @@
                         <small class="form-text text-danger" *ngIf="myForm.get('email')?.errors?.required">
                             El campo es requerido.
                         </small>
-                    </div>
-                    <div
-                        *ngIf="myForm.get('email')!.invalid && (myForm.get('email')!.dirty || myForm.get('email')!.touched)">
                         <small class="form-text text-danger" *ngIf="myForm.get('email')?.errors?.maxlength">
                             El Email no puede contener más de 50 caracteres.
                         </small>
@@ -69,10 +66,6 @@
                         <small class="form-text text-danger" *ngIf="myForm.get('phone1')?.errors?.maxlength">
                             El Teléfono no puede contener más de 50 caracteres.
                         </small>
-                    </div>
-
-                    <div
-                        *ngIf="myForm.get('phone1')!.invalid && (myForm.get('phone1')!.dirty || myForm.get('phone1')!.touched)">
                         <small class="form-text text-danger" *ngIf="myForm.get('phone1')?.errors?.required">
                             El campo es requerido.
                         </small>

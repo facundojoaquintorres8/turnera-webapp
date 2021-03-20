@@ -47,7 +47,7 @@
           </select>
         </div>
       </div>
-      <div class="col-sm-3">
+      <div class="col-sm-2">
         <div class="form-group">
           <label class="form-control-label">Desde</label>
           <div class="input-group">
@@ -61,7 +61,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-3">
+      <div class="col-sm-2">
         <div class="form-group">
           <label class="form-control-label">Hasta</label>
           <div class="input-group">
@@ -75,10 +75,13 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-2">
+      <div class="col-sm-4">
         <div class="form-group">
           <label class="form-control-label">&nbsp;</label>
           <div class="text-right">
+            <button type="button" (click)="clean()" class="btn btn-outline-secondary mr-2">
+              <fa-icon icon="broom"></fa-icon>&nbsp;Limpiar
+            </button>
             <button type="submit" class="btn btn-outline-dark">
               <fa-icon icon="filter"></fa-icon>&nbsp;Filtrar
             </button>
@@ -141,6 +144,11 @@
           <button type="button" *ngIf="!agenda.lastAppointment" (click)="delete(agenda)"
             class="btn btn-danger btn-sm mr-1" title="Eliminar disponibilidad">
             <fa-icon icon="times"></fa-icon>
+          </button>
+
+          <button type="button" *ngIf="canDesactivate(agenda)" (click)="desactivate(agenda)"
+            class="btn btn-danger btn-sm mr-1" title="Desactivar disponibilidad">
+            <fa-icon icon="calendar-times"></fa-icon>
           </button>
         </td>
       </tr>

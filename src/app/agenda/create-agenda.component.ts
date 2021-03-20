@@ -8,6 +8,7 @@ import { ISaveAgenda } from '../models/agenda.models';
 import { IResource } from '../models/resource.models';
 import { ResourceService } from '../resource/resource.service';
 import { formatDateFromIDate, formatTimeFromITime } from '../shared/date-format';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-create-agenda',
@@ -18,14 +19,20 @@ export class CreateAgendaComponent implements OnInit {
 
   resources!: IResource[];
 
+  now: Date = new Date();
+  today: NgbDateStruct = { year: this.now.getFullYear(), month: this.now.getMonth() + 1, day: this.now.getDate()}
+
+  public maxDate = (): NgbDateStruct => { return this.myForm.get(['endDate'])!.value };
+  public minDate = (): NgbDateStruct => { return this.myForm.get(['startDate'])!.value };
+
   myForm = this.fb.group({
     id: [],
     resource: [null, [Validators.required]],
-    startDate: [null, [Validators.required]],
-    endDate: [null, [Validators.required]],
+    startDate: [this.today, [Validators.required]],
+    endDate: [this.today, [Validators.required]],
     startHour: [null, [Validators.required]],
     endHour: [null, [Validators.required]],
-    duration: [null, [Validators.required]],
+    duration: [null, [Validators.required, Validators.min(1)]],
     sunday: [false],
     monday: [false],
     tuesday: [false],
@@ -50,6 +57,13 @@ export class CreateAgendaComponent implements OnInit {
 
   previousState(): void {
     window.history.back();
+  }
+
+  hasAnyDaySelected(): boolean {
+    return this.myForm.get(['sunday'])!.value || this.myForm.get(['monday'])!.value ||
+    this.myForm.get(['tuesday'])!.value || this.myForm.get(['wednesday'])!.value ||
+    this.myForm.get(['thursday'])!.value || this.myForm.get(['friday'])!.value ||
+    this.myForm.get(['saturday'])!.value;
   }
 
   save(): void {

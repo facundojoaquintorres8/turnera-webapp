@@ -4,6 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { NgbDateStruct, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { AgendaService } from '../agenda/agenda.service';
 import { DeleteAgendaModalComponent } from '../agenda/delete-agenda-modal.component';
+import { DesactivateAgendaModalComponent } from '../agenda/desactivate-agenda-modal.component';
 import { CustomerService } from '../customer/customer.service';
 import { IAgenda } from '../models/agenda.models';
 import { IAppointment } from '../models/appointment.model';
@@ -86,6 +87,19 @@ export class AppointmentTrackingComponent implements OnInit {
     );
   }
 
+  clean(): void {
+    this.myForm.reset();
+    this.myForm.get('from')?.setValue(formatIDateFromDate(this.firstDayMonth));
+    this.myForm.get('to')?.setValue(formatIDateFromDate(this.lastDayMonth));
+    this.getAgendas();
+  }
+
+  getAgendas(): void {
+    this.agendaService.findAllByFilter(this.createFromForm()).subscribe(
+      (res: HttpResponse<IAgenda[]>) => this.agendas = res.body || []
+    );
+  }
+
   private createFromForm(): any {
     return {
       resourceTypeId: this.myForm.get(['resourceTypeId'])!.value,
@@ -94,13 +108,8 @@ export class AppointmentTrackingComponent implements OnInit {
       status: this.myForm.get(['status'])!.value,
       from: formatDateFromIDate(this.myForm.get(['from'])!.value),
       to: formatDateFromIDate(this.myForm.get(['to'])!.value),
+      active: true,
     };
-  }
-
-  getAgendas(): void {
-    this.agendaService.findAllByFilter(this.createFromForm()).subscribe(
-      (res: HttpResponse<IAgenda[]>) => this.agendas = res.body || []
-    );
   }
 
   onResourceTypeChange(): void {
@@ -169,6 +178,10 @@ export class AppointmentTrackingComponent implements OnInit {
 
   canFinalize(agenda: IAgenda): boolean {
     return agenda.lastAppointment && agenda.lastAppointment.currentStatus.toString() === 'IN_ATTENTION';
+  }
+
+  canDesactivate(agenda: IAgenda): boolean {
+    return !agenda.lastAppointment || agenda.lastAppointment.currentStatus.toString() === 'CANCELLED';
   }
 
   book(agenda: IAgenda): void {
@@ -243,6 +256,20 @@ export class AppointmentTrackingComponent implements OnInit {
 
   delete(agenda: IAgenda): void {
     this.ngbModalRef = this.modalService.open(DeleteAgendaModalComponent, { size: 'lg', backdrop: 'static' });
+    this.ngbModalRef.componentInstance.agenda = agenda;
+    this.ngbModalRef.result.then(
+      () => {
+        this.getAgendas();
+        this.ngbModalRef = undefined;
+      },
+      () => {
+        this.ngbModalRef = undefined;
+      }
+    );
+  }
+
+  desactivate(agenda: IAgenda): void {
+    this.ngbModalRef = this.modalService.open(DesactivateAgendaModalComponent, { size: 'lg', backdrop: 'static' });
     this.ngbModalRef.componentInstance.agenda = agenda;
     this.ngbModalRef.result.then(
       () => {

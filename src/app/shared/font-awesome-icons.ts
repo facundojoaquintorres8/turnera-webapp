@@ -16,6 +16,8 @@ import {
   faFilter,
   faUser,
   faCog,
+  faBroom,
+  faCalendarTimes,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -43,4 +45,6 @@ export const fontAwesomeIcons = [
   faFilter,
   faUser,
   faCog,
+  faBroom,
+  faCalendarTimes
 ];

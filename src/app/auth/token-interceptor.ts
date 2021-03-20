@@ -20,13 +20,20 @@ export class TokenInterceptor implements HttpInterceptor {
         }
         return next.handle(request).pipe(tap(
             (ok: any) => {
-                if (token && ok.type !== 0 && !request.url.endsWith('findAllByFilter') &&
-                    (request.method === 'POST' || request.method === 'PUT' || request.method === 'DELETE')) {
-                    this.toastService.changeMessage(
-                        {
-                            showSuccessToast: true,
-                        }
-                    );
+                if (token && ok.type !== 0) {
+                    if (request.method === 'POST' && ok.status === 204) {
+                        this.toastService.changeMessage(
+                            {
+                                showInfoToast: true,
+                            }
+                        );
+                    } else if (request.method === 'POST' || request.method === 'PUT' || request.method === 'DELETE') {
+                        this.toastService.changeMessage(
+                            {
+                                showSuccessToast: true,
+                            }
+                        );
+                    }   
                 }
             },
             (err: any) => {

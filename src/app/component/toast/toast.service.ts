@@ -25,6 +25,8 @@ export class ToastService {
 export interface IToast {
   errorMessage?: string;
   successMessage?: string;
+  infoMessage?: string;
   showErrorToast?: boolean;
   showSuccessToast?: boolean;
+  showInfoToast?: boolean;
 }

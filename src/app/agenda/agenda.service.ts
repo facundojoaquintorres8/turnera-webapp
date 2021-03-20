@@ -27,4 +27,8 @@ export class AgendaService {
   delete(id: number): Observable<HttpResponse<any>> {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
+
+  desactivate(id: number): Observable<HttpResponse<IAgenda>> {
+    return this.http.put<IAgenda>(`${this.resourceUrl}/${id}/desactivate`, {} ,{ observe: 'response' });
+  }
 }

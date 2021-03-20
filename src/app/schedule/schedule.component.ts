@@ -75,12 +75,13 @@ export class ScheduleComponent implements OnInit {
     );
   }
 
-  private createFromForm(): {} {
+  private createFromForm(): any {
     const from = new Date(this.agendaService.viewDate.getFullYear(), this.agendaService.viewDate.getMonth(), 1);
     const to = new Date(this.agendaService.viewDate.getFullYear(), this.agendaService.viewDate.getMonth() + 1, 0);
     return {
       from: formatDateFromDate(from),
       to: formatDateFromDate(to),
+      active: true
     };
   }
 
