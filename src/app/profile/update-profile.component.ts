@@ -36,6 +36,7 @@ export class UpdateProfileComponent implements OnInit {
       (res1: HttpResponse<IPermission[]>) => {
         this.permissions = res1.body || [];
         this.permissionHomeIndex = this.permissions.find(x => x.code === 'home.index')!;
+        this.permissionHomeIndex['selected'] = true;
         this.permissionHomeIndex['isPredetermined'] = true;
 
         const id = this.activatedRoute.snapshot.paramMap.get("id");
@@ -110,7 +111,8 @@ export class UpdateProfileComponent implements OnInit {
 
   private subscribeToSaveResponse(result: Observable<HttpResponse<IProfile>>): void {
     result.subscribe(
-      () => this.previousState()
+      () => this.previousState(),
+      () => this.isSaving = false
     );
   }
 }
