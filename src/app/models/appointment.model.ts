@@ -4,12 +4,23 @@ import { IQuickCustomer } from "./customer.models";
 export interface IAppointment {
     id: number;
     customerBusinessName: string;
-    currentStatus: AppointmentStatusEnum;
+    lastAppointmentStatus: IAppointmentStatus;
 }
 
-export interface ISaveAppointment {
+export interface IAppointmentSave {
     customer: IQuickCustomer;
     agenda: IAgenda;
+}
+
+export interface IAppointmentCancel {
+    id: number;
+    observations: string;
+}
+
+export interface IAppointmentStatus {
+    id: number;
+    observations: string;
+    status: AppointmentStatusEnum;
 }
 
 export enum AppointmentStatusEnum {

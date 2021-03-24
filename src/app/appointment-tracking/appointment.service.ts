@@ -2,7 +2,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SERVER_API_URL } from '../app.constants';
-import { IAppointment, ISaveAppointment } from '../models/appointment.model';
+import { IAppointment, IAppointmentCancel, IAppointmentSave } from '../models/appointment.model';
 
 @Injectable({ providedIn: 'root' })
 export class AppointmentService {
@@ -10,7 +10,7 @@ export class AppointmentService {
 
   constructor(private http: HttpClient) {}
 
-  book(appointment: ISaveAppointment): Observable<HttpResponse<IAppointment>> {
+  book(appointment: IAppointmentSave): Observable<HttpResponse<IAppointment>> {
     return this.http.post<IAppointment>(this.resourceUrl, appointment, { observe: 'response' });
   }
 
@@ -18,8 +18,8 @@ export class AppointmentService {
     return this.http.get<IAppointment>(`${this.resourceUrl}/${id}/absent`, { observe: 'response' });
   }
   
-  cancel(id: number): Observable<HttpResponse<IAppointment>> {
-    return this.http.get<IAppointment>(`${this.resourceUrl}/${id}/cancel`, { observe: 'response' });
+  cancel(appointmentCancel: IAppointmentCancel): Observable<HttpResponse<IAppointment>> {
+    return this.http.post<IAppointment>(`${this.resourceUrl}/cancel`, appointmentCancel, { observe: 'response' });
   }
   
   attend(id: number): Observable<HttpResponse<IAppointment>> {

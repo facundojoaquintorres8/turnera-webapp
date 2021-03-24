@@ -111,8 +111,11 @@
         <td>{{ agenda.lastAppointment ? agenda.lastAppointment.customerBusinessName : '-'}}</td>
         <td>
           <span class="{{ appointmentStatusColor(agenda.lastAppointment) }} appointmentStatus">
-            {{ agenda.lastAppointment ? appointmentStatusObject[agenda.lastAppointment.currentStatus] :
-            appointmentStatusObject.FREE }}
+            {{ agenda.lastAppointment ? appointmentStatusObject[agenda.lastAppointment.lastAppointmentStatus.status] :
+            appointmentStatusObject.FREE }} 
+          </span>
+          <span *ngIf="agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.observations">
+            <fa-icon icon="comment-dots" class="text-info ml-1" [title]="'Observaciones: ' + agenda.lastAppointment.lastAppointmentStatus.observations"></fa-icon>
           </span>
         </td>
         <td class="text-right">

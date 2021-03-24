@@ -6,7 +6,7 @@ import { IAgenda } from '../models/agenda.models';
 import { AppointmentService } from './appointment.service';
 import { CustomerService } from '../customer/customer.service';
 import { ICustomer, IQuickCustomer } from '../models/customer.models';
-import { IAppointment, ISaveAppointment } from '../models/appointment.model';
+import { IAppointment, IAppointmentSave } from '../models/appointment.model';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -66,7 +66,7 @@ export class BookAppointmentComponent implements OnInit {
     this.subscribeToSaveResponse(this.appointmentService.book(appointment));
   }
 
-  private createFromForm(): ISaveAppointment {
+  private createFromForm(): IAppointmentSave {
     return {
       agenda: this.agenda,
       customer: this.getCustomer(),

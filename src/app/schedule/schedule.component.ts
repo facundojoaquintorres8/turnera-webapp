@@ -87,8 +87,8 @@ export class ScheduleComponent implements OnInit {
 
   getEventTitle(agenda: IAgenda): string {
     let title = this.datePipe.transform(agenda.startDate, 'dd-MM-yyyy HH:mm') + '<br>' + agenda.resource.description;
-    if (agenda.lastAppointment && this.appointmentStatus[agenda.lastAppointment.currentStatus] !== AppointmentStatusEnum.CANCELLED) {
-      title = title + '<br>' + agenda.lastAppointment.customerBusinessName + ' (' + this.appointmentStatusTranslate[agenda.lastAppointment.currentStatus] + ')';
+    if (agenda.lastAppointment && this.appointmentStatus[agenda.lastAppointment.lastAppointmentStatus.status] !== AppointmentStatusEnum.CANCELLED) {
+      title = title + '<br>' + agenda.lastAppointment.customerBusinessName + ' (' + this.appointmentStatusTranslate[agenda.lastAppointment.lastAppointmentStatus.status] + ')';
     }
     return title;
   }
@@ -96,7 +96,7 @@ export class ScheduleComponent implements OnInit {
   getColor(lastAppointment: IAppointment): string {
     let result = 'bg-white border border-primary'; // Free or Cancelled
     if (lastAppointment) {
-      switch (this.appointmentStatus[lastAppointment.currentStatus]) {
+      switch (this.appointmentStatus[lastAppointment.lastAppointmentStatus.status]) {
         case AppointmentStatusEnum.BOOKED:
           result = 'bg-warning';
           break;

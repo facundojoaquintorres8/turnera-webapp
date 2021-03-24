@@ -53,7 +53,7 @@ export class TokenInterceptor implements HttpInterceptor {
                                 errorMessage: 'No tiene permisos.',
                             }
                         );
-                        this.router.navigate(['/schedule']);
+                        this.router.navigate(['login']);
                     }
                     if (err.status !== 401) {
                         return;

@@ -138,7 +138,7 @@ export class AppointmentTrackingComponent implements OnInit {
   appointmentStatusColor(lastAppointment: IAppointment): string {
     let result = 'badge badge-white border border-primary'; // Free
     if (lastAppointment) {
-      switch (lastAppointment.currentStatus.toString()) {
+      switch (lastAppointment.lastAppointmentStatus.status.toString()) {
         case 'BOOKED':
           result = 'badge badge-warning';
           break;
@@ -160,28 +160,28 @@ export class AppointmentTrackingComponent implements OnInit {
   }
 
   canBook(agenda: IAgenda): boolean {
-    return (!agenda.lastAppointment || agenda.lastAppointment.currentStatus.toString() === 'CANCELLED')
+    return (!agenda.lastAppointment || agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'CANCELLED')
       && new Date(agenda.startDate) > new Date();
   }
 
   canAbsent(agenda: IAgenda): boolean {
-    return agenda.lastAppointment && agenda.lastAppointment.currentStatus.toString() === 'BOOKED';
+    return agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'BOOKED';
   }
 
   canCancel(agenda: IAgenda): boolean {
-    return agenda.lastAppointment && agenda.lastAppointment.currentStatus.toString() === 'BOOKED';
+    return agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'BOOKED';
   }
 
   canAttend(agenda: IAgenda): boolean {
-    return agenda.lastAppointment && agenda.lastAppointment.currentStatus.toString() === 'BOOKED';
+    return agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'BOOKED';
   }
 
   canFinalize(agenda: IAgenda): boolean {
-    return agenda.lastAppointment && agenda.lastAppointment.currentStatus.toString() === 'IN_ATTENTION';
+    return agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'IN_ATTENTION';
   }
 
   canDesactivate(agenda: IAgenda): boolean {
-    return !agenda.lastAppointment || agenda.lastAppointment.currentStatus.toString() === 'CANCELLED';
+    return !agenda.lastAppointment || agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'CANCELLED';
   }
 
   book(agenda: IAgenda): void {
