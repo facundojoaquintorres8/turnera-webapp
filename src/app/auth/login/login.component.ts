@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
   isSaving = false;
 
   myForm = this.fb.group({
-    username: [null, [Validators.required]],
+    username: [null, [Validators.required, Validators.email, Validators.maxLength(100)]],
     password: [null, [Validators.required]],
   });
 

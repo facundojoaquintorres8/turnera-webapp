@@ -46,7 +46,7 @@ export class BookAppointmentComponent implements OnInit {
     this.myForm.controls['customer'].clearValidators();
     this.myForm.controls['businessName'].setValidators([Validators.required]);
     this.myForm.controls['phone1'].setValidators([Validators.required, Validators.maxLength(50)]);
-    this.myForm.controls['email'].setValidators([Validators.required, Validators.minLength(5), Validators.maxLength(100)]);
+    this.myForm.controls['email'].setValidators([Validators.required, Validators.email, Validators.maxLength(100)]);
     this.myForm.reset();
     this.showSelectCustomers = false;
   }

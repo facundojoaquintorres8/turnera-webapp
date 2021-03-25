@@ -10,10 +10,15 @@
             <div class="form-group">
               <label class="form-control-label required" for="username">Correo Electrónico</label>
               <input type="email" class="form-control" name="username" id="username" formControlName="username" />
-              <div
-                *ngIf="myForm.get('username')!.invalid && (myForm.get('username')!.dirty || myForm.get('username')!.touched)">
+              <div *ngIf="myForm.get('username')!.invalid && (myForm.get('username')!.dirty || myForm.get('username')!.touched)">
                 <small class="form-text text-danger" *ngIf="myForm.get('username')?.errors?.required">
                   El campo es requerido.
+                </small>
+                <small class="form-text text-danger" *ngIf="myForm.get('username')?.errors?.maxlength">
+                  El Correo Electrónico no puede contener más de 50 caracteres.
+                </small>
+                <small class="form-text text-danger" *ngIf="myForm.get('username')?.errors?.email">
+                  El Correo Electrónico es inválido.
                 </small>
               </div>
             </div>

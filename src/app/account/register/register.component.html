@@ -42,6 +42,12 @@
                 <small class="form-text text-danger" *ngIf="myForm.get('username')?.errors?.required">
                   El campo es requerido.
                 </small>
+                <small class="form-text text-danger" *ngIf="myForm.get('username')?.errors?.maxlength">
+                  El Correo Electrónico no puede contener más de 50 caracteres.
+                </small>
+                <small class="form-text text-danger" *ngIf="myForm.get('username')?.errors?.email">
+                  El Correo Electrónico es inválido.
+                </small>
               </div>
             </div>
           </div>

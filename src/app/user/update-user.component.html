@@ -42,8 +42,8 @@
                         <small class="form-text text-danger" *ngIf="myForm.get('email')?.errors?.maxlength">
                             El Correo Electrónico no puede contener más de 50 caracteres.
                         </small>
-                        <small class="form-text text-danger" *ngIf="myForm.get('email')?.errors?.minlength">
-                            El Correo Electrónico debe contener al menos 5 caracteres.
+                        <small class="form-text text-danger" *ngIf="myForm.get('email')?.errors?.email">
+                            El Correo Electrónico es inválido.
                         </small>
                     </div>
                 </div>

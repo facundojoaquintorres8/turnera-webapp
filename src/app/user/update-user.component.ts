@@ -22,7 +22,7 @@ export class UpdateUserComponent implements OnInit {
     id: [],
     firstName: [null, [Validators.required]],
     lastName: [null, [Validators.required]],
-    email: [null, [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
+    email: [null, [Validators.required, Validators.email, Validators.maxLength(100)]],
     active: [null],
     selectAll: [null]
   });

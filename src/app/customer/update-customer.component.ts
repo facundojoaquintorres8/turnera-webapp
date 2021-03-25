@@ -22,7 +22,7 @@ export class UpdateCustomerComponent implements OnInit {
     address: [null],
     phone1: [null, [Validators.required, Validators.maxLength(50)]],
     phone2: [null, [Validators.maxLength(50)]],
-    email: [null, [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
+    email: [null, [Validators.required, Validators.email, Validators.maxLength(100)]],
     active: [null],
   });
 

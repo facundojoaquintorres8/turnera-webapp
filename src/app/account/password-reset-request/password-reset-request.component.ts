@@ -16,7 +16,7 @@ export class PasswordResetRequestComponent implements OnInit {
   isSaving = false;
 
   myForm = this.fb.group({
-    username: [null, [Validators.required]],
+    username: [null, [Validators.required, Validators.email, Validators.maxLength(100)]],
   });
 
   constructor(
