@@ -21,11 +21,11 @@
   </dl>
 
   <div class="button-form">
-    <button type="button" class="btn btn-secondary" (click)="previousState()">
+    <button type="button" class="btn btn-secondary" (click)="previousState()" title="Volver">
       <fa-icon icon="arrow-left"></fa-icon>&nbsp;Volver
     </button>
 
-    <button type="button" [routerLink]="['../../', customer?.id, 'edit']" class="btn btn-primary">
+    <button type="button" [routerLink]="['../../', customer?.id, 'edit']" class="btn btn-primary" title="Editar">
       <fa-icon icon="pencil-alt"></fa-icon>&nbsp;Editar
     </button>
   </div>

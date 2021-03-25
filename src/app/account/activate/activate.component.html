@@ -37,10 +37,10 @@
           </div>
         </div>
         <div class="button-form">
-          <button type="button" class="btn btn-secondary" (click)="previousState()">
+          <button type="button" class="btn btn-secondary" (click)="previousState()" title="Volver">
             <fa-icon icon="arrow-left"></fa-icon>&nbsp;Volver
           </button>
-          <button type="submit" [disabled]="myForm.invalid || isSaving" class="btn btn-primary">Activar</button>
+          <button type="submit" [disabled]="myForm.invalid || isSaving" class="btn btn-primary" title="Activar">Activar</button>
         </div>
       </form>
     </div>

@@ -1,6 +1,6 @@
 <div class="container">
   <h2>
-    <button type="button" [routerLink]="['new']" class="btn btn-primary btn-sm">
+    <button type="button" [routerLink]="['new']" class="btn btn-primary btn-sm" title="Crear Tipo de Recurso">
       <fa-icon icon="plus"></fa-icon>
     </button> Tipos de Recursos
   </h2>
@@ -21,15 +21,15 @@
           <fa-icon *ngIf="!resourceType.active" [icon]="['far', 'square']" class="text-danger outline"></fa-icon>
         </td>
         <td class="text-right">
-          <button type="button" [routerLink]="[resourceType.id, 'view']" class="btn btn-info btn-sm mr-1">
+          <button type="button" [routerLink]="[resourceType.id, 'view']" class="btn btn-info btn-sm mr-1" title="Ver">
             <fa-icon icon="eye"></fa-icon>
           </button>
 
-          <button type="button" [routerLink]="[resourceType.id, 'edit']" class="btn btn-primary btn-sm mr-1">
+          <button type="button" [routerLink]="[resourceType.id, 'edit']" class="btn btn-primary btn-sm mr-1" title="Editar">
             <fa-icon icon="pencil-alt"></fa-icon>
           </button>
 
-          <button type="button" (click)="delete(resourceType)" class="btn btn-danger btn-sm mr-1">
+          <button type="button" (click)="delete(resourceType)" class="btn btn-danger btn-sm mr-1" title="Eliminar">
             <fa-icon icon="times"></fa-icon>
           </button>
         </td>

@@ -92,7 +92,7 @@ export class CreateAgendaComponent implements OnInit {
         return 'Debe seleccionar al menos un día de la semana.';
       }
     }
-    return '';
+    return 'Guardar';
   }
 
   save(): void {

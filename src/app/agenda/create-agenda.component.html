@@ -29,7 +29,7 @@
                             formControlName="startDate" ngbDatepicker #startDate="ngbDatepicker" [firstDayOfWeek]="7"
                             [maxDate]="maxDate()" [minDate]="today">
                         <div class="input-group-append">
-                            <button class="btn btn-primary" (click)="startDate.toggle()" type="button">
+                            <button class="btn btn-primary" (click)="startDate.toggle()" type="button" title="Abrir Calendario">
                                 <fa-icon icon="calendar"></fa-icon>
                             </button>
                         </div>
@@ -49,7 +49,7 @@
                         <input class="form-control" placeholder="yyyy-mm-dd" name="endDate" formControlName="endDate"
                             ngbDatepicker #endDate="ngbDatepicker" [firstDayOfWeek]="7" [minDate]="minDate()">
                         <div class="input-group-append">
-                            <button class="btn btn-primary" (click)="endDate.toggle()" type="button">
+                            <button class="btn btn-primary" (click)="endDate.toggle()" type="button" title="Abrir Calendario">
                                 <fa-icon icon="calendar"></fa-icon>
                             </button>
                         </div>
@@ -163,7 +163,7 @@
         </div>
 
         <div class="button-form mt-4">
-            <button type="button" class="btn btn-secondary" (click)="previousState()">
+            <button type="button" class="btn btn-secondary" (click)="previousState()" title="Cancelar">
                 <fa-icon icon="ban"></fa-icon>&nbsp;Cancelar
             </button>
             <button type="submit" [disabled]="myForm.invalid || isSaving || !hasAnyDaySelected() || !areValidTimes()" 
