@@ -3,8 +3,8 @@ export interface IOrganization {
   businessName: string;
   brandName?: string;
   cuit?: string;
-  address?: string;
+  defaultEmail: string;
   phone1?: string;
   phone2?: string;
-  defaultEmail: string;
+  address?: string;
 }

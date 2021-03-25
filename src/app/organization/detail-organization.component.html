@@ -1,0 +1,30 @@
+<div class="container">
+    <h2>Mi Organización</h2>
+  
+    <dl *ngIf="organization">
+      <dt>Razón Social</dt>
+      <dd>{{ organization.businessName }}</dd>
+      <dt>Marca</dt>
+      <dd>{{ organization.brandName ? organization.brandName : '-' }}</dd>
+      <dt>CUIT</dt>
+      <dd>{{ organization.cuit ? organization.cuit : '-' }}</dd>
+      <dt>Correo Electrónico Predeterminado</dt>
+      <dd>{{ organization.defaultEmail }}</dd>
+      <dt>Teléfono 1</dt>
+      <dd>{{ organization.phone1 ? organization.phone1 : '-' }}</dd>
+      <dt>Teléfono 2</dt>
+      <dd>{{ organization.phone2 ? organization.phone2 : '-' }}</dd>
+      <dt>Dirección</dt>
+      <dd>{{ organization.address ? organization.address : '-' }}</dd>
+    </dl>
+  
+    <div class="button-form">
+      <button type="button" class="btn btn-secondary" (click)="previousState()" title="Volver">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;Volver
+      </button>
+  
+      <button type="button" [routerLink]="[organization?.id, 'edit']" class="btn btn-primary" title="Editar">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;Editar
+      </button>
+    </div>
+  </div>

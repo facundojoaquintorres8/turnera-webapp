@@ -6,10 +6,10 @@ import { IOrganization } from '../models/organization.models';
 import { OrganizationService } from './organization.service';
 
 @Component({
-  selector: 'app-organization',
-  templateUrl: './organization.component.html'
+  selector: 'app-update-organization',
+  templateUrl: './update-organization.component.html'
 })
-export class OrganizationComponent implements OnInit {
+export class UpdateOrganizationComponent implements OnInit {
   isSaving = false;
 
   myForm = this.fb.group({

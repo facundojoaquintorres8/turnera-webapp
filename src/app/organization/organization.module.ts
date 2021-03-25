@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
-import { OrganizationComponent } from './organization.component';
+import { DetailOrganizationComponent } from './detail-organization.component';
 import { organizationRoutes } from './organization.route';
+import { UpdateOrganizationComponent } from './update-organization.component';
 
 @NgModule({
-  declarations: [OrganizationComponent],
+  declarations: [DetailOrganizationComponent, UpdateOrganizationComponent],
   imports: [SharedModule, RouterModule.forChild(organizationRoutes)],
 })
 export class OrganizationModule { }

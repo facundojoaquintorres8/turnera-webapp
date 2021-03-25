@@ -1,12 +1,20 @@
 import { Routes } from '@angular/router';
-import { OrganizationComponent } from './organization.component';
+import { DetailOrganizationComponent } from './detail-organization.component';
+import { UpdateOrganizationComponent } from './update-organization.component';
 
 export const organizationRoutes: Routes = [
   {
     path: '',
-    component: OrganizationComponent,
+    component: DetailOrganizationComponent,
     data: {
       title: 'Mi Organización'
+    },
+  },
+  {
+    path: ':id/edit',
+    component: UpdateOrganizationComponent,
+    data: {
+      title: 'Editar mi Organización'
     },
   },
 ];
