@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { IPasswordChange } from 'src/app/models/account.models';
 import { IUser } from 'src/app/models/user.models';
+import { matchValues } from 'src/app/shared/custom-validators';
 import { AccountService } from '../account.service';
 
 @Component({
@@ -17,7 +18,7 @@ export class PasswordChangeComponent implements OnInit {
   myForm = this.fb.group({
     currentPassword: [null, [Validators.required]],
     password: [null, [Validators.required]],
-    passwordConfirm: [null, [Validators.required]],
+    passwordConfirm: [null, [Validators.required, matchValues('password')]],
   });
 
   constructor(
@@ -26,7 +27,11 @@ export class PasswordChangeComponent implements OnInit {
     private authService: AuthService,
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.myForm.controls.password.valueChanges.subscribe(() => {
+      this.myForm.controls.passwordConfirm.updateValueAndValidity();
+    });
+  }
 
   previousState(): void {
     window.history.back();

@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { ToastService } from 'src/app/component/toast/toast.service';
 import { IActivateAccount } from 'src/app/models/account.models';
 import { IUser } from 'src/app/models/user.models';
+import { matchValues } from 'src/app/shared/custom-validators';
 import { AccountService } from '../account.service';
 
 @Component({
@@ -19,7 +20,7 @@ export class ActivateComponent implements OnInit {
 
   myForm = this.fb.group({
     password: [null, [Validators.required]],
-    passwordConfirm: [null, [Validators.required]],
+    passwordConfirm: [null, [Validators.required, matchValues('password')]],
   });
 
   constructor(
@@ -32,6 +33,9 @@ export class ActivateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activationKey = this.activatedRoute.snapshot.paramMap.get("activationKey")!;
+    this.myForm.controls.password.valueChanges.subscribe(() => {
+      this.myForm.controls.passwordConfirm.updateValueAndValidity();
+    });
   }
 
   previousState(): void {

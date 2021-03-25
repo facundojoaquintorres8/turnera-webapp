@@ -29,6 +29,9 @@
                 <small class="form-text text-danger" *ngIf="myForm.get('passwordConfirm')?.errors?.required">
                   El campo es requerido.
                 </small>
+                <small class="form-text text-danger" *ngIf="!myForm.get('passwordConfirm')?.errors?.isMatching">
+                  Las Contraseñas no coinciden.
+                </small>
               </div>
             </div>
           </div>
