@@ -1,6 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { NgbDateStruct, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { AgendaService } from '../agenda/agenda.service';
 import { DeleteAgendaModalComponent } from '../agenda/delete-agenda-modal.component';
@@ -28,6 +28,7 @@ import { FinalizeAppointmentModalComponent } from './finalize-appointment-modal.
 export class AppointmentTrackingComponent implements OnInit {
   private ngbModalRef: NgbModalRef | undefined;
 
+  isSearching: boolean = false;
   agendas: IAgenda[] = [];
   resourcesTypes: IResourceType[] = [];
   resources: IResource[] = [];
@@ -51,8 +52,8 @@ export class AppointmentTrackingComponent implements OnInit {
     resourceId: [null],
     customerId: [null],
     status: [null],
-    from: [formatNgbDateStructFromDate(this.firstDayMonth)],
-    to: [formatNgbDateStructFromDate(this.lastDayMonth)],
+    from: [formatNgbDateStructFromDate(this.firstDayMonth), [Validators.required]],
+    to: [formatNgbDateStructFromDate(this.lastDayMonth), [Validators.required]],
   });
 
   public maxDate = (): NgbDateStruct => { return this.myForm.get(['to'])!.value };
@@ -87,7 +88,7 @@ export class AppointmentTrackingComponent implements OnInit {
     );
   }
 
-  clean(): void {
+  clear(): void {
     this.myForm.reset();
     this.myForm.get('from')?.setValue(formatNgbDateStructFromDate(this.firstDayMonth));
     this.myForm.get('to')?.setValue(formatNgbDateStructFromDate(this.lastDayMonth));
@@ -95,8 +96,13 @@ export class AppointmentTrackingComponent implements OnInit {
   }
 
   getAgendas(): void {
+    this.isSearching = true;
     this.agendaService.findAllByFilter(this.createFromForm()).subscribe(
-      (res: HttpResponse<IAgenda[]>) => this.agendas = res.body || []
+      (res: HttpResponse<IAgenda[]>) => { 
+        this.agendas = res.body || [];
+        this.isSearching = false;
+      },
+      () => this.isSearching = false
     );
   }
 
@@ -132,7 +138,6 @@ export class AppointmentTrackingComponent implements OnInit {
     } else {
       this.myForm.get('resourceTypeId')?.enable();
     }
-
   }
 
   appointmentStatusColor(lastAppointment: IAppointment): string {

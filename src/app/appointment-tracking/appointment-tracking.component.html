@@ -49,7 +49,7 @@
       </div>
       <div class="col-sm-2">
         <div class="form-group">
-          <label class="form-control-label">Desde</label>
+          <label class="form-control-label required">Desde</label>
           <div class="input-group">
             <input class="form-control" placeholder="yyyy-mm-dd" name="from" formControlName="from" ngbDatepicker
               #from="ngbDatepicker" [firstDayOfWeek]="7" [maxDate]="maxDate()">
@@ -59,11 +59,16 @@
               </button>
             </div>
           </div>
+          <div *ngIf="myForm.get('from')!.invalid && (myForm.get('from')!.dirty || myForm.get('from')!.touched)">
+            <small class="form-text text-danger" *ngIf="myForm.get('from')?.errors?.required">
+              El campo es requerido.
+            </small>
+          </div>
         </div>
       </div>
       <div class="col-sm-2">
         <div class="form-group">
-          <label class="form-control-label">Hasta</label>
+          <label class="form-control-label required">Hasta</label>
           <div class="input-group">
             <input class="form-control" placeholder="yyyy-mm-dd" name="to" formControlName="to" ngbDatepicker
               #to="ngbDatepicker" [firstDayOfWeek]="7" [minDate]="minDate()">
@@ -73,16 +78,21 @@
               </button>
             </div>
           </div>
+          <div *ngIf="myForm.get('to')!.invalid && (myForm.get('to')!.dirty || myForm.get('to')!.touched)">
+            <small class="form-text text-danger" *ngIf="myForm.get('to')?.errors?.required">
+              El campo es requerido.
+            </small>
+          </div>
         </div>
       </div>
       <div class="col-sm-4">
         <div class="form-group">
           <label class="form-control-label">&nbsp;</label>
           <div class="text-right">
-            <button type="button" (click)="clean()" class="btn btn-outline-secondary mr-2" title="Limpiar">
+            <button type="button" (click)="clear()" class="btn btn-secondary mr-2" [disabled]="isSearching" title="Limpiar">
               <fa-icon icon="broom"></fa-icon>&nbsp;Limpiar
             </button>
-            <button type="submit" class="btn btn-outline-dark" title="Filtrar">
+            <button type="submit" class="btn btn-outline-dark" [disabled]="myForm.invalid || isSearching" title="Filtrar">
               <fa-icon icon="filter"></fa-icon>&nbsp;Filtrar
             </button>
           </div>
