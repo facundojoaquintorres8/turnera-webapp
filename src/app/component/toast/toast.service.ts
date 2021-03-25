@@ -17,6 +17,7 @@ export class ToastService {
       this.messageSource.next({
         showErrorToast: false,
         showSuccessToast: false,
+        showInfoToast: false,
       });
     }, 10000);
   }
