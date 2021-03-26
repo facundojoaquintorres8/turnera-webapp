@@ -4,16 +4,18 @@ import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontaweso
 import { fontAwesomeIcons } from './font-awesome-icons';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PermissionModule } from '../security/permission.module';
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule],
+  imports: [CommonModule, PermissionModule],
   exports: [
     FormsModule,
     CommonModule,
     NgbModule,
     FontAwesomeModule,
     ReactiveFormsModule,
+    PermissionModule,
   ]
 })
 export class SharedModule {

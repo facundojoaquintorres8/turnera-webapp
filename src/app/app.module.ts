@@ -8,11 +8,13 @@ import { FooterComponent } from './layout/footer/footer.component';
 import { PrivateLayoutComponent } from './layout/private/private-layout.component';
 import { PublicLayoutComponent } from './layout/public/public-layout.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TokenInterceptor } from './auth/token-interceptor';
+import { TokenInterceptor } from './security/token-interceptor';
 import { ToastComponent } from './component/toast/toast.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import localeEsAr from '@angular/common/locales/es-AR';
 import { registerLocaleData } from '@angular/common';
+import { HasPermissionDirective } from './security/has-permission.directive';
+import { PermissionModule } from './security/permission.module';
 
 const APP_CONTAINERS = [
   PrivateLayoutComponent,
@@ -34,6 +36,7 @@ registerLocaleData(localeEsAr, 'es');
     AppRoutingModule,
     HttpClientModule,
     FontAwesomeModule,
+    PermissionModule,
   ],
   exports: [ToastComponent],
   providers: [

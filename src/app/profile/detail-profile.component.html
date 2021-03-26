@@ -9,7 +9,7 @@
   </dl>
 
   <h3>Permisos</h3>
-  <table class="table table-striped" aria-describedby="page-heading">
+  <table class="table table-striped" aria-describedby="page-heading" *ngIf="profile">
     <thead>
       <tr>
         <th scope="col">Descripción</th>
@@ -27,7 +27,8 @@
       <fa-icon icon="arrow-left"></fa-icon>&nbsp;Volver
     </button>
 
-    <button type="button" [routerLink]="['../../', profile?.id, 'edit']" class="btn btn-primary" title="Editar">
+    <button *hasPermission="['profiles.write']" type="button" [routerLink]="['../../', profile?.id, 'edit']"
+      class="btn btn-primary" title="Editar">
       <fa-icon icon="pencil-alt"></fa-icon>&nbsp;Editar
     </button>
   </div>

@@ -4,8 +4,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CalendarEvent, CalendarMonthViewBeforeRenderEvent, CalendarView } from 'angular-calendar';
 import { AgendaService } from '../agenda/agenda.service';
+import { AuthService } from '../auth/auth.service';
 import { IAgenda } from '../models/agenda.models';
 import { AppointmentStatusEnum, IAppointment } from '../models/appointment.model';
+import { checkPermission } from '../security/check-permissions';
 import { formatDateFromDate } from '../shared/date-format';
 
 @Component({
@@ -15,6 +17,8 @@ import { formatDateFromDate } from '../shared/date-format';
 })
 export class ScheduleComponent implements OnInit {
 
+  permissions: string[] = [];
+  canViewAgendas: boolean = false;
   events: CalendarEvent[] = [];
   view: CalendarView = CalendarView.Month;
   today: string = this.datePipe.transform(new Date(), 'dd-MM-yyyy') + '';
@@ -42,21 +46,30 @@ export class ScheduleComponent implements OnInit {
     public agendaService: AgendaService,
     private datePipe: DatePipe,
     private router: Router,
+    private authService: AuthService,
   ) { }
 
   ngOnInit(): void {
-    this.onCalendarChange();
+    this.permissions = this.authService.getPermissions();
+    this.canViewAgendas = checkPermission(this.permissions, ['agendas.read']);
+    if (this.canViewAgendas) {
+      this.onCalendarChange();      
+    }
   }
 
   dayClicked(): void {
-    this.router.navigate(['/appointment-tracking']);
+    if (this.canViewAgendas) {
+      this.router.navigate(['/appointment-tracking']);
+    }
   }
 
   handleEvent(event: CalendarEvent): void {
   }
 
   closeOpenMonthViewDay(): void {
-    this.onCalendarChange();
+    if (this.canViewAgendas) {
+      this.onCalendarChange();      
+    }
   }
 
   onCalendarChange(): void {

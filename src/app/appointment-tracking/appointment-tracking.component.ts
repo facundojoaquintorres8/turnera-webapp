@@ -5,6 +5,7 @@ import { NgbDateStruct, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap
 import { AgendaService } from '../agenda/agenda.service';
 import { DeleteAgendaModalComponent } from '../agenda/delete-agenda-modal.component';
 import { DesactivateAgendaModalComponent } from '../agenda/desactivate-agenda-modal.component';
+import { AuthService } from '../auth/auth.service';
 import { CustomerService } from '../customer/customer.service';
 import { IAgenda } from '../models/agenda.models';
 import { IAppointment } from '../models/appointment.model';
@@ -14,6 +15,7 @@ import { IResource } from '../models/resource.models';
 import { IResourceType } from '../models/resourceType.models';
 import { ResourceTypeService } from '../resource-type/resource-type.service';
 import { ResourceService } from '../resource/resource.service';
+import { checkPermission } from '../security/check-permissions';
 import { formatDateFromNgbDateStruct, formatNgbDateStructFromDate } from '../shared/date-format';
 import { AbsentAppointmentModalComponent } from './absent-appointment-modal.component';
 import { AttendAppointmentModalComponent } from './attend-appointment-modal.component';
@@ -28,6 +30,7 @@ import { FinalizeAppointmentModalComponent } from './finalize-appointment-modal.
 export class AppointmentTrackingComponent implements OnInit {
   private ngbModalRef: NgbModalRef | undefined;
 
+  permissions: string[] = [];
   isSearching: boolean = false;
   agendas: IAgenda[] = [];
   resourcesTypes: IResourceType[] = [];
@@ -66,9 +69,12 @@ export class AppointmentTrackingComponent implements OnInit {
     private resourceTypeService: ResourceTypeService,
     private resourceService: ResourceService,
     private customerService: CustomerService,
+    private authService: AuthService,
   ) { }
 
   ngOnInit(): void {
+    this.permissions = this.authService.getPermissions();
+
     this.getAgendas();
 
     this.resourceTypeService.findAllByFilter({}).subscribe(
@@ -166,27 +172,36 @@ export class AppointmentTrackingComponent implements OnInit {
 
   canBook(agenda: IAgenda): boolean {
     return (!agenda.lastAppointment || agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'CANCELLED')
-      && new Date(agenda.startDate) > new Date();
+      && new Date(agenda.startDate) > new Date() && checkPermission(this.permissions, ['appointments.book']);
   }
 
   canAbsent(agenda: IAgenda): boolean {
-    return agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'BOOKED';
+    return agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'BOOKED'
+      && checkPermission(this.permissions, ['appointments.absent']);
   }
 
   canCancel(agenda: IAgenda): boolean {
-    return agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'BOOKED';
+    return agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'BOOKED'
+      && checkPermission(this.permissions, ['appointments.cancel']);
   }
 
   canAttend(agenda: IAgenda): boolean {
-    return agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'BOOKED';
+    return agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'BOOKED'
+      && checkPermission(this.permissions, ['appointments.attend']);
   }
 
   canFinalize(agenda: IAgenda): boolean {
-    return agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'IN_ATTENTION';
+    return agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'IN_ATTENTION'
+      && checkPermission(this.permissions, ['appointments.finalize']);
+  }
+
+  canDelete(agenda: IAgenda): boolean {
+    return !agenda.lastAppointment && checkPermission(this.permissions, ['agendas.delete']);
   }
 
   canDesactivate(agenda: IAgenda): boolean {
-    return !agenda.lastAppointment || agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'CANCELLED';
+    return !agenda.lastAppointment || agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'CANCELLED'
+      && checkPermission(this.permissions, ['agendas.write']);
   }
 
   book(agenda: IAgenda): void {

@@ -154,7 +154,7 @@
             <fa-icon icon="stop"></fa-icon>
           </button>
 
-          <button type="button" *ngIf="!agenda.lastAppointment" (click)="delete(agenda)"
+          <button type="button" *ngIf="canDelete(agenda)" (click)="delete(agenda)"
             class="btn btn-danger btn-sm mr-1" title="Eliminar disponibilidad">
             <fa-icon icon="times"></fa-icon>
           </button>
