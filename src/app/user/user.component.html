@@ -35,7 +35,7 @@
             <fa-icon icon="pencil-alt"></fa-icon>
           </button>
 
-          <button *hasPermission="['users.delete']" [disabled]="sessionUser?.id !== user.id" type="button" (click)="delete(user)" class="btn btn-danger btn-sm mr-1" [title]="sessionUser?.id !== user.id ? 'No puede eliminar su propio Usuario' : 'Eliminar'">
+          <button *hasPermission="['users.delete']" [disabled]="sessionUser?.id === user.id" type="button" (click)="delete(user)" class="btn btn-danger btn-sm mr-1" [title]="sessionUser?.id === user.id ? 'No puede eliminar su propio Usuario' : 'Eliminar'">
             <fa-icon icon="times"></fa-icon>
           </button>
         </td>

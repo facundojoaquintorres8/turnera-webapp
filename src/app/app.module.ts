@@ -13,8 +13,8 @@ import { ToastComponent } from './component/toast/toast.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import localeEsAr from '@angular/common/locales/es-AR';
 import { registerLocaleData } from '@angular/common';
-import { HasPermissionDirective } from './security/has-permission.directive';
 import { PermissionModule } from './security/permission.module';
+import { AuthGuard } from './security/auth-guard';
 
 const APP_CONTAINERS = [
   PrivateLayoutComponent,
@@ -45,7 +45,8 @@ registerLocaleData(localeEsAr, 'es');
       useClass: TokenInterceptor,
       multi: true
     },
-    { provide: LOCALE_ID, useValue: 'es' }
+    { provide: LOCALE_ID, useValue: 'es' },
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })
