@@ -50,4 +50,4 @@ registerLocaleData(localeEsAr, 'es');
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

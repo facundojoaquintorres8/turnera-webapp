@@ -5,10 +5,11 @@ import { fontAwesomeIcons } from './font-awesome-icons';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PermissionModule } from '../security/permission.module';
+import { TableComponent } from '../component/table/table.component';
 
 @NgModule({
-  declarations: [],
-  imports: [CommonModule, PermissionModule],
+  declarations: [TableComponent],
+  imports: [CommonModule, PermissionModule, FontAwesomeModule, ReactiveFormsModule],
   exports: [
     FormsModule,
     CommonModule,
@@ -16,6 +17,7 @@ import { PermissionModule } from '../security/permission.module';
     FontAwesomeModule,
     ReactiveFormsModule,
     PermissionModule,
+    TableComponent,
   ]
 })
 export class SharedModule {

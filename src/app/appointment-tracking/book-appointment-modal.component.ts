@@ -36,8 +36,8 @@ export class BookAppointmentComponent implements OnInit {
 
   ngOnInit(): void {
     this.customerService.findAllByFilter({ active: true }).subscribe(
-      (res: HttpResponse<ICustomer[]>) => {
-        this.customers = res.body || [];
+      (res: HttpResponse<any>) => {
+        this.customers = res.body.content || [];
       }
     )
   }

@@ -1,45 +1,11 @@
 <div class="container">
   <h2>
-    <button *hasPermission="['users.write']" type="button" [routerLink]="['new']" class="btn btn-primary btn-sm" title="Crear Usuario">
+    <button *hasPermission="['users.write']" type="button" [routerLink]="['new']" class="btn btn-primary btn-icon"
+      title="Crear Usuario">
       <fa-icon icon="plus"></fa-icon>
     </button> Usuarios
   </h2>
-  
-  <table class="table table-striped" aria-describedby="page-heading">
-    <thead>
-      <tr>
-        <th scope="col">Nombre</th>
-        <th scope="col">Apellido</th>
-        <th scope="col">Correo Electrónico</th>
-        <th scope="col">Cantidad de Perfiles</th>
-        <th scope="col">Activo</th>
-        <th scope="col"></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of users">
-        <td>{{ user.firstName }}</td>
-        <td>{{ user.lastName }}</td>
-        <td>{{ user.username }}</td>
-        <td>{{ user.profiles.length }}</td>
-        <td>
-          <fa-icon *ngIf="user.active" [icon]="['far', 'check-square']" class="text-success"></fa-icon>
-          <fa-icon *ngIf="!user.active" [icon]="['far', 'square']" class="text-danger outline"></fa-icon>
-        </td>
-        <td class="text-right">
-          <button *hasPermission="['users.read']" type="button" [routerLink]="[user.id, 'view']" class="btn btn-info btn-sm mr-1" title="Ver">
-            <fa-icon icon="eye"></fa-icon>
-          </button>
 
-          <button *hasPermission="['users.write']" type="button" [routerLink]="[user.id, 'edit']" class="btn btn-primary btn-sm mr-1" title="Editar">
-            <fa-icon icon="pencil-alt"></fa-icon>
-          </button>
-
-          <button *hasPermission="['users.delete']" [disabled]="sessionUser?.id === user.id" type="button" (click)="delete(user)" class="btn btn-danger btn-sm mr-1" [title]="sessionUser?.id === user.id ? 'No puede eliminar su propio Usuario' : 'Eliminar'">
-            <fa-icon icon="times"></fa-icon>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <app-table [table]="table" [myForm]="myForm" [sort]="sort" [queryItems]="query" #tableComponent>
+  </app-table>
 </div>

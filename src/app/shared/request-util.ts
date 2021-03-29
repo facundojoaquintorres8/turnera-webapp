@@ -9,6 +9,10 @@ export const createRequestOption = (req?: any): HttpParams => {
           options = options.set(key, req[key]);
         }
       });
+
+      if (!req['page']) {
+        req['page'] = 0;
+      }
     }
 
     return options;

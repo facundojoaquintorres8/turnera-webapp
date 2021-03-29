@@ -42,11 +42,12 @@ export class UpdateResourceComponent implements OnInit {
       );
     }
 
-    this.resourceTypeService.findAllByFilter({ active: true }).subscribe(
-      (res: HttpResponse<IResourceType[]>) => {
-        this.resourcesTypes = res.body || [];
-      }
-    )
+    this.resourceTypeService.findAllByFilter({ active: true })
+      .subscribe(
+        (res: HttpResponse<any>) => {
+          this.resourcesTypes = res.body.content || [];
+        }
+      )
   }
 
   updateForm(resource: IResource): void {

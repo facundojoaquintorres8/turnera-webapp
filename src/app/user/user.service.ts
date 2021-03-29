@@ -15,6 +15,7 @@ export class UserService {
 
   findAllByFilter(filter: any): Observable<HttpResponse<IUser[]>> {
     filter['organizationId'] = this.organizationId;
+    filter['sort'] = filter['sort'] ? filter['sort'] : ['ASC', 'firstName'];
     const options = createRequestOption(filter);
     return this.http.get<IUser[]>(`${this.resourceUrl}/findAllByFilter`, { params: options, observe: 'response' });
   }

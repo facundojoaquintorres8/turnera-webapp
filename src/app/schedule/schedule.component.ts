@@ -33,7 +33,7 @@ export class ScheduleComponent implements OnInit {
     IN_ATTENTION: AppointmentStatusEnum.IN_ATTENTION,
   }
 
-  appointmentStatusTranslate= {
+  appointmentStatusTranslate = {
     FREE: "Libre",
     BOOKED: "Reservado",
     ABSENT: "Ausente",

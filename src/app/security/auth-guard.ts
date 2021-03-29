@@ -10,14 +10,6 @@ export class AuthGuard implements CanActivate {
     constructor(private router: Router, private authService: AuthService, private toastService: ToastService) { }
 
     canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot): boolean {
-        this.toastService.changeMessage(
-            {
-                showErrorToast: false,
-                showSuccessToast: false,
-                showInfoToast: false,
-            }
-        );
-
         if (!this.authService.getToken()) {
             this.toastService.changeMessage(
                 {

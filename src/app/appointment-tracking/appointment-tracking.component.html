@@ -102,7 +102,7 @@
 
   </form>
 
-  <table class="table table-striped" aria-describedby="page-heading">
+  <table class="table table-striped">
     <thead>
       <tr>
         <th scope="col">Recurso</th>
@@ -129,38 +129,38 @@
           </span>
         </td>
         <td class="text-right">
-          <button type="button" *ngIf="canBook(agenda)" (click)="book(agenda)" class="btn btn-warning btn-sm mr-1"
+          <button type="button" *ngIf="canBook(agenda)" (click)="book(agenda)" class="btn btn-warning btn-icon mr-1"
             title="Reservar turno">
             <fa-icon icon="plus"></fa-icon>
           </button>
 
           <button type="button" *ngIf="canAbsent(agenda)" (click)="absent(agenda.lastAppointment)"
-            class="btn btn-dark btn-sm mr-1" title="Ausente">
+            class="btn btn-dark btn-icon mr-1" title="Ausente">
             <fa-icon icon="user-slash"></fa-icon>
           </button>
 
           <button type="button" *ngIf="canCancel(agenda)" (click)="cancel(agenda.lastAppointment)"
-            class="btn btn-danger btn-sm mr-1" title="Cancelar">
+            class="btn btn-danger btn-icon mr-1" title="Cancelar">
             <fa-icon icon="ban"></fa-icon>
           </button>
 
           <button type="button" *ngIf="canAttend(agenda)" (click)="attend(agenda.lastAppointment)"
-            class="btn btn-info btn-sm mr-1" title="Atender">
+            class="btn btn-info btn-icon mr-1" title="Atender">
             <fa-icon icon="play"></fa-icon>
           </button>
 
           <button type="button" *ngIf="canFinalize(agenda)" (click)="finalize(agenda.lastAppointment)"
-            class="btn btn-success btn-sm mr-1" title="Finalizar">
+            class="btn btn-success btn-icon mr-1" title="Finalizar">
             <fa-icon icon="stop"></fa-icon>
           </button>
 
           <button type="button" *ngIf="canDelete(agenda)" (click)="delete(agenda)"
-            class="btn btn-danger btn-sm mr-1" title="Eliminar disponibilidad">
+            class="btn btn-danger btn-icon mr-1" title="Eliminar disponibilidad">
             <fa-icon icon="times"></fa-icon>
           </button>
 
           <button type="button" *ngIf="canDesactivate(agenda)" (click)="desactivate(agenda)"
-            class="btn btn-danger btn-sm mr-1" title="Desactivar disponibilidad">
+            class="btn btn-danger btn-icon mr-1" title="Desactivar disponibilidad">
             <fa-icon icon="calendar-times"></fa-icon>
           </button>
         </td>

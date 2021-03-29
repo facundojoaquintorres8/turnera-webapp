@@ -19,6 +19,11 @@ import {
   faBroom,
   faCalendarTimes,
   faCommentDots,
+  faArrowDown,
+  faArrowUp,
+  faSort,
+  faSortUp,
+  faSortDown,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -48,5 +53,10 @@ export const fontAwesomeIcons = [
   faCog,
   faBroom,
   faCalendarTimes,
-  faCommentDots
+  faCommentDots,
+  faArrowDown,
+  faArrowUp,
+  faSort,
+  faSortUp,
+  faSortDown
 ];

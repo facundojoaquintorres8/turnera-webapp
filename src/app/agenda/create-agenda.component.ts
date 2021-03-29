@@ -51,7 +51,7 @@ export class CreateAgendaComponent implements OnInit {
 
   ngOnInit(): void {
     this.resourceService.findAllByFilter({ active: true }).subscribe(
-      (res: HttpResponse<IResource[]>) => this.resources = res.body!
+      (res: HttpResponse<any>) => this.resources = res.body.content!
     )
   }
 

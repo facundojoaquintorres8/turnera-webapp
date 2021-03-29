@@ -78,15 +78,15 @@ export class AppointmentTrackingComponent implements OnInit {
     this.getAgendas();
 
     this.resourceTypeService.findAllByFilter({}).subscribe(
-      (res: HttpResponse<IResourceType[]>) => this.resourcesTypes = res.body || []
+      (res: HttpResponse<any>) => this.resourcesTypes = res.body.content || []
     );
 
     this.resourceService.findAllByFilter({}).subscribe(
-      (res: HttpResponse<IResource[]>) => this.resources = res.body || []
+      (res: HttpResponse<any>) => this.resources = res.body.content || []
     );
 
     this.customerService.findAllByFilter({}).subscribe(
-      (res: HttpResponse<ICustomer[]>) => this.customers = res.body || []
+      (res: HttpResponse<any>) => this.customers = res.body.content || []
     );
 
     Object.keys(this.appointmentStatusObject).map(key =>
@@ -127,11 +127,11 @@ export class AppointmentTrackingComponent implements OnInit {
   onResourceTypeChange(): void {
     if (this.myForm.get('resourceTypeId')?.value === null) { 
       this.resourceService.findAllByFilter({}).subscribe(
-        (res: HttpResponse<IResource[]>) => this.resources = res.body || []
+        (res: HttpResponse<any>) => this.resources = res.body.content || []
       );  
     } else {
       this.resourceService.findAllByFilter({ resourceTypeId: this.myForm.get('resourceTypeId')?.value }).subscribe(
-        (res: HttpResponse<IResource[]>) => this.resources = res.body || []
+        (res: HttpResponse<any>) => this.resources = res.body.content || []
       );  
     }
   }
