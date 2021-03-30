@@ -1,93 +1,30 @@
-<form name="myForm" role="form" novalidate (ngSubmit)="executeQuery(1)" [formGroup]="myForm">
-    <table class="table table-responsive">
-        <thead>
-            <tr>
-                <th scope="col" *ngFor="let header of table.headers">
-                    <div class="d-flex justify-content-between" [class.pointer]="header.sort"
-                        (click)="header.sort ? onSortChange(header.inputName) : null">
-                        {{ header.label}}
-                        <small class="ml-1" *ngIf="header.sort">
-                            <fa-icon icon="sort-up" *ngIf="sort[0] === 'DESC' && sort[1] === header.inputName">
-                            </fa-icon>
-                            <fa-icon icon="sort-down" *ngIf="sort[0] === 'ASC' && sort[1] === header.inputName">
-                            </fa-icon>
-                            <fa-icon icon="sort" *ngIf="sort[1] !== header.inputName"></fa-icon>
-                        </small>
-                    </div>
-                    <div class="input-group input-group-sm" [ngSwitch]="header.inputType">
-
-                        <input *ngSwitchCase="inputType.TEXT" type="text" class="form-control" placeholder="Filtrar"
-                            name="{{header.inputName}}" id="{{header.inputName}}"
-                            formControlName="{{header.inputName}}">
-                        <div *ngSwitchCase="inputType.TEXT" class="input-group-append">
-                            <button class="btn btn-outline-success d-sm-none" type="submit">
-                                <fa-icon icon="filter"></fa-icon>
-                            </button>
-                            <button class="btn btn-outline-secondary" type="button"
-                                (click)="clearInput(header.inputName)">
-                                <fa-icon icon="times"></fa-icon>
-                            </button>
-                        </div>
-
-                        <select *ngSwitchCase="inputType.BOOLEAN" (change)="onChange()" class="form-control"
-                            name="active" id="active" formControlName="active">
-                            <option [ngValue]="null">Todos</option>
-                            <option [value]="true">Si</option>
-                            <option [value]="false">No</option>
-                        </select>
-                    </div>
-                </th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let item of items">
-                <td *ngFor="let header of table.headers">
-                    <span *ngIf="header.inputType !== inputType.BOOLEAN">
-                        {{ item[header.inputName] }}
-                    </span>
-                    <span *ngIf="header.inputType === inputType.BOOLEAN">
-                        <fa-icon *ngIf="item[header.inputName]" [icon]="['far', 'check-square']" class="text-success">
-                        </fa-icon>
-                        <fa-icon *ngIf="!item[header.inputName]" [icon]="['far', 'square']" class="text-danger outline">
-                        </fa-icon>
-                    </span>
-                </td>
-                <td class="text-right">
-                    <span *ngFor="let button of table.buttons">
-                        <button *hasPermission="button.permissions" type="button" (click)="button.onClickFunction(item)"
-                            [class]="button.class"
-                            [title]="button.titleWithFunction ? button.titleWithFunction(item) : button.title"
-                            [disabled]="button.disabled ? button.disabled(item) : false">
-                            <fa-icon [icon]="button.icon"></fa-icon>
-                        </button>
-                    </span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <nav class="float-right">
-        <ul class="pagination">
-            <small class="m-2">
-                Página {{ page }} de {{ totalPages }}
-            </small>
-            <li class="page-item">
-                <button type="button" (click)="previousPage()" [disabled]="page === 1"
-                    class="btn btn-outline-info btn-icon" title="Página anterior">
-                    <fa-icon icon="arrow-left"></fa-icon>
-                </button>
-            </li>
-            <li class="page-item">
-                <button type="button" [disabled]="true" class="btn btn-info btn-icon" title="Página actual">
-                    {{ page }}
-                </button>
-            </li>
-            <li class="page-item">
-                <button type="button" (click)="nextPage()" [disabled]="page === totalPages"
-                    class="btn btn-outline-info btn-icon" title="Página siguiente">
-                    <fa-icon icon="arrow-right"></fa-icon>
-                </button>
-            </li>
-        </ul>
-    </nav>
-</form>
+<table class="table table-responsive">
+    <thead>
+        <tr>
+            <th scope="col" *ngFor="let header of table.headers">
+                <app-table-header [header]="header" [sort]="sort" [myForm]="myForm"
+                    (executeQuery)="executeQuery($event)">
+                </app-table-header>
+            </th>
+            <th scope="col" *ngIf="hasButtons"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of items">
+            <td *ngFor="let header of table.headers">
+                <app-table-body [header]="header" [item]="item"></app-table-body>
+            </td>
+            <td class="text-right" *ngIf="hasButtons">
+                <span *ngFor="let button of table.buttons">
+                    <button *hasPermission="button.permissions" type="button" (click)="button.onClickFunction(item)"
+                        [class]="button.class"
+                        [title]="button.titleWithFunction ? button.titleWithFunction(item) : button.title"
+                        [disabled]="button.disabled ? button.disabled(item) : false">
+                        <fa-icon [icon]="button.icon"></fa-icon>
+                    </button>
+                </span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<app-paginate [page]="page" [totalPages]="totalPages" (executeQuery)="executeQuery($event)"></app-paginate>

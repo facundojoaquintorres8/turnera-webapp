@@ -15,8 +15,9 @@ export class TableComponent implements OnInit {
     @Input() table!: ITable;
     @Input() myForm!: FormGroup;
     @Input() sort!: string[];
+    @Input() hasButtons: boolean = false;
+    @Input() page: number = 1;
 
-    page: number = 1;
     totalPages: number = 1;
     items: any[] = [];
     inputType: any = InputTypeEnum;
@@ -24,11 +25,11 @@ export class TableComponent implements OnInit {
     constructor() {}
 
     ngOnInit(): void {
-        this.executeQuery(1);
+        this.executeQuery({ page: 1 });
     }
 
-    executeQuery(page: number): void {
-        this.page = page;
+    executeQuery($event: any): void {
+        this.page = $event.page || 1;
         let filters: { [index: string]: [string] } = {};
         this.table.headers.forEach(header => {
             if (header.inputName && this.myForm.get(header.inputName)!.value) {
@@ -39,8 +40,8 @@ export class TableComponent implements OnInit {
         this.queryItems(
             {
                 ...filters,
-                sort: this.sort,
-                page: this.page - 1
+                sort: $event.sort || this.sort,
+                page: $event.page - 1
             }
         ).subscribe(
             (res: HttpResponse<any>) => {
@@ -48,33 +49,5 @@ export class TableComponent implements OnInit {
                 this.totalPages = res.body.totalPages;
             }
         );
-    }
-
-    clearInput(field: string): void {
-        this.myForm.get(field)?.setValue(null);
-        this.executeQuery(1);
-    }
-
-    onSortChange(field: string): void {
-        let sort = 'ASC';
-        if (this.sort[1] === field) {
-            if (this.sort[0] !== 'DESC') {
-                sort = 'DESC';
-            }
-        }
-        this.sort = [sort, field];
-        this.executeQuery(1);
-    }
-
-    onChange(): void {
-        this.executeQuery(1);
-    }
-
-    previousPage(): void {
-        this.executeQuery(this.page - 1);
-    }
-
-    nextPage(): void {
-        this.executeQuery(this.page + 1);
     }
 }

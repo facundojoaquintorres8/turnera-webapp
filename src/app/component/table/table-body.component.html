@@ -1,0 +1,9 @@
+<span *ngIf="header.inputType !== inputType.BOOLEAN">
+    {{ item[header.inputName] }}
+</span>
+<span *ngIf="header.inputType === inputType.BOOLEAN">
+    <fa-icon *ngIf="item[header.inputName]" [icon]="['far', 'check-square']" class="text-success">
+    </fa-icon>
+    <fa-icon *ngIf="!item[header.inputName]" [icon]="['far', 'square']" class="text-danger outline">
+    </fa-icon>
+</span>

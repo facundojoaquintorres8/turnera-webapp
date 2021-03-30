@@ -1,0 +1,33 @@
+<form name="myForm" role="form" novalidate (ngSubmit)="onFilterChange()" [formGroup]="myForm">
+    <div class="d-flex justify-content-between" [class.pointer]="header.sort"
+        (click)="header.sort ? onSortChange(header.inputName) : null">
+        {{ header.label}}
+        <small class="ml-1" *ngIf="header.sort">
+            <fa-icon icon="sort-up" *ngIf="sort[0] === 'DESC' && sort[1] === header.inputName">
+            </fa-icon>
+            <fa-icon icon="sort-down" *ngIf="sort[0] === 'ASC' && sort[1] === header.inputName">
+            </fa-icon>
+            <fa-icon icon="sort" *ngIf="sort[1] !== header.inputName"></fa-icon>
+        </small>
+    </div>
+    <div class="input-group input-group-sm" [ngSwitch]="header.inputType">
+
+        <input *ngSwitchCase="inputType.TEXT" type="text" class="form-control" placeholder="Filtrar"
+            name="{{header.inputName}}" id="{{header.inputName}}" formControlName="{{header.inputName}}">
+        <div *ngSwitchCase="inputType.TEXT" class="input-group-append">
+            <button class="btn btn-outline-success d-sm-none" type="submit">
+                <fa-icon icon="filter"></fa-icon>
+            </button>
+            <button class="btn btn-outline-secondary" type="button" (click)="clearInput(header.inputName)">
+                <fa-icon icon="times"></fa-icon>
+            </button>
+        </div>
+
+        <select *ngSwitchCase="inputType.BOOLEAN" (change)="onChange()" class="form-control" name="{{header.inputName}}"
+            id="{{header.inputName}}" formControlName="{{header.inputName}}">
+            <option [ngValue]="null">Todos</option>
+            <option [value]="true">Si</option>
+            <option [value]="false">No</option>
+        </select>
+    </div>
+</form>

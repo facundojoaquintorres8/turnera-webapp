@@ -1,0 +1,24 @@
+<nav class="float-right">
+    <ul class="pagination">
+        <small class="m-2">
+            Página {{ page }} de {{ totalPages }}
+        </small>
+        <li class="page-item">
+            <button type="button" (click)="previousPage()" [disabled]="page === 1" class="btn btn-outline-info btn-icon"
+                title="Página anterior">
+                <fa-icon icon="arrow-left"></fa-icon>
+            </button>
+        </li>
+        <li class="page-item">
+            <button type="button" [disabled]="true" class="btn btn-info btn-icon" title="Página actual">
+                {{ page }}
+            </button>
+        </li>
+        <li class="page-item">
+            <button type="button" (click)="nextPage()" [disabled]="page === totalPages"
+                class="btn btn-outline-info btn-icon" title="Página siguiente">
+                <fa-icon icon="arrow-right"></fa-icon>
+            </button>
+        </li>
+    </ul>
+</nav>

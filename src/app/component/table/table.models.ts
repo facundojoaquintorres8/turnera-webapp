@@ -25,7 +25,6 @@ export interface IButton {
 export enum InputTypeEnum {
   TEXT,
   NUMBER,
-  // LIST,
   BOOLEAN,
   DATE
 }
