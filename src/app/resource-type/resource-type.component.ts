@@ -70,7 +70,7 @@ export class ResourceTypeComponent implements OnInit {
     this.ngbModalRef.componentInstance.resourceType = resourceType;
     this.ngbModalRef.result.then(
       () => {
-        this.tableComponent.executeQuery(1);
+        this.tableComponent.executeQuery({ page: 1 });
         this.ngbModalRef = undefined;
       },
       () => {

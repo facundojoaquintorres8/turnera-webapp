@@ -68,7 +68,7 @@ export class ProfileComponent implements OnInit {
     this.ngbModalRef.componentInstance.profile = profile;
     this.ngbModalRef.result.then(
       () => {
-        this.tableComponent.executeQuery(1);
+        this.tableComponent.executeQuery({ page: 1 });
         this.ngbModalRef = undefined;
       },
       () => {
