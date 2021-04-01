@@ -8,6 +8,7 @@ export interface ITable {
 export interface IHeader {
   label: string;
   inputName: string;
+  inputWithChildren?: string;
   inputType: InputTypeEnum;
   sort: boolean;
 }

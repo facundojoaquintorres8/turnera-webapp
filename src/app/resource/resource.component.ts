@@ -36,7 +36,7 @@ export class ResourceComponent implements OnInit {
       headers: [
         { label: 'Descripción', inputType: InputTypeEnum.TEXT, inputName: 'description', sort: true },
         { label: 'Código', inputType: InputTypeEnum.TEXT, inputName: 'code', sort: true },
-        { label: 'Tipo de Recurso', inputType: InputTypeEnum.TEXT, inputName: 'resourceTypeDescription', sort: true },
+        { label: 'Tipo de Recurso', inputType: InputTypeEnum.TEXT, inputName: 'resourceTypeDescription', inputWithChildren: 'resourceType_description',sort: true },
         { label: 'Activo', inputType: InputTypeEnum.BOOLEAN, inputName: 'active', sort: false }
       ],
       buttons: [

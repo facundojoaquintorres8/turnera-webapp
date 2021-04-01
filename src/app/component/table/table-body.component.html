@@ -1,5 +1,5 @@
 <span *ngIf="header.inputType !== inputType.BOOLEAN">
-    {{ item[header.inputName] }}
+    {{ getValue() }}
 </span>
 <span *ngIf="header.inputType === inputType.BOOLEAN">
     <fa-icon *ngIf="item[header.inputName]" [icon]="['far', 'check-square']" class="text-success">
