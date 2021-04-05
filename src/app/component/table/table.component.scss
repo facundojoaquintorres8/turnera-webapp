@@ -1,26 +1,28 @@
-th {
-  vertical-align: baseline !important;
-  color: darkblue;
-}
-
-thead>tr {
-  background-color: #f8f9fa;
-}
-
-tbody tr:nth-child(odd) {
-  background-color: #e5e3f9fc;
-}
-
-th>div {
-  white-space: nowrap;
-}
-
-@media screen and (min-width: 600px) {
-
-  .table td, .table th {
-    padding: .55rem !important;
+::ng-deep { 
+  th {
+    vertical-align: baseline !important;
+    color: darkblue;
   }
-  .table {
-    display: table !important;
+
+  thead>tr {
+    background-color: #f8f9fa;
+  }
+
+  tbody tr:nth-child(odd) {
+    background-color: #e5e3f9fc;
+  }
+
+  th>div {
+    white-space: nowrap;
+  }
+
+  @media screen and (min-width: 600px) {
+
+    .table td, .table th {
+      padding: .55rem !important;
+    }
+    .table {
+      display: table !important;
+    }
   }
 }

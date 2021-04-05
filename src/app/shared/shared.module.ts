@@ -6,13 +6,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PermissionModule } from '../security/permission.module';
 import { TableComponent } from '../component/table/table.component';
-import { PaginateComponent } from '../component/table/paginate.component';
+import { PaginateComponent } from '../component/table/paginated.component';
 import { TableHeaderComponent } from '../component/table/table-header.component';
-import { TableBodyComponent } from '../component/table/table-body.component';
 
 @NgModule({
-  declarations: [TableComponent, TableHeaderComponent, TableBodyComponent, PaginateComponent],
-  imports: [CommonModule, PermissionModule, FontAwesomeModule, ReactiveFormsModule],
+  declarations: [TableComponent, TableHeaderComponent, PaginateComponent],
+  imports: [CommonModule, PermissionModule, FontAwesomeModule, ReactiveFormsModule, NgbModule],
   exports: [
     FormsModule,
     CommonModule,
@@ -22,7 +21,6 @@ import { TableBodyComponent } from '../component/table/table-body.component';
     PermissionModule,
     TableComponent,
     TableHeaderComponent,
-    TableBodyComponent,
     PaginateComponent,
   ]
 })

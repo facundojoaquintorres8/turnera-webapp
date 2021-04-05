@@ -4,8 +4,7 @@ import { DeleteCustomerModalComponent } from './delete-customer-modal.component'
 import { CustomerService } from './customer.service';
 import { ICustomer } from '../models/customer.models';
 import { FormBuilder } from '@angular/forms';
-import { InputTypeEnum, ITable } from '../component/table/table.models';
-import { Router } from '@angular/router';
+import { IHeader, InputTypeEnum } from '../component/table/table.models';
 import { TableComponent } from '../component/table/table.component';
 
 @Component({
@@ -16,7 +15,7 @@ export class CustomerComponent implements OnInit {
   @ViewChild('tableComponent') tableComponent!: TableComponent;  
   private ngbModalRef: NgbModalRef | undefined;
 
-  table!: ITable;
+  headers!: IHeader[];
   sort: string[] = ['ASC', 'businessName'];
   myForm = this.fb.group({
     businessName: [null],
@@ -30,42 +29,16 @@ export class CustomerComponent implements OnInit {
     private customerService: CustomerService,
     private modalService: NgbModal,
     private fb: FormBuilder,
-    private router: Router,
   ) { }
 
   ngOnInit(): void {
-    this.table = {
-      headers: [
-        { label: 'Razón Social', inputType: InputTypeEnum.TEXT, inputName: 'businessName', sort: true },
-        { label: 'Marca', inputType: InputTypeEnum.TEXT, inputName: 'brandName', sort: true },
-        { label: 'Correo Electrónico', inputType: InputTypeEnum.TEXT, inputName: 'email', sort: true },
-        { label: 'Teléfono 1', inputType: InputTypeEnum.TEXT, inputName: 'phone1', sort: true },
-        { label: 'Activo', inputType: InputTypeEnum.BOOLEAN, inputName: 'active', sort: false }
-      ],
-      buttons: [
-        {
-          class: 'btn btn-info btn-icon mr-1',
-          icon: ['fas', 'eye'],
-          permissions: ['customers.read'],
-          title: 'Ver',
-          onClickFunction: (customer: ICustomer) => this.router.navigate(['customers', customer.id, 'view'])
-        },
-        {
-          class: 'btn btn-primary btn-icon mr-1',
-          icon: ['fas', 'pencil-alt'],
-          permissions: ['customers.write'],
-          title: 'Editar',
-          onClickFunction: (customer: ICustomer) => this.router.navigate(['customers', customer.id, 'edit'])
-        },
-        {
-          class: 'btn btn-danger btn-icon mr-1',
-          icon: ['fas', 'times'],
-          permissions: ['customers.delete'],
-          title: 'Eliminar',
-          onClickFunction: (customer: ICustomer) => this.delete(customer)
-        }
-      ]
-    }
+    this.headers = [
+      { label: 'Razón Social', inputType: InputTypeEnum.TEXT, inputName: 'businessName', sort: true },
+      { label: 'Marca', inputType: InputTypeEnum.TEXT, inputName: 'brandName', sort: true },
+      { label: 'Correo Electrónico', inputType: InputTypeEnum.TEXT, inputName: 'email', sort: true },
+      { label: 'Teléfono 1', inputType: InputTypeEnum.TEXT, inputName: 'phone1', sort: true },
+      { label: 'Activo', inputType: InputTypeEnum.BOOLEAN, inputName: 'active', sort: false }
+    ];
   }
 
   query = (req?: any) => this.customerService.findAllByFilter(req);

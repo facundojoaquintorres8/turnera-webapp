@@ -5,9 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ProfileService } from './profile.service';
 import { AuthService } from '../auth/auth.service';
-import { IPermission, IProfile } from '../models/profile.models';
+import { IPermission, IProfile, PermissionByEntity } from '../models/profile.models';
 
-interface PermissionByEntity { name: string, actions: { permission: IPermission, action: string }[], selected: boolean };
 
 @Component({
   selector: 'app-update-profile',
@@ -63,21 +62,6 @@ export class UpdateProfileComponent implements OnInit {
     )
   }
 
-  updateForm(profile: IProfile, permissionsByEntities: PermissionByEntity[]): void {
-    permissionsByEntities.forEach(pbye => {
-      pbye.actions.forEach(action => {
-        if (profile.permissions.find(x => x.id === action.permission.id)) {
-          this.select(action.permission, pbye);
-        }
-      });
-    });
-    this.myForm.patchValue({
-      id: profile.id,
-      description: profile.description,
-      active: profile.active,
-    });
-  }
-
   select(permission: IPermission, permissionByEntity: PermissionByEntity): void {
     permission['selected'] = !permission['selected'];
     permissionByEntity.selected = permissionByEntity.actions.every((x: any) => {
@@ -105,6 +89,21 @@ export class UpdateProfileComponent implements OnInit {
     } else {
       this.subscribeToSaveResponse(this.profileService.create(profile));
     }
+  }
+
+  private updateForm(profile: IProfile, permissionsByEntities: PermissionByEntity[]): void {
+    permissionsByEntities.forEach(pbye => {
+      pbye.actions.forEach(action => {
+        if (profile.permissions.find(x => x.id === action.permission.id)) {
+          this.select(action.permission, pbye);
+        }
+      });
+    });
+    this.myForm.patchValue({
+      id: profile.id,
+      description: profile.description,
+      active: profile.active,
+    });
   }
 
   private createFromForm(): IProfile {

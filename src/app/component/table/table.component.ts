@@ -1,8 +1,8 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { InputTypeEnum, ITable } from './table.models';
+import { IHeader, InputTypeEnum } from './table.models';
 
 @Component({
     selector: 'app-table',
@@ -12,11 +12,12 @@ import { InputTypeEnum, ITable } from './table.models';
 export class TableComponent implements OnInit {
 
     @Input() queryItems!: (req?: any) => Observable<HttpResponse<any[]>>;
-    @Input() table!: ITable;
+    @Input() headers: IHeader[] = [];
     @Input() myForm!: FormGroup;
     @Input() sort!: string[];
     @Input() hasButtons: boolean = false;
     @Input() page: number = 1;
+    @Input() bodyTemplate!: TemplateRef<any>;
 
     totalPages: number = 1;
     items: any[] = [];
@@ -30,8 +31,11 @@ export class TableComponent implements OnInit {
 
     executeQuery($event: any): void {
         this.page = $event.page || 1;
+        if ($event.sort) {
+            this.sort = $event.sort;            
+        }
         let filters: { [index: string]: [string] } = {};
-        this.table.headers.forEach(header => {
+        this.headers.forEach(header => {
             if (header.inputName && this.myForm.get(header.inputName)!.value) {
                 filters[header.inputName] = [this.myForm.get(header.inputName)!.value];
             }

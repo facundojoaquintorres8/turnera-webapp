@@ -74,9 +74,9 @@ export class ScheduleComponent implements OnInit {
 
   onCalendarChange(): void {
     this.loading = true;
-    this.agendaService.findAllByFilter(this.createFromForm()).subscribe(
-      (res: HttpResponse<IAgenda[]>) => {
-        this.events = res.body!.map(x => ({
+    this.agendaService.findAllByFilter({ ignorePaginated: true, page: 0, ...this.createFromForm() }).subscribe(
+      (res: HttpResponse<any>) => {
+        this.events = res.body.content.map((x: IAgenda) => ({
           id: x.id,
           start: new Date(x.startDate),
           end: new Date(x.endDate),

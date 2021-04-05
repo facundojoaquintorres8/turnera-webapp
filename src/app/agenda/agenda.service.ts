@@ -16,7 +16,7 @@ export class AgendaService {
 
   findAllByFilter(filter: any): Observable<HttpResponse<IAgenda[]>> {
     filter['organizationId'] = this.organizationId;
-    // filter['sort'] = filter['sort'] ? filter['sort'] : ['ASC', 'resourceTypeId'];
+    filter['sort'] = filter['sort'] ? filter['sort'] : ['ASC', 'startDate'];
     const options = createRequestOption(filter);
     return this.http.get<IAgenda[]>(`${this.resourceUrl}/findAllByFilter`, { params: options, observe: 'response' });
   }

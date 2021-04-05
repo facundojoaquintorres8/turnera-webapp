@@ -1,31 +1,18 @@
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-
-export interface ITable {
-  headers: IHeader[];
-  buttons: IButton[];
-}
+import { IListItem } from "src/app/models/list.models";
 
 export interface IHeader {
   label: string;
   inputName: string;
-  inputWithChildren?: string;
   inputType: InputTypeEnum;
   sort: boolean;
-}
-
-export interface IButton {
-  permissions: string[];
-  class: string;
-  title: string;
-  titleWithFunction?: (param?: any) => string;
-  icon: IconProp;
-  disabled?: (param?: any) => boolean;
-  onClickFunction: (param?: any) => {} | void;
+  querySelector?: (param?: any) => any;
+  itemList?: IListItem[];
 }
 
 export enum InputTypeEnum {
   TEXT,
   NUMBER,
   BOOLEAN,
-  DATE
+  DATE,
+  LIST
 }

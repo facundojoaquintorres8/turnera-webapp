@@ -1,30 +1,27 @@
 <table class="table table-responsive">
     <thead>
-        <tr>
-            <th scope="col" *ngFor="let header of table.headers">
-                <app-table-header [header]="header" [sort]="sort" [myForm]="myForm"
-                    (executeQuery)="executeQuery($event)">
-                </app-table-header>
-            </th>
-            <th scope="col" *ngIf="hasButtons"></th>
-        </tr>
+        <ng-container *ngTemplateOutlet="defaultHeader">
+        </ng-container>
     </thead>
     <tbody>
-        <tr *ngFor="let item of items">
-            <td *ngFor="let header of table.headers">
-                <app-table-body [header]="header" [item]="item"></app-table-body>
-            </td>
-            <td class="text-right" *ngIf="hasButtons">
-                <span *ngFor="let button of table.buttons">
-                    <button *hasPermission="button.permissions" type="button" (click)="button.onClickFunction(item)"
-                        [class]="button.class"
-                        [title]="button.titleWithFunction ? button.titleWithFunction(item) : button.title"
-                        [disabled]="button.disabled ? button.disabled(item) : false">
-                        <fa-icon [icon]="button.icon"></fa-icon>
-                    </button>
-                </span>
-            </td>
-        </tr>
+        <ng-container *ngTemplateOutlet="items.length ? bodyTemplate : bodyNoItems; context: {$implicit:  items}">
+        </ng-container>
     </tbody>
 </table>
-<app-paginate [page]="page" [totalPages]="totalPages" (executeQuery)="executeQuery($event)"></app-paginate>
+<app-paginated [page]="page" [totalPages]="totalPages" (executeQuery)="executeQuery($event)"></app-paginated>
+
+<ng-template #defaultHeader>
+    <tr>
+        <th scope="col" *ngFor="let header of headers">
+            <app-table-header [header]="header" [sort]="sort" [myForm]="myForm" (executeQuery)="executeQuery($event)">
+            </app-table-header>
+        </th>
+        <th scope="col" *ngIf="hasButtons"></th>
+    </tr>
+</ng-template>
+
+<ng-template #bodyNoItems>
+    <tr>
+        <td colspan="20">No hay items para mostrar.</td>
+    </tr>
+</ng-template>

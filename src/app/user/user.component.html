@@ -6,6 +6,43 @@
     </button> Usuarios
   </h2>
 
-  <app-table [table]="table" [myForm]="myForm" [sort]="sort" [hasButtons]="true" [queryItems]="query" #tableComponent>
+  <app-table [headers]="headers" [bodyTemplate]="customBody" [myForm]="myForm" [sort]="sort" [hasButtons]="true"
+    [queryItems]="query" #tableComponent>
+
+    <ng-template #customBody let-items>
+      <tr *ngFor="let user of items">
+        <td>
+          {{ user.firstName }}
+        </td>
+        <td>
+          {{ user.lastName }}
+        </td>
+        <td>
+          {{ user.username }}
+        </td>
+        <td>
+          <fa-icon *ngIf="user.active" [icon]="['far', 'check-square']" class="text-success"></fa-icon>
+          <fa-icon *ngIf="!user.active" [icon]="['far', 'square']" class="text-danger outline"></fa-icon>
+        </td>
+        <td class="text-right">
+          <button *hasPermission="['users.read']" type="button" [routerLink]="[user.id, 'view']"
+            class="btn btn-info btn-icon mr-1" title="Ver">
+            <fa-icon icon="eye"></fa-icon>
+          </button>
+
+          <button *hasPermission="['users.write']" type="button" [routerLink]="[user.id, 'edit']"
+            class="btn btn-primary btn-icon mr-1" title="Editar">
+            <fa-icon icon="pencil-alt"></fa-icon>
+          </button>
+
+          <button *hasPermission="['users.delete']" [disabled]="sessionUser?.id === user.id" type="button"
+            (click)="delete(user)" class="btn btn-danger btn-icon mr-1"
+            [title]="sessionUser?.id === user.id ? 'No puede eliminar su propio Usuario' : 'Eliminar'">
+            <fa-icon icon="times"></fa-icon>
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+
   </app-table>
 </div>

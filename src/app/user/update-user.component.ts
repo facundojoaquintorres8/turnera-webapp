@@ -24,7 +24,6 @@ export class UpdateUserComponent implements OnInit {
     lastName: [null, [Validators.required]],
     email: [null, [Validators.required, Validators.email, Validators.maxLength(100)]],
     active: [null],
-    selectAll: [null]
   });
 
   constructor(
@@ -33,7 +32,7 @@ export class UpdateUserComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private profileService: ProfileService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.profileService.findAllByFilter({ active: true }).subscribe(
@@ -62,27 +61,11 @@ export class UpdateUserComponent implements OnInit {
       lastName: user.lastName,
       email: user.username,
       active: user.active,
-      selectAll: profilesIds.length === allProfiles.length,
     });
-  }
-
-  selectAll(): void {
-    if (this.myForm.get(['selectAll'])!.value) {
-      this.profiles.forEach(p => {
-        p['selected'] = true;
-      });
-    } else {
-      this.profiles.forEach(p => {
-        p['selected'] = false;
-      });
-    }
   }
 
   selectProfile(profile: IProfile): void {
     profile['selected'] = !profile['selected'];
-    this.myForm.patchValue({
-      selectAll: !this.profiles.find(x => !x['selected'])
-    });
   }
 
   previousState(): void {

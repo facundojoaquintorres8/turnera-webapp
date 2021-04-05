@@ -1,0 +1,46 @@
+<nav class="float-right mb-5">
+    <ul class="pagination">
+        <small class="m-2">
+            Página {{ totalPages === 0 ? 0 : page }} de {{ totalPages }}
+        </small>
+        <li class="page-item">
+            <button type="button" (click)="firstPage()" [disabled]="page === 1" class="btn btn-outline-dark btn-icon"
+                title="Primer página">
+                <fa-icon icon="angle-double-left"></fa-icon>
+            </button>
+        </li>
+        <li class="page-item">
+            <button type="button" (click)="previousPage()" [disabled]="page === 1" class="btn btn-outline-dark btn-icon"
+                title="Página anterior">
+                <fa-icon icon="angle-left"></fa-icon>
+            </button>
+        </li>
+        <li class="page-item" *ngIf="page - 1 > 0">
+            <button type="button" (click)="goToPage(page - 1)" class="btn btn-outline-dark btn-icon" title="{{ page - 1 }}">
+                {{ page - 1 }}
+            </button>
+        </li>
+        <li class="page-item">
+            <button type="button" [disabled]="true" class="btn btn-dark btn-icon" title="Página actual">
+                {{ totalPages === 0 ? '-' : page }}
+            </button>
+        </li>
+        <li class="page-item" *ngIf="page + 1 <= totalPages">
+            <button type="button" (click)="goToPage(page + 1)" class="btn btn-outline-dark btn-icon" title="{{ page + 1 }}">
+                {{ page + 1 }}
+            </button>
+        </li>
+        <li class="page-item">
+            <button type="button" (click)="nextPage()" [disabled]="page === totalPages || totalPages === 0"
+                class="btn btn-outline-dark btn-icon" title="Página siguiente">
+                <fa-icon icon="angle-right"></fa-icon>
+            </button>
+        </li>
+        <li class="page-item">
+            <button type="button" (click)="lastPage()" [disabled]="page === totalPages || totalPages === 0"
+                class="btn btn-outline-dark btn-icon" title="Última página">
+                <fa-icon icon="angle-double-right"></fa-icon>
+            </button>
+        </li>
+    </ul>
+</nav>

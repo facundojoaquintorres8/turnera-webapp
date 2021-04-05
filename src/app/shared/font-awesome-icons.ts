@@ -24,6 +24,10 @@ import {
   faSort,
   faSortUp,
   faSortDown,
+  faAngleLeft,
+  faAngleRight,
+  faAngleDoubleLeft,
+  faAngleDoubleRight,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -58,5 +62,9 @@ export const fontAwesomeIcons = [
   faArrowUp,
   faSort,
   faSortUp,
-  faSortDown
+  faSortDown,
+  faAngleLeft,
+  faAngleRight,
+  faAngleDoubleLeft,
+  faAngleDoubleRight
 ];

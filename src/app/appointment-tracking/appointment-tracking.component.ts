@@ -1,11 +1,13 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NgbDateStruct, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { AgendaService } from '../agenda/agenda.service';
 import { DeleteAgendaModalComponent } from '../agenda/delete-agenda-modal.component';
 import { DesactivateAgendaModalComponent } from '../agenda/desactivate-agenda-modal.component';
 import { AuthService } from '../auth/auth.service';
+import { TableComponent } from '../component/table/table.component';
+import { IHeader, InputTypeEnum } from '../component/table/table.models';
 import { CustomerService } from '../customer/customer.service';
 import { IAgenda } from '../models/agenda.models';
 import { IAppointment } from '../models/appointment.model';
@@ -28,6 +30,7 @@ import { FinalizeAppointmentModalComponent } from './finalize-appointment-modal.
   templateUrl: './appointment-tracking.component.html'
 })
 export class AppointmentTrackingComponent implements OnInit {
+  @ViewChild('tableComponent') tableComponent!: TableComponent;
   private ngbModalRef: NgbModalRef | undefined;
 
   permissions: string[] = [];
@@ -50,17 +53,26 @@ export class AppointmentTrackingComponent implements OnInit {
     FINALIZED: "Finalizado",
   }
 
-  myForm = this.fb.group({
+  myFormFilter = this.fb.group({
     resourceTypeId: [null],
     resourceId: [null],
     customerId: [null],
-    status: [null],
     from: [formatNgbDateStructFromDate(this.firstDayMonth), [Validators.required]],
     to: [formatNgbDateStructFromDate(this.lastDayMonth), [Validators.required]],
   });
 
-  public maxDate = (): NgbDateStruct => { return this.myForm.get(['to'])!.value };
-  public minDate = (): NgbDateStruct => { return this.myForm.get(['from'])!.value };
+  public maxDate = (): NgbDateStruct => { return this.myFormFilter.get(['to'])!.value };
+  public minDate = (): NgbDateStruct => { return this.myFormFilter.get(['from'])!.value };
+
+  headers!: IHeader[];
+  sort: string[] = ['ASC', 'startDate'];
+  myForm = this.fb.group({
+    resourceDescription: [null],
+    startDate: [null],
+    endDate: [null],
+    customerBusinessName: [null],
+    status: [null],
+  });
 
   constructor(
     private agendaService: AgendaService,
@@ -73,9 +85,15 @@ export class AppointmentTrackingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.permissions = this.authService.getPermissions();
+    this.headers = [
+      { label: 'Recurso', inputType: InputTypeEnum.TEXT, inputName: 'resourceDescription', sort: true },
+      { label: 'Inicio', inputType: InputTypeEnum.DATE, inputName: 'startDate', sort: true },
+      { label: 'Fin', inputType: InputTypeEnum.DATE, inputName: 'endDate', sort: true },
+      { label: 'Cliente', inputType: InputTypeEnum.TEXT, inputName: 'customerBusinessName', sort: false },
+      { label: 'Último Estado', inputType: InputTypeEnum.LIST, inputName: 'status', sort: false, itemList: this.appointmentStatus }
+    ];
 
-    this.getAgendas();
+    this.permissions = this.authService.getPermissions();
 
     this.resourceTypeService.findAllByFilter({}).subscribe(
       (res: HttpResponse<any>) => this.resourcesTypes = res.body.content || []
@@ -95,54 +113,48 @@ export class AppointmentTrackingComponent implements OnInit {
   }
 
   clear(): void {
-    this.myForm.reset();
-    this.myForm.get('from')?.setValue(formatNgbDateStructFromDate(this.firstDayMonth));
-    this.myForm.get('to')?.setValue(formatNgbDateStructFromDate(this.lastDayMonth));
-    this.getAgendas();
+    this.myFormFilter.reset();
+    this.myFormFilter.get('from')?.setValue(formatNgbDateStructFromDate(this.firstDayMonth));
+    this.myFormFilter.get('to')?.setValue(formatNgbDateStructFromDate(this.lastDayMonth));
+    this.tableComponent.executeQuery({ page: 1 });
   }
 
+  query = (req?: any) => this.agendaService.findAllByFilter({ ...req, ...this.createFromForm()});
+
   getAgendas(): void {
-    this.isSearching = true;
-    this.agendaService.findAllByFilter(this.createFromForm()).subscribe(
-      (res: HttpResponse<IAgenda[]>) => { 
-        this.agendas = res.body || [];
-        this.isSearching = false;
-      },
-      () => this.isSearching = false
-    );
+    this.tableComponent.executeQuery({ page: 1 });
   }
 
   private createFromForm(): any {
     return {
-      resourceTypeId: this.myForm.get(['resourceTypeId'])!.value,
-      resourceId: this.myForm.get(['resourceId'])!.value,
-      customerId: this.myForm.get(['customerId'])!.value,
-      status: this.myForm.get(['status'])!.value,
-      from: formatDateFromNgbDateStruct(this.myForm.get(['from'])!.value),
-      to: formatDateFromNgbDateStruct(this.myForm.get(['to'])!.value),
+      resourceTypeId: this.myFormFilter.get(['resourceTypeId'])!.value,
+      resourceId: this.myFormFilter.get(['resourceId'])!.value,
+      customerId: this.myFormFilter.get(['customerId'])!.value,
+      from: formatDateFromNgbDateStruct(this.myFormFilter.get(['from'])!.value),
+      to: formatDateFromNgbDateStruct(this.myFormFilter.get(['to'])!.value),
       active: true,
     };
   }
 
   onResourceTypeChange(): void {
-    if (this.myForm.get('resourceTypeId')?.value === null) { 
+    if (this.myFormFilter.get('resourceTypeId')?.value === null) { 
       this.resourceService.findAllByFilter({}).subscribe(
         (res: HttpResponse<any>) => this.resources = res.body.content || []
       );  
     } else {
-      this.resourceService.findAllByFilter({ resourceTypeId: this.myForm.get('resourceTypeId')?.value }).subscribe(
+      this.resourceService.findAllByFilter({ resourceTypeId: this.myFormFilter.get('resourceTypeId')?.value }).subscribe(
         (res: HttpResponse<any>) => this.resources = res.body.content || []
       );  
     }
   }
 
   onResourceChange(): void {
-    if (this.myForm.get('resourceId')?.value !== null) {
-      const resource = this.resources.find(x => x.id == this.myForm.get('resourceId')?.value);
-      this.myForm.get('resourceTypeId')?.setValue(resource?.resourceType?.id);
-      this.myForm.get('resourceTypeId')?.disable();
+    if (this.myFormFilter.get('resourceId')?.value !== null) {
+      const resource = this.resources.find(x => x.id == this.myFormFilter.get('resourceId')?.value);
+      this.myFormFilter.get('resourceTypeId')?.setValue(resource?.resourceType?.id);
+      this.myFormFilter.get('resourceTypeId')?.disable();
     } else {
-      this.myForm.get('resourceTypeId')?.enable();
+      this.myFormFilter.get('resourceTypeId')?.enable();
     }
   }
 
@@ -209,7 +221,7 @@ export class AppointmentTrackingComponent implements OnInit {
     this.ngbModalRef.componentInstance.agenda = agenda;
     this.ngbModalRef.result.then(
       () => {
-        this.getAgendas();
+        this.tableComponent.executeQuery({ page: 1 });
         this.ngbModalRef = undefined;
       },
       () => {
@@ -223,7 +235,7 @@ export class AppointmentTrackingComponent implements OnInit {
     this.ngbModalRef.componentInstance.appointment = lastAppointment;
     this.ngbModalRef.result.then(
       () => {
-        this.getAgendas();
+        this.tableComponent.executeQuery({ page: 1 });
         this.ngbModalRef = undefined;
       },
       () => {
@@ -237,7 +249,7 @@ export class AppointmentTrackingComponent implements OnInit {
     this.ngbModalRef.componentInstance.appointment = lastAppointment;
     this.ngbModalRef.result.then(
       () => {
-        this.getAgendas();
+        this.tableComponent.executeQuery({ page: 1 });
         this.ngbModalRef = undefined;
       },
       () => {
@@ -251,7 +263,7 @@ export class AppointmentTrackingComponent implements OnInit {
     this.ngbModalRef.componentInstance.appointment = lastAppointment;
     this.ngbModalRef.result.then(
       () => {
-        this.getAgendas();
+        this.tableComponent.executeQuery({ page: 1 });
         this.ngbModalRef = undefined;
       },
       () => {
@@ -265,7 +277,7 @@ export class AppointmentTrackingComponent implements OnInit {
     this.ngbModalRef.componentInstance.appointment = lastAppointment;
     this.ngbModalRef.result.then(
       () => {
-        this.getAgendas();
+        this.tableComponent.executeQuery({ page: 1 });
         this.ngbModalRef = undefined;
       },
       () => {
@@ -279,7 +291,7 @@ export class AppointmentTrackingComponent implements OnInit {
     this.ngbModalRef.componentInstance.agenda = agenda;
     this.ngbModalRef.result.then(
       () => {
-        this.getAgendas();
+        this.tableComponent.executeQuery({ page: 1 });
         this.ngbModalRef = undefined;
       },
       () => {
@@ -293,16 +305,12 @@ export class AppointmentTrackingComponent implements OnInit {
     this.ngbModalRef.componentInstance.agenda = agenda;
     this.ngbModalRef.result.then(
       () => {
-        this.getAgendas();
+        this.tableComponent.executeQuery({ page: 1 });
         this.ngbModalRef = undefined;
       },
       () => {
         this.ngbModalRef = undefined;
       }
     );
-  }
-
-  previousState(): void {
-    window.history.back();
   }
 }

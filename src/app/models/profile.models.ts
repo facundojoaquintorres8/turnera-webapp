@@ -11,3 +11,12 @@ export interface IPermission {
   description: string;
   code: string;
 }
+
+export interface PermissionByEntity {
+  name: string;
+  actions: {
+    permission: IPermission;
+    action: string;
+  }[];
+  selected: boolean;
+}

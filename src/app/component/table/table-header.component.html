@@ -29,5 +29,21 @@
             <option [value]="true">Si</option>
             <option [value]="false">No</option>
         </select>
+
+        <select *ngSwitchCase="inputType.LIST" (change)="onChange()" class="form-control" name="{{header.inputName}}"
+            id="{{header.inputName}}" formControlName="{{header.inputName}}">
+            <option [ngValue]="null">Todos</option>
+            <option [value]="item.id" *ngFor="let item of header.itemList">{{ item.value }}</option>
+        </select>
+
+        <!-- <div class="input-group" *ngSwitchCase="inputType.DATE">
+            <input class="form-control" placeholder="yyyy-mm-dd" name="{{header.inputName}}" formControlName="{{header.inputName}}" ngbDatepicker
+                #inputDate="ngbDatepicker" [firstDayOfWeek]="7" (ngModelChange)="onChange()"> 
+            <div class="input-group-append">
+                <button class="btn btn-primary" (click)="inputDate.toggle()" type="button" title="Ver Calendario">
+                    <fa-icon icon="calendar"></fa-icon>
+                </button>
+            </div>
+        </div> -->
     </div>
 </form>

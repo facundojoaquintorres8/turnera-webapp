@@ -6,6 +6,37 @@
     </button> Clientes
   </h2>
 
-  <app-table [table]="table" [myForm]="myForm" [sort]="sort" [hasButtons]="true" [queryItems]="query" #tableComponent>
+  <app-table [headers]="headers" [bodyTemplate]="customBody" [myForm]="myForm" [sort]="sort" [hasButtons]="true" [queryItems]="query"
+    #tableComponent>
+
+    <ng-template #customBody let-items>
+      <tr *ngFor="let customer of items">
+        <td>{{ customer.businessName }}</td>
+        <td>{{ customer.brandName }}</td>
+        <td>{{ customer.email }}</td>
+        <td>{{ customer.phone1 }}</td>
+        <td>
+          <fa-icon *ngIf="customer.active" [icon]="['far', 'check-square']" class="text-success"></fa-icon>
+          <fa-icon *ngIf="!customer.active" [icon]="['far', 'square']" class="text-danger outline"></fa-icon>
+        </td>
+        <td class="text-right">
+          <button *hasPermission="['customers.read']" type="button" [routerLink]="[customer.id, 'view']"
+            class="btn btn-info btn-icon mr-1" title="Ver">
+            <fa-icon icon="eye"></fa-icon>
+          </button>
+
+          <button *hasPermission="['customers.write']" type="button" [routerLink]="[customer.id, 'edit']"
+            class="btn btn-primary btn-icon mr-1" title="Editar">
+            <fa-icon icon="pencil-alt"></fa-icon>
+          </button>
+
+          <button *hasPermission="['customers.delete']" type="button" (click)="delete(customer)"
+            class="btn btn-danger btn-icon mr-1" title="Eliminar">
+            <fa-icon icon="times"></fa-icon>
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+
   </app-table>
 </div>

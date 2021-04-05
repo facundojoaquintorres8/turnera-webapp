@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-    selector: 'app-paginate',
-    templateUrl: './paginate.component.html'
+    selector: 'app-paginated',
+    templateUrl: './paginated.component.html',
+    styleUrls: ['./paginated.component.scss']
 })
 export class PaginateComponent {
 
@@ -19,6 +20,21 @@ export class PaginateComponent {
 
     nextPage(): void {
         this.page++;
+        this.executeQuery.emit({ page: this.page });
+    }
+
+    goToPage(page: number): void {
+        this.page = page;
+        this.executeQuery.emit({ page: this.page });
+    }
+
+    firstPage(): void {
+        this.page = 1;
+        this.executeQuery.emit({ page: this.page });
+    }
+
+    lastPage(): void {
+        this.page = this.totalPages;
         this.executeQuery.emit({ page: this.page });
     }
 }
