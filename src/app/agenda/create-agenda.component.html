@@ -27,7 +27,7 @@
                     <div class="input-group">
                         <input class="form-control" placeholder="yyyy-mm-dd" name="startDate"
                             formControlName="startDate" ngbDatepicker #startDate="ngbDatepicker" [firstDayOfWeek]="7"
-                            [maxDate]="maxDate()" [minDate]="today">
+                            [minDate]="today" (ngModelChange)="onStartDateChange()">
                         <div class="input-group-append">
                             <button class="btn btn-primary" (click)="startDate.toggle()" type="button" title="Abrir Calendario">
                                 <fa-icon icon="calendar"></fa-icon>
