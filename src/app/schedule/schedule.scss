@@ -1,5 +1,8 @@
 .calendar-loading {
-    opacity: 0.5;
-    z-index: 2;
-  }
-  
+  opacity: 0.5;
+  z-index: 2;
+}
+
+::ng-deep .titlecase {
+  text-transform: capitalize;
+}

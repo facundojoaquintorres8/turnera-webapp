@@ -129,6 +129,9 @@ export class ScheduleComponent implements OnInit {
 
   beforeMonthViewRender(renderEvent: CalendarMonthViewBeforeRenderEvent): void {
     const today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+    renderEvent.header.forEach((header: any) => {
+      header.cssClass = 'titlecase'
+    });
     renderEvent.body.forEach((day: any) => {
       if (day.date < today) {
         day.cssClass = 'bg-secondary';

@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="col-md-4">
-      <h3>{{ agendaService.viewDate | calendarDate:(view + 'ViewTitle'):'es' }}</h3>
+      <h3>{{ agendaService.viewDate | date: 'MMMM yyyy':'es' | titlecase }}</h3>
     </div>
   </div>
   <br />
