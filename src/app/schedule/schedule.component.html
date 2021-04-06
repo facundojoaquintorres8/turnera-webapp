@@ -1,6 +1,7 @@
 <div class="container">
   <h2>
-    <button type="button" [routerLink]="['./../agendas','new']" class="btn btn-primary btn-sm" title="Agregar Disponibilidades">
+    <button *hasPermission="['agendas.write']" type="button" [routerLink]="['./../agendas','new']"
+      class="btn btn-primary btn-icon" title="Agregar Disponibilidades">
       <fa-icon icon="calendar-plus"></fa-icon>
     </button> Calendario
   </h2>
@@ -23,7 +24,7 @@
       </div>
     </div>
     <div class="col-md-4">
-      <h3>{{ agendaService.viewDate | calendarDate:(view + 'ViewTitle'):'es' }}</h3>
+      <h3>{{ agendaService.viewDate | date: 'MMMM yyyy':'es' | titlecase }}</h3>
     </div>
   </div>
   <br />
@@ -33,7 +34,31 @@
       <div class="spinner-border text-light" role="status"></div>
     </div>
     <mwl-calendar-month-view [viewDate]="agendaService.viewDate" [events]="events" (dayClicked)="dayClicked()"
-      (beforeViewRender)="beforeMonthViewRender($event)" (eventClicked)="handleEvent($event.event)">
+      (beforeViewRender)="beforeMonthViewRender($event)" (eventClicked)="handleEvent($event.event)"
+      [cellTemplate]="customCellTemplate">
     </mwl-calendar-month-view>
   </div>
 </div>
+
+<ng-template #customCellTemplate let-day="day">
+  <div class="cal-cell-top">
+    <span class="cal-day-badge" *ngIf="day.badgeTotal > 0">{{ day.badgeTotal > 20 ? '+20' : day.badgeTotal }}</span>
+    <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber': 'es' }}</span>
+    <!-- <span class="cal-day-events cal-day-badge bg-success d-none" *ngIf="day.badgeTotal > 0">{{
+      quantityAppointmentsReserved(day.events) }}</span> -->
+  </div>
+  <div class="cal-events">
+    <ng-container *ngFor="let item of day.events; let index = index">
+      <span 
+        *ngIf="index < 20" 
+        class="cal-event"
+
+        title="{{item.title}}">
+      </span>
+    </ng-container>
+  </div>
+</ng-template>
+<!-- 
+[class.bg-success]="!item.available"
+[class.bg-primary]="!item.selected"
+[class.bg-info]="item.selected"  -->

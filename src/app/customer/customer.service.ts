@@ -16,6 +16,7 @@ export class CustomerService {
 
   findAllByFilter(filter: any): Observable<HttpResponse<ICustomer[]>> {
     filter['organizationId'] = this.organizationId;
+    filter['sort'] = filter['sort'] ? filter['sort'] : ['ASC', 'businessName'];
     const options = createRequestOption(filter);
     return this.http.get<ICustomer[]>(`${this.resourceUrl}/findAllByFilter`, { params: options, observe: 'response' });
   }

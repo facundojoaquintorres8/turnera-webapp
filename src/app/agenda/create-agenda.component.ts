@@ -9,6 +9,7 @@ import { IResource } from '../models/resource.models';
 import { ResourceService } from '../resource/resource.service';
 import { formatDateFromNgbDateStruct, formatTimeFromNgbTimeStruct } from '../shared/date-format';
 import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-create-agenda',
@@ -20,18 +21,17 @@ export class CreateAgendaComponent implements OnInit {
   resources!: IResource[];
 
   now: Date = new Date();
-  today: NgbDateStruct = { year: this.now.getFullYear(), month: this.now.getMonth() + 1, day: this.now.getDate()}
+  today: NgbDateStruct = { year: this.now.getFullYear(), month: this.now.getMonth() + 1, day: this.now.getDate() }
 
-  public maxDate = (): NgbDateStruct => { return this.myForm.get(['endDate'])!.value };
   public minDate = (): NgbDateStruct => { return this.myForm.get(['startDate'])!.value };
 
   myForm = this.fb.group({
     id: [],
     resource: [null, [Validators.required]],
     startDate: [this.today, [Validators.required]],
-    endDate: [this.today, [Validators.required]],
-    startHour: [{ hour: 8, minute: 0 }, [Validators.required]],
-    endHour: [{ hour: 18, minute: 0 }, [Validators.required]],
+    endDate: [null, [Validators.required]],
+    startHour: [{ hour: 8, minute: 0, second: 0 }, [Validators.required]],
+    endHour: [{ hour: 18, minute: 0, second: 0 }, [Validators.required]],
     duration: [null, [Validators.required, Validators.min(1), Validators.max(1440)]],
     sunday: [false],
     monday: [false],
@@ -47,11 +47,11 @@ export class CreateAgendaComponent implements OnInit {
     private resourceService: ResourceService,
     private fb: FormBuilder,
     private authService: AuthService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.resourceService.findAllByFilter({ active: true }).subscribe(
-      (res: HttpResponse<IResource[]>) => this.resources = res.body!
+      (res: HttpResponse<any>) => this.resources = res.body.content!
     )
   }
 
@@ -78,9 +78,9 @@ export class CreateAgendaComponent implements OnInit {
 
   hasAnyDaySelected(): boolean {
     return this.myForm.get(['sunday'])!.value || this.myForm.get(['monday'])!.value ||
-    this.myForm.get(['tuesday'])!.value || this.myForm.get(['wednesday'])!.value ||
-    this.myForm.get(['thursday'])!.value || this.myForm.get(['friday'])!.value ||
-    this.myForm.get(['saturday'])!.value;
+      this.myForm.get(['tuesday'])!.value || this.myForm.get(['wednesday'])!.value ||
+      this.myForm.get(['thursday'])!.value || this.myForm.get(['friday'])!.value ||
+      this.myForm.get(['saturday'])!.value;
   }
 
   getButtonCreateTitle(validForm: boolean): string {
@@ -93,6 +93,13 @@ export class CreateAgendaComponent implements OnInit {
       }
     }
     return 'Guardar';
+  }
+
+  onStartDateChange(): void {
+    if (this.myForm.get(['startDate'])!.value && this.myForm.get(['endDate'])!.value
+      && moment(this.myForm.get(['startDate'])!.value).isAfter(moment(this.myForm.get(['endDate'])!.value))) {
+      this.myForm.get('endDate')?.setValue(null);
+    }
   }
 
   save(): void {

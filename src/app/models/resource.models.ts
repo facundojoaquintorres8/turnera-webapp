@@ -7,4 +7,5 @@ export interface IResource {
   description: string;
   code?: string;
   resourceType: IResourceType;
+  resourceTypeDescription?: string;
 }

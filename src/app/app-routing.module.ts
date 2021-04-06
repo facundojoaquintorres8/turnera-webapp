@@ -76,7 +76,6 @@ export const routes: Routes = [
       }
     ]
   },
-  // { path: '**', component: PrivateLayoutComponent }
   { path: '**', redirectTo: '/schedule' },
 ];
 

@@ -4,16 +4,24 @@ import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontaweso
 import { fontAwesomeIcons } from './font-awesome-icons';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PermissionModule } from '../security/permission.module';
+import { TableComponent } from '../component/table/table.component';
+import { PaginateComponent } from '../component/table/paginated.component';
+import { TableHeaderComponent } from '../component/table/table-header.component';
 
 @NgModule({
-  declarations: [],
-  imports: [CommonModule],
+  declarations: [TableComponent, TableHeaderComponent, PaginateComponent],
+  imports: [CommonModule, PermissionModule, FontAwesomeModule, ReactiveFormsModule, NgbModule],
   exports: [
     FormsModule,
     CommonModule,
     NgbModule,
     FontAwesomeModule,
     ReactiveFormsModule,
+    PermissionModule,
+    TableComponent,
+    TableHeaderComponent,
+    PaginateComponent,
   ]
 })
 export class SharedModule {

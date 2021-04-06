@@ -1,6 +1,10 @@
-@media (min-width: 768px) {
+@media (min-width: 600px) {
   .dropdown:hover>.dropdown-menu {
     display: block;
+  }
+
+  .navbar-toggle, .mobileNavbar {
+    display: none !important;
   }
 }
 
@@ -15,4 +19,12 @@
 .dropdown-item:hover {
   background-color: #343a40;
   color: white;
+}
+
+#navbar-toggle-cbox:checked~.mobileNavbar {
+  display: block;
+}
+
+#navbar-toggle-cbox {
+  display: none
 }

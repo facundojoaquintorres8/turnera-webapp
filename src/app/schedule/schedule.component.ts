@@ -4,8 +4,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CalendarEvent, CalendarMonthViewBeforeRenderEvent, CalendarView } from 'angular-calendar';
 import { AgendaService } from '../agenda/agenda.service';
+import { AuthService } from '../auth/auth.service';
 import { IAgenda } from '../models/agenda.models';
 import { AppointmentStatusEnum, IAppointment } from '../models/appointment.model';
+import { checkPermission } from '../security/check-permissions';
 import { formatDateFromDate } from '../shared/date-format';
 
 @Component({
@@ -15,6 +17,8 @@ import { formatDateFromDate } from '../shared/date-format';
 })
 export class ScheduleComponent implements OnInit {
 
+  permissions: string[] = [];
+  canViewAgendas: boolean = false;
   events: CalendarEvent[] = [];
   view: CalendarView = CalendarView.Month;
   today: string = this.datePipe.transform(new Date(), 'dd-MM-yyyy') + '';
@@ -29,7 +33,7 @@ export class ScheduleComponent implements OnInit {
     IN_ATTENTION: AppointmentStatusEnum.IN_ATTENTION,
   }
 
-  appointmentStatusTranslate= {
+  appointmentStatusTranslate = {
     FREE: "Libre",
     BOOKED: "Reservado",
     ABSENT: "Ausente",
@@ -42,28 +46,37 @@ export class ScheduleComponent implements OnInit {
     public agendaService: AgendaService,
     private datePipe: DatePipe,
     private router: Router,
+    private authService: AuthService,
   ) { }
 
   ngOnInit(): void {
-    this.onCalendarChange();
+    this.permissions = this.authService.getPermissions();
+    this.canViewAgendas = checkPermission(this.permissions, ['agendas.read']);
+    if (this.canViewAgendas) {
+      this.onCalendarChange();      
+    }
   }
 
   dayClicked(): void {
-    this.router.navigate(['/appointment-tracking']);
+    if (this.canViewAgendas) {
+      this.router.navigate(['/appointment-tracking']);
+    }
   }
 
   handleEvent(event: CalendarEvent): void {
   }
 
   closeOpenMonthViewDay(): void {
-    this.onCalendarChange();
+    if (this.canViewAgendas) {
+      this.onCalendarChange();      
+    }
   }
 
   onCalendarChange(): void {
     this.loading = true;
-    this.agendaService.findAllByFilter(this.createFromForm()).subscribe(
-      (res: HttpResponse<IAgenda[]>) => {
-        this.events = res.body!.map(x => ({
+    this.agendaService.findAllByFilter({ ignorePaginated: true, page: 0, ...this.createFromForm() }).subscribe(
+      (res: HttpResponse<any>) => {
+        this.events = res.body.content.map((x: IAgenda) => ({
           id: x.id,
           start: new Date(x.startDate),
           end: new Date(x.endDate),
@@ -86,9 +99,9 @@ export class ScheduleComponent implements OnInit {
   }
 
   getEventTitle(agenda: IAgenda): string {
-    let title = this.datePipe.transform(agenda.startDate, 'dd-MM-yyyy HH:mm') + '<br>' + agenda.resource.description;
+    let title = this.datePipe.transform(agenda.startDate, 'dd-MM-yyyy HH:mm') + '\n' + agenda.resource.description;
     if (agenda.lastAppointment && this.appointmentStatus[agenda.lastAppointment.lastAppointmentStatus.status] !== AppointmentStatusEnum.CANCELLED) {
-      title = title + '<br>' + agenda.lastAppointment.customerBusinessName + ' (' + this.appointmentStatusTranslate[agenda.lastAppointment.lastAppointmentStatus.status] + ')';
+      title = title + '\n' + agenda.lastAppointment.customerBusinessName + ' (' + this.appointmentStatusTranslate[agenda.lastAppointment.lastAppointmentStatus.status] + ')';
     }
     return title;
   }
@@ -116,10 +129,17 @@ export class ScheduleComponent implements OnInit {
 
   beforeMonthViewRender(renderEvent: CalendarMonthViewBeforeRenderEvent): void {
     const today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+    renderEvent.header.forEach((header: any) => {
+      header.cssClass = 'titlecase'
+    });
     renderEvent.body.forEach((day: any) => {
       if (day.date < today) {
         day.cssClass = 'bg-secondary';
       }
     });
+  }
+
+  quantityAppointmentsReserved(events: CalendarEvent[]): number {
+    return !events.length ? 0 : events.filter(x => !x['available']).length;
   }
 }

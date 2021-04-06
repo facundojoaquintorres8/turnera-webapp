@@ -1,6 +1,8 @@
-import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TableComponent } from '../component/table/table.component';
+import { IHeader, InputTypeEnum } from '../component/table/table.models';
 import { IProfile } from '../models/profile.models';
 import { DeleteProfileModalComponent } from './delete-profile-modal.component';
 import { ProfileService } from './profile.service';
@@ -10,28 +12,36 @@ import { ProfileService } from './profile.service';
   templateUrl: './profile.component.html'
 })
 export class ProfileComponent implements OnInit {
+  @ViewChild('tableComponent') tableComponent!: TableComponent;
   private ngbModalRef: NgbModalRef | undefined;
 
-  profiles: IProfile[] = [];
-  constructor(private profileService: ProfileService, private modalService: NgbModal) { }
+  headers!: IHeader[];
+  sort: string[] = ['ASC', 'description'];
+  myForm = this.fb.group({
+    description: [null],
+    active: [null],
+  });
+  constructor(
+    private profileService: ProfileService,
+    private modalService: NgbModal,
+    private fb: FormBuilder,
+  ) { }
 
   ngOnInit(): void {
-    this.findAllByOrganizationId();
+    this.headers = [
+      { label: 'Descripción', inputType: InputTypeEnum.TEXT, inputName: 'description', sort: true },
+      { label: 'Activo', inputType: InputTypeEnum.BOOLEAN, inputName: 'active', sort: false }
+    ];
   }
 
-  findAllByOrganizationId(): void {
-    this.profiles = [];
-    this.profileService.findAllByFilter({}).subscribe(
-      (res: HttpResponse<IProfile[]>) => (this.profiles = res.body || [])
-    );
-  }
+  query = (req?: any) => this.profileService.findAllByFilter(req);
 
   delete(profile: IProfile): void {
     this.ngbModalRef = this.modalService.open(DeleteProfileModalComponent, { size: 'lg', backdrop: 'static' });
     this.ngbModalRef.componentInstance.profile = profile;
     this.ngbModalRef.result.then(
       () => {
-        this.findAllByOrganizationId();
+        this.tableComponent.executeQuery({ page: 1 });
         this.ngbModalRef = undefined;
       },
       () => {

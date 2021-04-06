@@ -9,7 +9,7 @@
             <div class="col-sm-12">
                 <div class="form-group">
                     <label class="form-control-label required" for="customer">
-                        <button type="button" (click)="newCustomer()" class="btn btn-primary btn-sm" title="Agregar nuevo">
+                        <button *hasPermission="['customers.write']" type="button" (click)="newCustomer()" class="btn btn-primary btn-icon" title="Agregar nuevo">
                             <fa-icon icon="plus"></fa-icon>
                         </button> Cliente
                     </label>

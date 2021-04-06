@@ -1,6 +1,8 @@
-import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TableComponent } from '../component/table/table.component';
+import { IHeader, InputTypeEnum } from '../component/table/table.models';
 import { IResourceType } from '../models/resourceType.models';
 import { DeleteResourceTypeModalComponent } from './delete-resource-type-modal.component';
 import { ResourceTypeService } from './resource-type.service';
@@ -10,28 +12,38 @@ import { ResourceTypeService } from './resource-type.service';
   templateUrl: './resource-type.component.html'
 })
 export class ResourceTypeComponent implements OnInit {
+  @ViewChild('tableComponent') tableComponent!: TableComponent;
   private ngbModalRef: NgbModalRef | undefined;
 
-  resourcesTypes: IResourceType[] = [];
-  constructor(private resourceTypeService: ResourceTypeService, private modalService: NgbModal) { }
+  headers!: IHeader[];
+  sort: string[] = ['ASC', 'description'];
+  myForm = this.fb.group({
+    description: [null],
+    active: [null],
+  });
+
+
+  constructor(
+    private resourceTypeService: ResourceTypeService,
+    private modalService: NgbModal,
+    private fb: FormBuilder,
+  ) { }
 
   ngOnInit(): void {
-    this.findAllByOrganizationId();
+    this.headers = [
+      { label: 'Descripción', inputType: InputTypeEnum.TEXT, inputName: 'description', sort: true },
+      { label: 'Activo', inputType: InputTypeEnum.BOOLEAN, inputName: 'active', sort: false }
+    ];
   }
 
-  findAllByOrganizationId(): void {
-    this.resourcesTypes = [];
-    this.resourceTypeService.findAllByFilter({}).subscribe(
-      (res: HttpResponse<IResourceType[]>) => (this.resourcesTypes = res.body || [])
-    );
-  }
+  query = (req?: any) => this.resourceTypeService.findAllByFilter(req);
 
   delete(resourceType: IResourceType): void {
     this.ngbModalRef = this.modalService.open(DeleteResourceTypeModalComponent, { size: 'lg', backdrop: 'static' });
     this.ngbModalRef.componentInstance.resourceType = resourceType;
     this.ngbModalRef.result.then(
       () => {
-        this.findAllByOrganizationId();
+        this.tableComponent.executeQuery({ page: 1 });
         this.ngbModalRef = undefined;
       },
       () => {

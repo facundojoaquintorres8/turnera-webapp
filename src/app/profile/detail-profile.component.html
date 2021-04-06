@@ -9,25 +9,81 @@
   </dl>
 
   <h3>Permisos</h3>
-  <table class="table table-striped" aria-describedby="page-heading">
-    <thead>
-      <tr>
-        <th scope="col">Descripción</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let permission of profile.permissions">
-        <td>{{ permission.description }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="container">
+    <div class="row h5 text-center d-none d-sm-flex mb-0">
+      <div class="col-sm-3 border">
+        Entidad
+      </div>
+      <div class="col-sm-3 border">
+        Acción
+      </div>
+      <div class="col-sm-3 border">
+        Entidad
+      </div>
+      <div class="col-sm-3 border">
+        Acción
+      </div>
+    </div>
+    <div class="row">
+      <ng-container *ngFor="let permissionByEntity of permissionsByEntities">
+        <div class="col-sm-3 d-flex border">
+          <span class="lead" [ngSwitch]="permissionByEntity.name">
+            <span *ngSwitchCase="'users'" class="badge badge-pill badge-light border border-dark">Usuarios</span>
+            <span *ngSwitchCase="'profiles'" class="badge badge-pill badge-light border border-dark">Perfiles</span>
+            <span *ngSwitchCase="'organizations'" class="badge badge-pill badge-light border border-dark">Mi
+              Organización</span>
+            <span *ngSwitchCase="'customers'" class="badge badge-pill badge-light border border-dark">Clientes</span>
+            <span *ngSwitchCase="'resourcesTypes'" class="badge badge-pill badge-light border border-dark">Tipos de
+              Recursos</span>
+            <span *ngSwitchCase="'resources'" class="badge badge-pill badge-light border border-dark">Recursos</span>
+            <span *ngSwitchCase="'agendas'"
+              class="badge badge-pill badge-light border border-dark">Disponibilidades</span>
+            <span *ngSwitchCase="'appointments'" class="badge badge-pill badge-light border border-dark">Turnos</span>
+          </span>
+        </div>
+        <div class="col-sm-3 border">
+          <div class="row" *ngFor="let action of permissionByEntity.actions">
+            <div class="col-sm-12 d-flex">
+              <span class="lead" [ngSwitch]="action.action">
+                <span *ngSwitchCase="'read'" class="badge badge-pill" [class.badge-info]="action.permission['selected']"
+                  [class.badge-ligth]="!action.permission['selected']"
+                  [class.text-line-through]="!action.permission['selected']">Ver</span>
+                <span *ngSwitchCase="'write'" class="badge badge-pill"
+                  [class.badge-primary]="action.permission['selected']" [class.badge-ligth]="!action.permission['selected']"
+                  [class.text-line-through]="!action.permission['selected']">Actualizar</span>
+                <span *ngSwitchCase="'delete'" class="badge badge-pill"
+                  [class.badge-danger]="action.permission['selected']" [class.badge-ligth]="!action.permission['selected']"
+                  [class.text-line-through]="!action.permission['selected']">Eliminar</span>
+                <span *ngSwitchCase="'book'" class="badge badge-pill"
+                  [class.badge-warning]="action.permission['selected']" [class.badge-ligth]="!action.permission['selected']"
+                  [class.text-line-through]="!action.permission['selected']">Reservar</span>
+                <span *ngSwitchCase="'absent'" class="badge badge-pill" [class.badge-dark]="action.permission['selected']"
+                  [class.badge-ligth]="!action.permission['selected']"
+                  [class.text-line-through]="!action.permission['selected']">Ausentar</span>
+                <span *ngSwitchCase="'cancel'" class="badge badge-pill"
+                  [class.badge-danger]="action.permission['selected']" [class.badge-ligth]="!action.permission['selected']"
+                  [class.text-line-through]="!action.permission['selected']">Cancelar</span>
+                <span *ngSwitchCase="'attend'" class="badge badge-pill" [class.badge-info]="action.permission['selected']"
+                  [class.badge-ligth]="!action.permission['selected']"
+                  [class.text-line-through]="!action.permission['selected']">Atender</span>
+                <span *ngSwitchCase="'finalize'" class="badge badge-pill"
+                  [class.badge-success]="action.permission['selected']" [class.badge-ligth]="!action.permission['selected']"
+                  [class.text-line-through]="!action.permission['selected']">Finalizar</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
 
   <div class="button-form">
     <button type="button" class="btn btn-secondary" (click)="previousState()" title="Volver">
       <fa-icon icon="arrow-left"></fa-icon>&nbsp;Volver
     </button>
 
-    <button type="button" [routerLink]="['../../', profile?.id, 'edit']" class="btn btn-primary" title="Editar">
+    <button *hasPermission="['profiles.write']" type="button" [routerLink]="['../../', profile?.id, 'edit']"
+      class="btn btn-primary" title="Editar">
       <fa-icon icon="pencil-alt"></fa-icon>&nbsp;Editar
     </button>
   </div>

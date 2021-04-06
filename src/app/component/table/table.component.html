@@ -1,0 +1,27 @@
+<table class="table table-responsive">
+    <thead>
+        <ng-container *ngTemplateOutlet="defaultHeader">
+        </ng-container>
+    </thead>
+    <tbody>
+        <ng-container *ngTemplateOutlet="items.length ? bodyTemplate : bodyNoItems; context: {$implicit:  items}">
+        </ng-container>
+    </tbody>
+</table>
+<app-paginated [page]="page" [totalPages]="totalPages" (executeQuery)="executeQuery($event)"></app-paginated>
+
+<ng-template #defaultHeader>
+    <tr>
+        <th scope="col" *ngFor="let header of headers">
+            <app-table-header [header]="header" [sort]="sort" [myForm]="myForm" (executeQuery)="executeQuery($event)">
+            </app-table-header>
+        </th>
+        <th scope="col" *ngIf="hasButtons"></th>
+    </tr>
+</ng-template>
+
+<ng-template #bodyNoItems>
+    <tr>
+        <td colspan="20">No hay items para mostrar.</td>
+    </tr>
+</ng-template>

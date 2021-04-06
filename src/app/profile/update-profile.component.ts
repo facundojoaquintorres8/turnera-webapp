@@ -5,23 +5,25 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ProfileService } from './profile.service';
 import { AuthService } from '../auth/auth.service';
-import { IPermission, IProfile } from '../models/profile.models';
+import { IPermission, IProfile, PermissionByEntity } from '../models/profile.models';
+
 
 @Component({
   selector: 'app-update-profile',
-  templateUrl: './update-profile.component.html'
+  templateUrl: './update-profile.component.html',
+  styleUrls: ['./profile.scss']
 })
 export class UpdateProfileComponent implements OnInit {
   isSaving = false;
 
-  permissions: IPermission[] = [];
-  permissionHomeIndex!: IPermission;
+  allPermissions: IPermission[] = [];
+
+  permissionsByEntities: PermissionByEntity[] = [];
 
   myForm = this.fb.group({
     id: [],
     description: [null, [Validators.required]],
     active: [null],
-    selectAll: [null]
   });
 
   constructor(
@@ -34,16 +36,25 @@ export class UpdateProfileComponent implements OnInit {
   ngOnInit(): void {
     this.profileService.findAllPermissions().subscribe(
       (res1: HttpResponse<IPermission[]>) => {
-        this.permissions = res1.body || [];
-        this.permissionHomeIndex = this.permissions.find(x => x.code === 'home.index')!;
-        this.permissionHomeIndex['selected'] = true;
-        this.permissionHomeIndex['isPredetermined'] = true;
+        this.allPermissions = res1.body?.filter(x => x.code !== 'home.index') || [];
+
+        this.allPermissions.forEach(permission => {
+          const permissionSplit = permission.code.split('.');
+          const permissionExisting = this.permissionsByEntities.find(x => x.name === permissionSplit[0]);
+          if (permissionExisting) {
+            permissionExisting.actions.push({ permission, action: permissionSplit[1] });
+          } else {
+            this.permissionsByEntities.push({
+              name: permissionSplit[0], actions: [{ permission, action: permissionSplit[1] }], selected: false
+            });
+          }
+        });
 
         const id = this.activatedRoute.snapshot.paramMap.get("id");
         if (id) {
           this.profileService.find(parseInt(id)).subscribe(
             (res2: HttpResponse<IProfile>) => {
-              this.updateForm(res2.body!, this.permissions);
+              this.updateForm(res2.body!, this.permissionsByEntities);
             }
           );
         }
@@ -51,37 +62,18 @@ export class UpdateProfileComponent implements OnInit {
     )
   }
 
-  updateForm(profile: IProfile, allPermissions: IPermission[]): void {
-    const permissionsId = profile.permissions.map(x => x.id);
-    allPermissions.forEach(p => {
-      p['selected'] = permissionsId.find(x => x === p.id) !== undefined;
-    });
-    this.myForm.patchValue({
-      id: profile.id,
-      description: profile.description,
-      active: profile.active,
-      selectAll: permissionsId.length === allPermissions.length,
-    });
-  }
-
-  selectAll(): void {
-    if (this.myForm.get(['selectAll'])!.value) {
-      this.permissions.forEach(p => {
-        p['selected'] = true;
-      });
-    } else {
-      this.permissions.forEach(p => {
-        if (!p['isPredetermined']) {
-          p['selected'] = false;
-        }
-      });
-    }
-  }
-
-  selectPermission(permission: IPermission): void {
+  select(permission: IPermission, permissionByEntity: PermissionByEntity): void {
     permission['selected'] = !permission['selected'];
-    this.myForm.patchValue({
-      selectAll: !this.permissions.find(x => !x['selected'])
+    permissionByEntity.selected = permissionByEntity.actions.every((x: any) => {
+      return x.permission['selected'];
+    });
+  }
+
+  selectAllEntity(permissionByEntity: PermissionByEntity): void {
+    permissionByEntity.selected = !permissionByEntity.selected;
+    const permissionByEntityExisting = this.permissionsByEntities.find(x => x === permissionByEntity);
+    permissionByEntityExisting?.actions.forEach(p => {
+      p.permission['selected'] = permissionByEntity.selected;
     });
   }
 
@@ -99,13 +91,36 @@ export class UpdateProfileComponent implements OnInit {
     }
   }
 
+  private updateForm(profile: IProfile, permissionsByEntities: PermissionByEntity[]): void {
+    permissionsByEntities.forEach(pbye => {
+      pbye.actions.forEach(action => {
+        if (profile.permissions.find(x => x.id === action.permission.id)) {
+          this.select(action.permission, pbye);
+        }
+      });
+    });
+    this.myForm.patchValue({
+      id: profile.id,
+      description: profile.description,
+      active: profile.active,
+    });
+  }
+
   private createFromForm(): IProfile {
+    const permissionsSelected: IPermission[] = [];
+    this.permissionsByEntities.forEach(pbye => {
+      pbye.actions.forEach(action => {
+        if (action.permission['selected']) {
+          permissionsSelected.push(action.permission);
+        }
+      });
+    });
     return {
       id: this.myForm.get(['id'])!.value,
       organizationId: this.authService.getOrganizationId()!,
       active: this.myForm.get(['active'])!.value,
       description: this.myForm.get(['description'])!.value,
-      permissions: this.permissions.filter(x => x['selected'])
+      permissions: permissionsSelected
     };
   }
 

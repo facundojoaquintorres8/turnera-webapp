@@ -4,6 +4,16 @@
 
 @import '~angular-calendar/css/angular-calendar.css';
 
+body {
+  font-family: Helvetica, sans-serif;
+}
+
+@media screen and (min-width: 600px) {
+  body {
+    font-size: 14px;
+  }
+}
+
 .container {
   margin-bottom: 50px;
 }
@@ -11,6 +21,10 @@
 @media screen and (max-width: 600px) {
   .form-public {
     width: 100% !important;
+  }
+
+  .input-group {
+    min-width: 120px;
   }
 }
 
@@ -45,8 +59,37 @@
 .checkbox-size-5 {
   font-size: 5px;
   margin-left: -20px;
+  cursor: pointer;
 }
 
 .appointmentStatus {
   width: 75px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.btn-icon {
+  width: 30px;
+  height: 30px;
+}
+
+button > fa-icon > svg {
+  font-size: smaller !important;
+}
+
+strong > fa-icon > svg {
+  font-size: smaller !important;
+}
+
+.close {
+  font-size: x-large !important;
+}
+
+button {
+  padding: 0.25rem 0.5rem !important;
+  font-size: 0.875rem !important;
+  line-height: 1.5 !important;
+  border-radius: 0.2rem !important;
 }

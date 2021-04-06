@@ -15,6 +15,7 @@ export class ResourceTypeService {
 
   findAllByFilter(filter: any): Observable<HttpResponse<IResourceType[]>> {
     filter['organizationId'] = this.organizationId;
+    filter['sort'] = filter['sort'] ? filter['sort'] : ['ASC', 'description'];
     const options = createRequestOption(filter);
     return this.http.get<IResourceType[]>(`${this.resourceUrl}/findAllByFilter`, { params: options, observe: 'response' });
   }

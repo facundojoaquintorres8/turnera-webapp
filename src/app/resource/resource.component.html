@@ -1,22 +1,16 @@
 <div class="container">
   <h2>
-    <button type="button" [routerLink]="['new']" class="btn btn-primary btn-sm" title="Crear Recurso">
+    <button *hasPermission="['resources.write']" type="button" [routerLink]="['new']" class="btn btn-primary btn-icon"
+      title="Crear Recurso">
       <fa-icon icon="plus"></fa-icon>
     </button> Recursos
   </h2>
 
-  <table class="table table-striped" aria-describedby="page-heading">
-    <thead>
-      <tr>
-        <th scope="col">Descripción</th>
-        <th scope="col">Código</th>
-        <th scope="col">Tipo de Recurso</th>
-        <th scope="col">Activo</th>
-        <th scope="col"></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let resource of resources">
+  <app-table [headers]="headers" [bodyTemplate]="customBody" [myForm]="myForm" [sort]="sort" [hasButtons]="true" [queryItems]="query"
+    #tableComponent>
+
+    <ng-template #customBody let-items>
+      <tr *ngFor="let resource of items">
         <td>{{ resource.description }}</td>
         <td>{{ resource.code ? resource.code : '-' }}</td>
         <td>{{ resource.resourceType.description }}</td>
@@ -25,19 +19,23 @@
           <fa-icon *ngIf="!resource.active" [icon]="['far', 'square']" class="text-danger outline"></fa-icon>
         </td>
         <td class="text-right">
-          <button type="button" [routerLink]="[resource.id, 'view']" class="btn btn-info btn-sm mr-1" title="Ver">
+          <button *hasPermission="['resources.read']" type="button" [routerLink]="[resource.id, 'view']"
+            class="btn btn-info btn-icon mr-1" title="Ver">
             <fa-icon icon="eye"></fa-icon>
           </button>
 
-          <button type="button" [routerLink]="[resource.id, 'edit']" class="btn btn-primary btn-sm mr-1" title="Editar">
+          <button *hasPermission="['resources.write']" type="button" [routerLink]="[resource.id, 'edit']"
+            class="btn btn-primary btn-icon mr-1" title="Editar">
             <fa-icon icon="pencil-alt"></fa-icon>
           </button>
 
-          <button type="button" (click)="delete(resource)" class="btn btn-danger btn-sm mr-1" title="Eliminar">
+          <button *hasPermission="['resources.delete']" type="button" (click)="delete(resource)"
+            class="btn btn-danger btn-icon mr-1" title="Eliminar">
             <fa-icon icon="times"></fa-icon>
           </button>
         </td>
       </tr>
-    </tbody>
-  </table>
+    </ng-template>
+
+  </app-table>
 </div>

@@ -1,13 +1,13 @@
 <div class="container">
   <h2>Seguimiento de Turnos</h2>
 
-  <form name="myForm" role="form" novalidate (ngSubmit)="getAgendas()" [formGroup]="myForm" class="mb-2">
+  <form name="myFormFilter" role="form" novalidate (ngSubmit)="getAgendas()" [formGroup]="myFormFilter" class="mb-2">
     <div class="row">
       <div class="col-sm-4">
         <div class="form-group">
           <label class="form-control-label" for="resourceTypeId">Tipo de Recurso</label>
           <select class="form-control" name="resourceTypeId" id="resourceTypeId" formControlName="resourceTypeId"
-             (change)="onResourceTypeChange()">
+            (change)="onResourceTypeChange()">
             <option [ngValue]="null"></option>
             <option [value]="resourceType.id" *ngFor="let resourceType of resourcesTypes">{{ resourceType.description }}
             </option>
@@ -20,7 +20,8 @@
           <select class="form-control" name="resourceId" id="resourceId" formControlName="resourceId"
             (change)="onResourceChange()">
             <option [ngValue]="null"></option>
-            <option [value]="resource.id" *ngFor="let resource of resources">{{ resource.description }} - {{ resource.code }}
+            <option [value]="resource.id" *ngFor="let resource of resources">{{ resource.description }} - {{
+              resource.code }}
             </option>
           </select>
         </div>
@@ -37,16 +38,6 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-4">
-        <div class="form-group">
-          <label class="form-control-label" for="status">Estado</label>
-          <select class="form-control" name="status" id="status" formControlName="status">
-            <option [ngValue]="null"></option>
-            <option [value]="status.id" *ngFor="let status of appointmentStatus">{{ status.value }}
-            </option>
-          </select>
-        </div>
-      </div>
       <div class="col-sm-2">
         <div class="form-group">
           <label class="form-control-label required">Desde</label>
@@ -59,8 +50,9 @@
               </button>
             </div>
           </div>
-          <div *ngIf="myForm.get('from')!.invalid && (myForm.get('from')!.dirty || myForm.get('from')!.touched)">
-            <small class="form-text text-danger" *ngIf="myForm.get('from')?.errors?.required">
+          <div
+            *ngIf="myFormFilter.get('from')!.invalid && (myFormFilter.get('from')!.dirty || myFormFilter.get('from')!.touched)">
+            <small class="form-text text-danger" *ngIf="myFormFilter.get('from')?.errors?.required">
               El campo es requerido.
             </small>
           </div>
@@ -78,21 +70,24 @@
               </button>
             </div>
           </div>
-          <div *ngIf="myForm.get('to')!.invalid && (myForm.get('to')!.dirty || myForm.get('to')!.touched)">
-            <small class="form-text text-danger" *ngIf="myForm.get('to')?.errors?.required">
+          <div
+            *ngIf="myFormFilter.get('to')!.invalid && (myFormFilter.get('to')!.dirty || myFormFilter.get('to')!.touched)">
+            <small class="form-text text-danger" *ngIf="myFormFilter.get('to')?.errors?.required">
               El campo es requerido.
             </small>
           </div>
         </div>
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-8">
         <div class="form-group">
           <label class="form-control-label">&nbsp;</label>
           <div class="text-right">
-            <button type="button" (click)="clear()" class="btn btn-secondary mr-2" [disabled]="isSearching" title="Limpiar">
+            <button type="button" (click)="clear()" class="btn btn-secondary mr-2" [disabled]="isSearching"
+              title="Limpiar">
               <fa-icon icon="broom"></fa-icon>&nbsp;Limpiar
             </button>
-            <button type="submit" class="btn btn-outline-dark" [disabled]="myForm.invalid || isSearching" title="Filtrar">
+            <button type="submit" class="btn btn-outline-dark" [disabled]="myFormFilter.invalid || isSearching"
+              title="Filtrar">
               <fa-icon icon="filter"></fa-icon>&nbsp;Filtrar
             </button>
           </div>
@@ -102,19 +97,12 @@
 
   </form>
 
-  <table class="table table-striped" aria-describedby="page-heading">
-    <thead>
-      <tr>
-        <th scope="col">Recurso</th>
-        <th scope="col">Inicio</th>
-        <th scope="col">Fin</th>
-        <th scope="col">Cliente</th>
-        <th scope="col">Último Estado</th>
-        <th scope="col"></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let agenda of agendas">
+
+  <app-table [headers]="headers" [bodyTemplate]="customBody" [myForm]="myForm" [sort]="sort" [hasButtons]="true"
+    [queryItems]="query" #tableComponent>
+
+    <ng-template #customBody let-items>
+      <tr *ngFor="let agenda of items">
         <td>{{ agenda.resource.description }}</td>
         <td>{{ agenda.startDate | date: 'dd-MM-yyyy HH:mm' }}</td>
         <td>{{ agenda.endDate | date: 'dd-MM-yyyy HH:mm' }}</td>
@@ -122,55 +110,52 @@
         <td>
           <span class="{{ appointmentStatusColor(agenda.lastAppointment) }} appointmentStatus">
             {{ agenda.lastAppointment ? appointmentStatusObject[agenda.lastAppointment.lastAppointmentStatus.status] :
-            appointmentStatusObject.FREE }} 
+            appointmentStatusObject.FREE }}
           </span>
           <span *ngIf="agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.observations">
-            <fa-icon icon="comment-dots" class="text-info ml-1" [title]="'Observaciones: ' + agenda.lastAppointment.lastAppointmentStatus.observations"></fa-icon>
+            <fa-icon icon="comment-dots" class="text-info ml-1"
+              [title]="'Observaciones: ' + agenda.lastAppointment.lastAppointmentStatus.observations"></fa-icon>
           </span>
         </td>
+
         <td class="text-right">
-          <button type="button" *ngIf="canBook(agenda)" (click)="book(agenda)" class="btn btn-warning btn-sm mr-1"
+          <button type="button" *ngIf="canBook(agenda)" (click)="book(agenda)" class="btn btn-warning btn-icon mr-1"
             title="Reservar turno">
             <fa-icon icon="plus"></fa-icon>
           </button>
 
           <button type="button" *ngIf="canAbsent(agenda)" (click)="absent(agenda.lastAppointment)"
-            class="btn btn-dark btn-sm mr-1" title="Ausente">
+            class="btn btn-dark btn-icon mr-1" title="Ausente">
             <fa-icon icon="user-slash"></fa-icon>
           </button>
 
           <button type="button" *ngIf="canCancel(agenda)" (click)="cancel(agenda.lastAppointment)"
-            class="btn btn-danger btn-sm mr-1" title="Cancelar">
+            class="btn btn-danger btn-icon mr-1" title="Cancelar">
             <fa-icon icon="ban"></fa-icon>
           </button>
 
           <button type="button" *ngIf="canAttend(agenda)" (click)="attend(agenda.lastAppointment)"
-            class="btn btn-info btn-sm mr-1" title="Atender">
+            class="btn btn-info btn-icon mr-1" title="Atender">
             <fa-icon icon="play"></fa-icon>
           </button>
 
           <button type="button" *ngIf="canFinalize(agenda)" (click)="finalize(agenda.lastAppointment)"
-            class="btn btn-success btn-sm mr-1" title="Finalizar">
+            class="btn btn-success btn-icon mr-1" title="Finalizar">
             <fa-icon icon="stop"></fa-icon>
           </button>
 
-          <button type="button" *ngIf="!agenda.lastAppointment" (click)="delete(agenda)"
-            class="btn btn-danger btn-sm mr-1" title="Eliminar disponibilidad">
+          <button type="button" *ngIf="canDelete(agenda)" (click)="delete(agenda)" class="btn btn-danger btn-icon mr-1"
+            title="Eliminar disponibilidad">
             <fa-icon icon="times"></fa-icon>
           </button>
 
           <button type="button" *ngIf="canDesactivate(agenda)" (click)="desactivate(agenda)"
-            class="btn btn-danger btn-sm mr-1" title="Desactivar disponibilidad">
+            class="btn btn-danger btn-icon mr-1" title="Desactivar disponibilidad">
             <fa-icon icon="calendar-times"></fa-icon>
           </button>
         </td>
       </tr>
-    </tbody>
-  </table>
+    </ng-template>
 
-  <div class="button-form">
-    <button type="button" class="btn btn-secondary" (click)="previousState()" title="Volver">
-      <fa-icon icon="arrow-left"></fa-icon>&nbsp;Volver
-    </button>
-  </div>
+  </app-table>
 </div>
