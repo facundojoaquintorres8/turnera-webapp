@@ -1,7 +1,7 @@
 <nav class="float-right mb-5">
     <ul class="pagination">
         <small class="m-2">
-            Página {{ totalPages === 0 ? 0 : page }} de {{ totalPages }}
+            Pág. {{ totalPages === 0 ? 0 : page }} de {{ totalPages }}
         </small>
         <li class="page-item">
             <button type="button" (click)="firstPage()" [disabled]="page === 1" class="btn btn-outline-dark btn-icon"

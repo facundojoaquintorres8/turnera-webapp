@@ -19,7 +19,7 @@ export class TableComponent implements OnInit {
     @Input() page: number = 1;
     @Input() bodyTemplate!: TemplateRef<any>;
 
-    totalPages: number = 1;
+    totalPages: number = 0;
     items: any[] = [];
     inputType: any = InputTypeEnum;
 
@@ -51,6 +51,7 @@ export class TableComponent implements OnInit {
             (res: HttpResponse<any>) => {
                 this.items = res.body.content || [];
                 this.totalPages = res.body.totalPages;
+                this.totalPages
             }
         );
     }

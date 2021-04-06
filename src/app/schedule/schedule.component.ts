@@ -99,9 +99,9 @@ export class ScheduleComponent implements OnInit {
   }
 
   getEventTitle(agenda: IAgenda): string {
-    let title = this.datePipe.transform(agenda.startDate, 'dd-MM-yyyy HH:mm') + '<br>' + agenda.resource.description;
+    let title = this.datePipe.transform(agenda.startDate, 'dd-MM-yyyy HH:mm') + '\n' + agenda.resource.description;
     if (agenda.lastAppointment && this.appointmentStatus[agenda.lastAppointment.lastAppointmentStatus.status] !== AppointmentStatusEnum.CANCELLED) {
-      title = title + '<br>' + agenda.lastAppointment.customerBusinessName + ' (' + this.appointmentStatusTranslate[agenda.lastAppointment.lastAppointmentStatus.status] + ')';
+      title = title + '\n' + agenda.lastAppointment.customerBusinessName + ' (' + this.appointmentStatusTranslate[agenda.lastAppointment.lastAppointmentStatus.status] + ')';
     }
     return title;
   }
@@ -137,5 +137,9 @@ export class ScheduleComponent implements OnInit {
         day.cssClass = 'bg-secondary';
       }
     });
+  }
+
+  quantityAppointmentsReserved(events: CalendarEvent[]): number {
+    return !events.length ? 0 : events.filter(x => !x['available']).length;
   }
 }

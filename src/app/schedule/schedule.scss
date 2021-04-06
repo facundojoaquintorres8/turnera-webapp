@@ -6,3 +6,58 @@
 ::ng-deep .titlecase {
   text-transform: capitalize;
 }
+
+
+
+.calendar-loading {
+  opacity: 0.5;
+  z-index: 2;
+}
+
+@media (max-width: 600px) {
+  .btn-calendar-d-inline-grid {
+    display: inline-grid;
+  }
+
+  ::ng-deep mwl-calendar-month-view {
+    .cal-month-view .cal-day-cell.cal-today .cal-day-number {
+      font-size: 1.2em !important;
+    }
+
+    .cal-month-view .cal-day-number {
+      margin-right: 5%;
+      order: 1;
+    }
+
+    .cal-month-view .cal-day-badge {
+      margin-left: 5%;
+      display: block;
+      order: 2;
+    }
+
+    .cal-events {
+      display: none !important;
+    }
+
+    .cal-day-cell {
+      min-height: unset !important;
+    }
+
+    .cal-cell-top {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cal-month-view .cal-day-events {
+      margin-left: 5%;
+      display: block !important;
+      order: 3;
+    }
+  }
+
+  ::ng-deep mwl-calendar-week-view-header {
+    .cal-header > span {
+      display: none;
+    }
+  }
+}
