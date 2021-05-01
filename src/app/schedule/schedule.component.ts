@@ -2,8 +2,17 @@ import { DatePipe } from '@angular/common';
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarMonthViewBeforeRenderEvent, CalendarView } from 'angular-calendar';
+import { MonthViewDay } from 'calendar-utils';
 import { AgendaService } from '../agenda/agenda.service';
+import { DeleteAgendaModalComponent } from '../agenda/delete-agenda-modal.component';
+import { DesactivateAgendaModalComponent } from '../agenda/desactivate-agenda-modal.component';
+import { AbsentAppointmentModalComponent } from '../appointment-tracking/absent-appointment-modal.component';
+import { AttendAppointmentModalComponent } from '../appointment-tracking/attend-appointment-modal.component';
+import { BookAppointmentComponent } from '../appointment-tracking/book-appointment-modal.component';
+import { CancelAppointmentModalComponent } from '../appointment-tracking/cancel-appointment-modal.component';
+import { FinalizeAppointmentModalComponent } from '../appointment-tracking/finalize-appointment-modal.component';
 import { AuthService } from '../auth/auth.service';
 import { IAgenda } from '../models/agenda.models';
 import { AppointmentStatusEnum, IAppointment } from '../models/appointment.model';
@@ -16,6 +25,7 @@ import { formatDateFromDate } from '../shared/date-format';
   styleUrls: ['./schedule.scss']
 })
 export class ScheduleComponent implements OnInit {
+  private ngbModalRef: NgbModalRef | undefined;
 
   permissions: string[] = [];
   canViewAgendas: boolean = false;
@@ -23,6 +33,7 @@ export class ScheduleComponent implements OnInit {
   view: CalendarView = CalendarView.Month;
   today: string = this.datePipe.transform(new Date(), 'dd-MM-yyyy') + '';
   loading!: boolean;
+  eventSelected?: CalendarEvent;
 
   appointmentStatus = {
     ABSENT: AppointmentStatusEnum.ABSENT,
@@ -47,6 +58,7 @@ export class ScheduleComponent implements OnInit {
     private datePipe: DatePipe,
     private router: Router,
     private authService: AuthService,
+    private modalService: NgbModal,
   ) { }
 
   ngOnInit(): void {
@@ -64,6 +76,11 @@ export class ScheduleComponent implements OnInit {
   }
 
   handleEvent(event: CalendarEvent): void {
+    if (this.eventSelected === event) {
+      this.eventSelected = undefined;
+    } else {
+      this.eventSelected = event;      
+    }
   }
 
   closeOpenMonthViewDay(): void {
@@ -81,7 +98,8 @@ export class ScheduleComponent implements OnInit {
           start: new Date(x.startDate),
           end: new Date(x.endDate),
           title: this.getEventTitle(x),
-          cssClass: this.getColor(x.lastAppointment),
+          agenda: x,
+          lastAppointmentStatus: x.lastAppointment ? x.lastAppointment.lastAppointmentStatus.status : null
         }));
         this.loading = false;
       }
@@ -106,27 +124,6 @@ export class ScheduleComponent implements OnInit {
     return title;
   }
 
-  getColor(lastAppointment: IAppointment): string {
-    let result = 'bg-white border border-primary'; // Free or Cancelled
-    if (lastAppointment) {
-      switch (this.appointmentStatus[lastAppointment.lastAppointmentStatus.status]) {
-        case AppointmentStatusEnum.BOOKED:
-          result = 'bg-warning';
-          break;
-        case AppointmentStatusEnum.ABSENT:
-          result = 'bg-dark';
-          break;
-        case AppointmentStatusEnum.IN_ATTENTION:
-          result = 'bg-info';
-          break;
-        case AppointmentStatusEnum.FINALIZED:
-          result = 'bg-success';
-          break;
-      }
-    }
-    return result;
-  }
-
   beforeMonthViewRender(renderEvent: CalendarMonthViewBeforeRenderEvent): void {
     const today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
     renderEvent.header.forEach((header: any) => {
@@ -141,5 +138,188 @@ export class ScheduleComponent implements OnInit {
 
   quantityAppointmentsReserved(events: CalendarEvent[]): number {
     return !events.length ? 0 : events.filter(x => !x['available']).length;
+  }
+
+  isYesterdayEvent(event: CalendarEvent, day: MonthViewDay): boolean {
+    return event.end?.getHours() === 0 && day.day !== event.start.getDay();
+  }
+
+  getColor(event: CalendarEvent): string {
+    let result = 'bg-white border-primary text-dark'; // Free or Cancelled
+    if (event['lastAppointmentStatus']) {
+      switch (this.appointmentStatus[event['lastAppointmentStatus']]) {
+        case AppointmentStatusEnum.BOOKED:
+          result = 'bg-warning border-warning';
+          break;
+        case AppointmentStatusEnum.ABSENT:
+          result = 'bg-dark border-dark';
+          break;
+        case AppointmentStatusEnum.IN_ATTENTION:
+          result = 'bg-info border-info';
+          break;
+        case AppointmentStatusEnum.FINALIZED:
+          result = 'bg-success border-success';
+          break;
+      }
+    }
+    return result;
+  }
+
+  getFirstLetterFromStatus(event: CalendarEvent): string {
+    let result = 'L';
+    if (event['lastAppointmentStatus']) {
+      switch (this.appointmentStatus[event['lastAppointmentStatus']]) {
+        case AppointmentStatusEnum.BOOKED:
+          result = 'R';
+          break;
+        case AppointmentStatusEnum.ABSENT:
+          result = 'A';
+          break;
+        case AppointmentStatusEnum.IN_ATTENTION:
+          result = 'E';
+          break;
+        case AppointmentStatusEnum.FINALIZED:
+          result = 'F';
+          break;
+      }
+    }
+    return result;
+  }
+
+  getTotalBadge(day: MonthViewDay): number {
+    return day.events.filter(x => x.start.getDay() === day.day).length;
+  }
+
+  // Agenda-Appointments
+  canBook(agenda: IAgenda): boolean {
+    return (!agenda.lastAppointment || agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'CANCELLED')
+      && new Date(agenda.startDate) > new Date() && checkPermission(this.permissions, ['appointments.book']);
+  }
+
+  canAbsent(agenda: IAgenda): boolean {
+    return agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'BOOKED'
+      && checkPermission(this.permissions, ['appointments.absent']);
+  }
+
+  canCancel(agenda: IAgenda): boolean {
+    return agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'BOOKED'
+      && checkPermission(this.permissions, ['appointments.cancel']);
+  }
+
+  canAttend(agenda: IAgenda): boolean {
+    return agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'BOOKED'
+      && checkPermission(this.permissions, ['appointments.attend']);
+  }
+
+  canFinalize(agenda: IAgenda): boolean {
+    return agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'IN_ATTENTION'
+      && checkPermission(this.permissions, ['appointments.finalize']);
+  }
+
+  canDelete(agenda: IAgenda): boolean {
+    return !agenda.lastAppointment && checkPermission(this.permissions, ['agendas.delete']);
+  }
+
+  canDesactivate(agenda: IAgenda): boolean {
+    return !agenda.lastAppointment || agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'CANCELLED'
+      && checkPermission(this.permissions, ['agendas.write']);
+  }
+
+  book(agenda: IAgenda): void {
+    this.ngbModalRef = this.modalService.open(BookAppointmentComponent, { size: 'lg', backdrop: 'static' });
+    this.ngbModalRef.componentInstance.agenda = agenda;
+    this.ngbModalRef.result.then(
+      () => {
+        this.ngbModalRef = undefined;
+        this.onCalendarChange();
+      },
+      () => {
+        this.ngbModalRef = undefined;
+      }
+    );
+  }
+
+  absent(lastAppointment: IAppointment): void {
+    this.ngbModalRef = this.modalService.open(AbsentAppointmentModalComponent, { size: 'lg', backdrop: 'static' });
+    this.ngbModalRef.componentInstance.appointment = lastAppointment;
+    this.ngbModalRef.result.then(
+      () => {
+        this.ngbModalRef = undefined;
+        this.onCalendarChange();
+      },
+      () => {
+        this.ngbModalRef = undefined;
+      }
+    );
+  }
+
+  cancel(lastAppointment: IAppointment): void {
+    this.ngbModalRef = this.modalService.open(CancelAppointmentModalComponent, { size: 'lg', backdrop: 'static' });
+    this.ngbModalRef.componentInstance.appointment = lastAppointment;
+    this.ngbModalRef.result.then(
+      () => {
+        this.ngbModalRef = undefined;
+        this.onCalendarChange();
+      },
+      () => {
+        this.ngbModalRef = undefined;
+      }
+    );
+  }
+
+  attend(lastAppointment: IAppointment): void {
+    this.ngbModalRef = this.modalService.open(AttendAppointmentModalComponent, { size: 'lg', backdrop: 'static' });
+    this.ngbModalRef.componentInstance.appointment = lastAppointment;
+    this.ngbModalRef.result.then(
+      () => {
+        this.ngbModalRef = undefined;
+        this.onCalendarChange();
+      },
+      () => {
+        this.ngbModalRef = undefined;
+      }
+    );
+  }
+
+  finalize(lastAppointment: IAppointment): void {
+    this.ngbModalRef = this.modalService.open(FinalizeAppointmentModalComponent, { size: 'lg', backdrop: 'static' });
+    this.ngbModalRef.componentInstance.appointment = lastAppointment;
+    this.ngbModalRef.result.then(
+      () => {
+        this.ngbModalRef = undefined;
+        this.onCalendarChange();
+      },
+      () => {
+        this.ngbModalRef = undefined;
+      }
+    );
+  }
+
+  delete(agenda: IAgenda): void {
+    this.ngbModalRef = this.modalService.open(DeleteAgendaModalComponent, { size: 'lg', backdrop: 'static' });
+    this.ngbModalRef.componentInstance.agenda = agenda;
+    this.ngbModalRef.result.then(
+      () => {
+        this.ngbModalRef = undefined;
+        this.onCalendarChange();
+      },
+      () => {
+        this.ngbModalRef = undefined;
+      }
+    );
+  }
+
+  desactivate(agenda: IAgenda): void {
+    this.ngbModalRef = this.modalService.open(DesactivateAgendaModalComponent, { size: 'lg', backdrop: 'static' });
+    this.ngbModalRef.componentInstance.agenda = agenda;
+    this.ngbModalRef.result.then(
+      () => {
+        this.ngbModalRef = undefined;
+        this.onCalendarChange();
+      },
+      () => {
+        this.ngbModalRef = undefined;
+      }
+    );
   }
 }

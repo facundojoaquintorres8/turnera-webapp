@@ -7,11 +7,13 @@
   text-transform: capitalize;
 }
 
-
-
 .calendar-loading {
   opacity: 0.5;
   z-index: 2;
+}
+
+::ng-deep .cal-month-view .cal-cell-top {
+  min-height: auto !important;
 }
 
 @media (max-width: 600px) {
@@ -60,4 +62,8 @@
       display: none;
     }
   }
+}
+
+.d-grid {
+  display: grid;
 }

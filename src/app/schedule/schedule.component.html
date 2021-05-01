@@ -33,32 +33,61 @@
       class="calendar-loading bg-dark position-absolute w-100 h-100 d-flex justify-content-center align-items-center">
       <div class="spinner-border text-light" role="status"></div>
     </div>
-    <mwl-calendar-month-view [viewDate]="agendaService.viewDate" [events]="events" (dayClicked)="dayClicked()"
-      (beforeViewRender)="beforeMonthViewRender($event)" (eventClicked)="handleEvent($event.event)"
-      [cellTemplate]="customCellTemplate">
+    <mwl-calendar-month-view [viewDate]="agendaService.viewDate" [events]="events"
+      (beforeViewRender)="beforeMonthViewRender($event)" [cellTemplate]="customCellTemplate">
     </mwl-calendar-month-view>
   </div>
 </div>
 
 <ng-template #customCellTemplate let-day="day">
-  <div class="cal-cell-top">
-    <span class="cal-day-badge" *ngIf="day.badgeTotal > 0">{{ day.badgeTotal > 20 ? '+20' : day.badgeTotal }}</span>
+  <div class="cal-cell-top pointer" (click)="dayClicked()"
+    [title]="getTotalBadge(day) + ' disponibilidades (Haz click para ver más)'">
+    <span class="cal-day-badge" *ngIf="day.badgeTotal > 0">{{ getTotalBadge(day) }}</span>
     <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber': 'es' }}</span>
-    <!-- <span class="cal-day-events cal-day-badge bg-success d-none" *ngIf="day.badgeTotal > 0">{{
-      quantityAppointmentsReserved(day.events) }}</span> -->
   </div>
   <div class="cal-events">
     <ng-container *ngFor="let item of day.events; let index = index">
-      <span 
-        *ngIf="index < 20" 
-        class="cal-event"
-
-        title="{{item.title}}">
+      <span *ngIf="index < 10 && !isYesterdayEvent(item, day)" (click)="handleEvent(item)"
+        class="badge badge-pill badge-primary m-1 border {{getColor(item)}}" title="{{ item.title }}">
+        {{ getFirstLetterFromStatus(item) }}
       </span>
+      <div *ngIf="item === eventSelected"
+        class="position-absolute badge bg-white border border-dark d-grid">
+        <button type="button" *ngIf="canBook(item['agenda'])" (click)="book(item['agenda'])"
+          class="btn btn-warning m-1" title="Reservar turno">
+          <fa-icon icon="plus"></fa-icon>&nbsp;Reservar
+        </button>
+        
+        <button type="button" *ngIf="canAbsent(item['agenda'])" (click)="absent(item['agenda'].lastAppointment)"
+          class="btn btn-dark m-1" title="Ausentar">
+          <fa-icon icon="user-slash"></fa-icon>&nbsp;Ausentar
+        </button>
+
+        <button type="button" *ngIf="canCancel(item['agenda'])" (click)="cancel(item['agenda'].lastAppointment)"
+          class="btn btn-danger m-1" title="Cancelar">
+          <fa-icon icon="ban"></fa-icon>&nbsp;Cancelar
+        </button>
+
+        <button type="button" *ngIf="canAttend(item['agenda'])" (click)="attend(item['agenda'].lastAppointment)"
+          class="btn btn-info m-1" title="Atender">
+          <fa-icon icon="play"></fa-icon>&nbsp;Atender
+        </button>
+
+        <button type="button" *ngIf="canFinalize(item['agenda'])" (click)="finalize(item['agenda'].lastAppointment)"
+          class="btn btn-success m-1" title="Finalizar">
+          <fa-icon icon="stop"></fa-icon>&nbsp;Finalizar
+        </button>
+
+        <button type="button" *ngIf="canDelete(item['agenda'])" (click)="delete(item['agenda'])" class="btn btn-danger m-1"
+          title="Eliminar disponibilidad">
+          <fa-icon icon="times"></fa-icon>&nbsp;Eliminar
+        </button>
+
+        <button type="button" *ngIf="canDesactivate(item['agenda'])" (click)="desactivate(item['agenda'])"
+          class="btn btn-danger m-1" title="Desactivar disponibilidad">
+          <fa-icon icon="calendar-times"></fa-icon>&nbsp;Desactivar
+        </button>
+      </div>
     </ng-container>
   </div>
 </ng-template>
-<!-- 
-[class.bg-success]="!item.available"
-[class.bg-primary]="!item.selected"
-[class.bg-info]="item.selected"  -->
