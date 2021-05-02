@@ -232,9 +232,11 @@ export class ScheduleComponent implements OnInit {
       () => {
         this.ngbModalRef = undefined;
         this.onCalendarChange();
+        this.agendaSelected = undefined;
       },
       () => {
         this.ngbModalRef = undefined;
+        this.agendaSelected = undefined;
       }
     );
   }
@@ -246,9 +248,11 @@ export class ScheduleComponent implements OnInit {
       () => {
         this.ngbModalRef = undefined;
         this.onCalendarChange();
+        this.agendaSelected = undefined;
       },
       () => {
         this.ngbModalRef = undefined;
+        this.agendaSelected = undefined;
       }
     );
   }
@@ -260,9 +264,11 @@ export class ScheduleComponent implements OnInit {
       () => {
         this.ngbModalRef = undefined;
         this.onCalendarChange();
+        this.agendaSelected = undefined;
       },
       () => {
         this.ngbModalRef = undefined;
+        this.agendaSelected = undefined;
       }
     );
   }
@@ -274,9 +280,11 @@ export class ScheduleComponent implements OnInit {
       () => {
         this.ngbModalRef = undefined;
         this.onCalendarChange();
+        this.agendaSelected = undefined;
       },
       () => {
         this.ngbModalRef = undefined;
+        this.agendaSelected = undefined;
       }
     );
   }
@@ -288,9 +296,11 @@ export class ScheduleComponent implements OnInit {
       () => {
         this.ngbModalRef = undefined;
         this.onCalendarChange();
+        this.agendaSelected = undefined;
       },
       () => {
         this.ngbModalRef = undefined;
+        this.agendaSelected = undefined;
       }
     );
   }

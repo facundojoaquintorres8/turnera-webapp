@@ -7,7 +7,7 @@
 
     <div class="modal-body">
         <p>
-            ¿Está seguro que desea desactivar la Disponibilidad?
+            ¿Está seguro que desea desactivar la Disponibilidad <strong>{{ agenda.startDate | date: 'dd/MM/yyyy HH:mm' }} - {{ agenda.resource.description }}</strong>?
         </p>
     </div>
 

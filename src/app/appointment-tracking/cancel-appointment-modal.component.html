@@ -7,7 +7,7 @@
 
     <div class="modal-body">
         <p>
-            ¿Está seguro que desea Cancelar el Turno?
+            ¿Está seguro que desea Cancelar el Turno de <strong>{{ appointment.customerBusinessName }}</strong>?
         </p>
 
         <div class="row">
@@ -27,7 +27,7 @@
         </button>
 
         <button type="submit" [disabled]="isSaving" class="btn btn-primary" title="Confirmar">
-            <fa-icon icon="times"></fa-icon>&nbsp;Confirmar
+            <fa-icon icon="check"></fa-icon>&nbsp;Confirmar
         </button>
     </div>
 </form>

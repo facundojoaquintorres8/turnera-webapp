@@ -29,6 +29,7 @@ import {
   faAngleDoubleLeft,
   faAngleDoubleRight,
   faBars,
+  faCheck,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -68,5 +69,6 @@ export const fontAwesomeIcons = [
   faAngleRight,
   faAngleDoubleLeft,
   faAngleDoubleRight,
-  faBars
+  faBars,
+  faCheck
 ];
