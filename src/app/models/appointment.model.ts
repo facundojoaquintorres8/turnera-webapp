@@ -12,7 +12,7 @@ export interface IAppointmentSave {
     agenda: IAgenda;
 }
 
-export interface IAppointmentCancel {
+export interface IAppointmentChangeStatus {
     id: number;
     observations: string;
 }

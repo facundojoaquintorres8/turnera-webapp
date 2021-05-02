@@ -2,7 +2,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SERVER_API_URL } from '../app.constants';
-import { IAppointment, IAppointmentCancel, IAppointmentSave } from '../models/appointment.model';
+import { IAppointment, IAppointmentChangeStatus, IAppointmentSave } from '../models/appointment.model';
 
 @Injectable({ providedIn: 'root' })
 export class AppointmentService {
@@ -14,19 +14,19 @@ export class AppointmentService {
     return this.http.post<IAppointment>(this.resourceUrl, appointment, { observe: 'response' });
   }
 
-  absent(id: number): Observable<HttpResponse<IAppointment>> {
-    return this.http.get<IAppointment>(`${this.resourceUrl}/${id}/absent`, { observe: 'response' });
+  absent(appointmentChangeStatus: IAppointmentChangeStatus): Observable<HttpResponse<IAppointment>> {
+    return this.http.post<IAppointment>(`${this.resourceUrl}/absent`, appointmentChangeStatus, { observe: 'response' });
   }
   
-  cancel(appointmentCancel: IAppointmentCancel): Observable<HttpResponse<IAppointment>> {
-    return this.http.post<IAppointment>(`${this.resourceUrl}/cancel`, appointmentCancel, { observe: 'response' });
+  cancel(appointmentChangeStatus: IAppointmentChangeStatus): Observable<HttpResponse<IAppointment>> {
+    return this.http.post<IAppointment>(`${this.resourceUrl}/cancel`, appointmentChangeStatus, { observe: 'response' });
   }
   
-  attend(id: number): Observable<HttpResponse<IAppointment>> {
-    return this.http.get<IAppointment>(`${this.resourceUrl}/${id}/attend`, { observe: 'response' });
+  attend(appointmentChangeStatus: IAppointmentChangeStatus): Observable<HttpResponse<IAppointment>> {
+    return this.http.post<IAppointment>(`${this.resourceUrl}/attend`, appointmentChangeStatus, { observe: 'response' });
   }
   
-  finalize(id: number): Observable<HttpResponse<IAppointment>> {
-    return this.http.get<IAppointment>(`${this.resourceUrl}/${id}/finalize`, { observe: 'response' });
+  finalize(appointmentChangeStatus: IAppointmentChangeStatus): Observable<HttpResponse<IAppointment>> {
+    return this.http.post<IAppointment>(`${this.resourceUrl}/finalize`, appointmentChangeStatus, { observe: 'response' });
   }
 }

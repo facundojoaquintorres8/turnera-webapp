@@ -1,7 +1,6 @@
-<form *ngIf="appointment" name="deleteForm" (ngSubmit)="confirm(appointment?.id!)">
+<form name="myForm" role="form" novalidate (ngSubmit)="confirm()" [formGroup]="myForm">
     <div class="modal-header">
         <h4 class="modal-title">Confirmar operación</h4>
-
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cancel()" title="Cancelar">&times;</button>
     </div>
 
@@ -9,6 +8,16 @@
         <p>
             ¿Está seguro que desea Finalizar el Turno de <strong>{{ appointment.customerBusinessName }}</strong>?
         </p>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="form-control-label" for="observations">Observaciones</label>
+                    <textarea type="text" class="form-control" name="observations" id="observations"
+                        formControlName="observations"></textarea>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="modal-footer">
@@ -16,7 +25,7 @@
             <fa-icon icon="ban"></fa-icon>&nbsp;Cancelar
         </button>
 
-        <button type="submit" class="btn btn-primary" title="Confirmar">
+        <button type="submit" [disabled]="isSaving" class="btn btn-primary" title="Confirmar">
             <fa-icon icon="check"></fa-icon>&nbsp;Confirmar
         </button>
     </div>

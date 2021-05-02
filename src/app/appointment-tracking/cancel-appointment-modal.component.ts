@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { IAppointment, IAppointmentCancel } from '../models/appointment.model';
+import { IAppointment, IAppointmentChangeStatus } from '../models/appointment.model';
 import { AppointmentService } from './appointment.service';
 
 @Component({
@@ -33,7 +33,7 @@ export class CancelAppointmentModalComponent {
     );
   }
 
-  private createFromForm(): IAppointmentCancel {
+  private createFromForm(): IAppointmentChangeStatus {
     return {
       id: this.appointment.id,
       observations: this.myForm.get(['observations'])!.value,
