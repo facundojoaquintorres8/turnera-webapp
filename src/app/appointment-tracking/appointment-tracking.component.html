@@ -112,10 +112,11 @@
             {{ agenda.lastAppointment ? appointmentStatusObject[agenda.lastAppointment.lastAppointmentStatus.status] :
             appointmentStatusObject.FREE }}
           </span>
-          <span *ngIf="agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.observations">
-            <fa-icon icon="comment-dots" class="text-info ml-1"
+          <ng-container *ngIf="agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.observations">
+            <fa-icon icon="comment-dots" class="text-info ml-1 pointer"
+              (click)="seeObservations(agenda.lastAppointment.lastAppointmentStatus.observations)"
               [title]="'Observaciones: ' + agenda.lastAppointment.lastAppointmentStatus.observations"></fa-icon>
-          </span>
+          </ng-container>
         </td>
 
         <td class="text-right">

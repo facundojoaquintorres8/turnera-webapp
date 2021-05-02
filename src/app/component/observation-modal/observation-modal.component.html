@@ -1,0 +1,18 @@
+<div class="modal-header">
+    <h4 class="modal-title">Observaciones</h4>
+
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cancel()"
+        title="Cerrar">&times;</button>
+</div>
+
+<div class="modal-body">
+    <p>
+        {{ observations }}
+    </p>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()" title="Cerrar">
+        <fa-icon icon="times"></fa-icon>&nbsp;Cerrar
+    </button>
+</div>

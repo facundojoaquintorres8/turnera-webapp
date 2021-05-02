@@ -8,9 +8,10 @@ import { PermissionModule } from '../security/permission.module';
 import { TableComponent } from '../component/table/table.component';
 import { PaginateComponent } from '../component/table/paginated.component';
 import { TableHeaderComponent } from '../component/table/table-header.component';
+import { ObservationModalComponent } from '../component/observation-modal/observation-modal.component';
 
 @NgModule({
-  declarations: [TableComponent, TableHeaderComponent, PaginateComponent],
+  declarations: [TableComponent, TableHeaderComponent, PaginateComponent, ObservationModalComponent],
   imports: [CommonModule, PermissionModule, FontAwesomeModule, ReactiveFormsModule, NgbModule],
   exports: [
     FormsModule,
@@ -22,7 +23,9 @@ import { TableHeaderComponent } from '../component/table/table-header.component'
     TableComponent,
     TableHeaderComponent,
     PaginateComponent,
-  ]
+    ObservationModalComponent,
+  ],
+  entryComponents: [ObservationModalComponent]
 })
 export class SharedModule {
   constructor(iconLibrary: FaIconLibrary) {

@@ -6,6 +6,7 @@ import { AgendaService } from '../agenda/agenda.service';
 import { DeleteAgendaModalComponent } from '../agenda/delete-agenda-modal.component';
 import { DesactivateAgendaModalComponent } from '../agenda/desactivate-agenda-modal.component';
 import { AuthService } from '../auth/auth.service';
+import { ObservationModalComponent } from '../component/observation-modal/observation-modal.component';
 import { TableComponent } from '../component/table/table.component';
 import { IHeader, InputTypeEnum } from '../component/table/table.models';
 import { CustomerService } from '../customer/customer.service';
@@ -306,6 +307,19 @@ export class AppointmentTrackingComponent implements OnInit {
     this.ngbModalRef.result.then(
       () => {
         this.tableComponent.executeQuery({ page: 1 });
+        this.ngbModalRef = undefined;
+      },
+      () => {
+        this.ngbModalRef = undefined;
+      }
+    );
+  }
+
+  seeObservations(observations: string): void {
+    this.ngbModalRef = this.modalService.open(ObservationModalComponent, { size: 'lg', backdrop: 'static' });
+    this.ngbModalRef.componentInstance.observations = observations;
+    this.ngbModalRef.result.then(
+      () => {
         this.ngbModalRef = undefined;
       },
       () => {
