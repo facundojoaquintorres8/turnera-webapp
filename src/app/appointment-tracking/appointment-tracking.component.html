@@ -104,8 +104,8 @@
     <ng-template #customBody let-items>
       <tr *ngFor="let agenda of items">
         <td>{{ agenda.resource.description }}</td>
-        <td>{{ agenda.startDate | date: 'dd-MM-yyyy HH:mm' }}</td>
-        <td>{{ agenda.endDate | date: 'dd-MM-yyyy HH:mm' }}</td>
+        <td>{{ agenda.startDate | date: 'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ agenda.endDate | date: 'dd/MM/yyyy HH:mm' }}</td>
         <td>{{ agenda.lastAppointment ? agenda.lastAppointment.customerBusinessName : '-'}}</td>
         <td>
           <span class="{{ appointmentStatusColor(agenda.lastAppointment) }} appointmentStatus">

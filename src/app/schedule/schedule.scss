@@ -64,6 +64,10 @@
   }
 }
 
-.d-grid {
+::ng-deep .popover-body {
   display: grid;
+}
+
+.font-xx-small {
+  font-size: xx-small !important;
 }

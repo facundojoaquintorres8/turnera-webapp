@@ -15,7 +15,7 @@ import { CancelAppointmentModalComponent } from '../appointment-tracking/cancel-
 import { FinalizeAppointmentModalComponent } from '../appointment-tracking/finalize-appointment-modal.component';
 import { AuthService } from '../auth/auth.service';
 import { IAgenda } from '../models/agenda.models';
-import { AppointmentStatusEnum, IAppointment } from '../models/appointment.model';
+import { AppointmentStatusEnum } from '../models/appointment.model';
 import { checkPermission } from '../security/check-permissions';
 import { formatDateFromDate } from '../shared/date-format';
 
@@ -31,9 +31,9 @@ export class ScheduleComponent implements OnInit {
   canViewAgendas: boolean = false;
   events: CalendarEvent[] = [];
   view: CalendarView = CalendarView.Month;
-  today: string = this.datePipe.transform(new Date(), 'dd-MM-yyyy') + '';
+  today: string = this.datePipe.transform(new Date(), 'dd/MM/yyyy') + '';
   loading!: boolean;
-  eventSelected?: CalendarEvent;
+  agendaSelected?: IAgenda;
 
   appointmentStatus = {
     ABSENT: AppointmentStatusEnum.ABSENT,
@@ -76,10 +76,10 @@ export class ScheduleComponent implements OnInit {
   }
 
   handleEvent(event: CalendarEvent): void {
-    if (this.eventSelected === event) {
-      this.eventSelected = undefined;
+    if (this.agendaSelected === event['agenda']) {
+      this.agendaSelected = undefined;
     } else {
-      this.eventSelected = event;      
+      this.agendaSelected = event['agenda'];      
     }
   }
 
@@ -116,8 +116,8 @@ export class ScheduleComponent implements OnInit {
     };
   }
 
-  getEventTitle(agenda: IAgenda): string {
-    let title = this.datePipe.transform(agenda.startDate, 'dd-MM-yyyy HH:mm') + '\n' + agenda.resource.description;
+  private getEventTitle(agenda: IAgenda): string {
+    let title = this.datePipe.transform(agenda.startDate, 'dd/MM/yyyy HH:mm') + '\n' + agenda.resource.description;
     if (agenda.lastAppointment && this.appointmentStatus[agenda.lastAppointment.lastAppointmentStatus.status] !== AppointmentStatusEnum.CANCELLED) {
       title = title + '\n' + agenda.lastAppointment.customerBusinessName + ' (' + this.appointmentStatusTranslate[agenda.lastAppointment.lastAppointmentStatus.status] + ')';
     }
@@ -145,20 +145,20 @@ export class ScheduleComponent implements OnInit {
   }
 
   getColor(event: CalendarEvent): string {
-    let result = 'bg-white border-primary text-dark'; // Free or Cancelled
+    let result = 'btn-outline-primary'; // Free or Cancelled
     if (event['lastAppointmentStatus']) {
       switch (this.appointmentStatus[event['lastAppointmentStatus']]) {
         case AppointmentStatusEnum.BOOKED:
-          result = 'bg-warning border-warning';
+          result = 'btn-warning';
           break;
         case AppointmentStatusEnum.ABSENT:
-          result = 'bg-dark border-dark';
+          result = 'btn-dark';
           break;
         case AppointmentStatusEnum.IN_ATTENTION:
-          result = 'bg-info border-info';
+          result = 'btn-info';
           break;
         case AppointmentStatusEnum.FINALIZED:
-          result = 'bg-success border-success';
+          result = 'btn-success';
           break;
       }
     }
@@ -191,43 +191,43 @@ export class ScheduleComponent implements OnInit {
   }
 
   // Agenda-Appointments
-  canBook(agenda: IAgenda): boolean {
-    return (!agenda.lastAppointment || agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'CANCELLED')
-      && new Date(agenda.startDate) > new Date() && checkPermission(this.permissions, ['appointments.book']);
+  canBook(): boolean {
+    return this.agendaSelected !== undefined && (!this.agendaSelected.lastAppointment || this.agendaSelected.lastAppointment.lastAppointmentStatus.status.toString() === 'CANCELLED')
+      && new Date(this.agendaSelected.startDate) > new Date() && checkPermission(this.permissions, ['appointments.book']);
   }
 
-  canAbsent(agenda: IAgenda): boolean {
-    return agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'BOOKED'
+  canAbsent(): boolean {
+    return this.agendaSelected !== undefined && this.agendaSelected.lastAppointment && this.agendaSelected.lastAppointment.lastAppointmentStatus.status.toString() === 'BOOKED'
       && checkPermission(this.permissions, ['appointments.absent']);
   }
 
-  canCancel(agenda: IAgenda): boolean {
-    return agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'BOOKED'
+  canCancel(): boolean {
+    return this.agendaSelected !== undefined && this.agendaSelected.lastAppointment && this.agendaSelected.lastAppointment.lastAppointmentStatus.status.toString() === 'BOOKED'
       && checkPermission(this.permissions, ['appointments.cancel']);
   }
 
-  canAttend(agenda: IAgenda): boolean {
-    return agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'BOOKED'
+  canAttend(): boolean {
+    return this.agendaSelected !== undefined && this.agendaSelected.lastAppointment && this.agendaSelected.lastAppointment.lastAppointmentStatus.status.toString() === 'BOOKED'
       && checkPermission(this.permissions, ['appointments.attend']);
   }
 
-  canFinalize(agenda: IAgenda): boolean {
-    return agenda.lastAppointment && agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'IN_ATTENTION'
+  canFinalize(): boolean {
+    return this.agendaSelected !== undefined && this.agendaSelected.lastAppointment && this.agendaSelected.lastAppointment.lastAppointmentStatus.status.toString() === 'IN_ATTENTION'
       && checkPermission(this.permissions, ['appointments.finalize']);
   }
 
-  canDelete(agenda: IAgenda): boolean {
-    return !agenda.lastAppointment && checkPermission(this.permissions, ['agendas.delete']);
+  canDelete(): boolean {
+    return this.agendaSelected !== undefined && !this.agendaSelected.lastAppointment && checkPermission(this.permissions, ['agendas.delete']);
   }
 
-  canDesactivate(agenda: IAgenda): boolean {
-    return !agenda.lastAppointment || agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'CANCELLED'
+  canDesactivate(): boolean {
+    return this.agendaSelected !== undefined && (!this.agendaSelected.lastAppointment || this.agendaSelected.lastAppointment.lastAppointmentStatus.status.toString() === 'CANCELLED')
       && checkPermission(this.permissions, ['agendas.write']);
   }
 
-  book(agenda: IAgenda): void {
+  book(): void {
     this.ngbModalRef = this.modalService.open(BookAppointmentComponent, { size: 'lg', backdrop: 'static' });
-    this.ngbModalRef.componentInstance.agenda = agenda;
+    this.ngbModalRef.componentInstance.agenda = this.agendaSelected!;
     this.ngbModalRef.result.then(
       () => {
         this.ngbModalRef = undefined;
@@ -239,9 +239,9 @@ export class ScheduleComponent implements OnInit {
     );
   }
 
-  absent(lastAppointment: IAppointment): void {
+  absent(): void {
     this.ngbModalRef = this.modalService.open(AbsentAppointmentModalComponent, { size: 'lg', backdrop: 'static' });
-    this.ngbModalRef.componentInstance.appointment = lastAppointment;
+    this.ngbModalRef.componentInstance.appointment = this.agendaSelected!.lastAppointment;
     this.ngbModalRef.result.then(
       () => {
         this.ngbModalRef = undefined;
@@ -253,9 +253,9 @@ export class ScheduleComponent implements OnInit {
     );
   }
 
-  cancel(lastAppointment: IAppointment): void {
+  cancel(): void {
     this.ngbModalRef = this.modalService.open(CancelAppointmentModalComponent, { size: 'lg', backdrop: 'static' });
-    this.ngbModalRef.componentInstance.appointment = lastAppointment;
+    this.ngbModalRef.componentInstance.appointment = this.agendaSelected!.lastAppointment;
     this.ngbModalRef.result.then(
       () => {
         this.ngbModalRef = undefined;
@@ -267,9 +267,9 @@ export class ScheduleComponent implements OnInit {
     );
   }
 
-  attend(lastAppointment: IAppointment): void {
+  attend(): void {
     this.ngbModalRef = this.modalService.open(AttendAppointmentModalComponent, { size: 'lg', backdrop: 'static' });
-    this.ngbModalRef.componentInstance.appointment = lastAppointment;
+    this.ngbModalRef.componentInstance.appointment = this.agendaSelected!.lastAppointment;
     this.ngbModalRef.result.then(
       () => {
         this.ngbModalRef = undefined;
@@ -281,9 +281,9 @@ export class ScheduleComponent implements OnInit {
     );
   }
 
-  finalize(lastAppointment: IAppointment): void {
+  finalize(): void {
     this.ngbModalRef = this.modalService.open(FinalizeAppointmentModalComponent, { size: 'lg', backdrop: 'static' });
-    this.ngbModalRef.componentInstance.appointment = lastAppointment;
+    this.ngbModalRef.componentInstance.appointment = this.agendaSelected!.lastAppointment;
     this.ngbModalRef.result.then(
       () => {
         this.ngbModalRef = undefined;
@@ -295,9 +295,9 @@ export class ScheduleComponent implements OnInit {
     );
   }
 
-  delete(agenda: IAgenda): void {
+  delete(): void {
     this.ngbModalRef = this.modalService.open(DeleteAgendaModalComponent, { size: 'lg', backdrop: 'static' });
-    this.ngbModalRef.componentInstance.agenda = agenda;
+    this.ngbModalRef.componentInstance.agenda = this.agendaSelected!;
     this.ngbModalRef.result.then(
       () => {
         this.ngbModalRef = undefined;
@@ -309,9 +309,9 @@ export class ScheduleComponent implements OnInit {
     );
   }
 
-  desactivate(agenda: IAgenda): void {
+  desactivate(): void {
     this.ngbModalRef = this.modalService.open(DesactivateAgendaModalComponent, { size: 'lg', backdrop: 'static' });
-    this.ngbModalRef.componentInstance.agenda = agenda;
+    this.ngbModalRef.componentInstance.agenda = this.agendaSelected!;
     this.ngbModalRef.result.then(
       () => {
         this.ngbModalRef = undefined;

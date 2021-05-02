@@ -45,49 +45,59 @@
     <span class="cal-day-badge" *ngIf="day.badgeTotal > 0">{{ getTotalBadge(day) }}</span>
     <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber': 'es' }}</span>
   </div>
-  <div class="cal-events">
+  <div class="cal-events pl-2">
     <ng-container *ngFor="let item of day.events; let index = index">
-      <span *ngIf="index < 10 && !isYesterdayEvent(item, day)" (click)="handleEvent(item)"
-        class="badge badge-pill badge-primary m-1 border {{getColor(item)}}" title="{{ item.title }}">
+      <button *ngIf="index < 10 && !isYesterdayEvent(item, day)" (click)="handleEvent(item)" type="button"
+        [ngbPopover]="popContent" [popoverTitle]="popTitle" [openDelay]="100"
+        class="btn mr-1 mb-1 font-xx-small {{getColor(item)}}" title="{{ item.title }}">
         {{ getFirstLetterFromStatus(item) }}
-      </span>
-      <div *ngIf="item === eventSelected"
-        class="position-absolute badge bg-white border border-dark d-grid">
-        <button type="button" *ngIf="canBook(item['agenda'])" (click)="book(item['agenda'])"
-          class="btn btn-warning m-1" title="Reservar turno">
-          <fa-icon icon="plus"></fa-icon>&nbsp;Reservar
-        </button>
-        
-        <button type="button" *ngIf="canAbsent(item['agenda'])" (click)="absent(item['agenda'].lastAppointment)"
-          class="btn btn-dark m-1" title="Ausentar">
-          <fa-icon icon="user-slash"></fa-icon>&nbsp;Ausentar
-        </button>
-
-        <button type="button" *ngIf="canCancel(item['agenda'])" (click)="cancel(item['agenda'].lastAppointment)"
-          class="btn btn-danger m-1" title="Cancelar">
-          <fa-icon icon="ban"></fa-icon>&nbsp;Cancelar
-        </button>
-
-        <button type="button" *ngIf="canAttend(item['agenda'])" (click)="attend(item['agenda'].lastAppointment)"
-          class="btn btn-info m-1" title="Atender">
-          <fa-icon icon="play"></fa-icon>&nbsp;Atender
-        </button>
-
-        <button type="button" *ngIf="canFinalize(item['agenda'])" (click)="finalize(item['agenda'].lastAppointment)"
-          class="btn btn-success m-1" title="Finalizar">
-          <fa-icon icon="stop"></fa-icon>&nbsp;Finalizar
-        </button>
-
-        <button type="button" *ngIf="canDelete(item['agenda'])" (click)="delete(item['agenda'])" class="btn btn-danger m-1"
-          title="Eliminar disponibilidad">
-          <fa-icon icon="times"></fa-icon>&nbsp;Eliminar
-        </button>
-
-        <button type="button" *ngIf="canDesactivate(item['agenda'])" (click)="desactivate(item['agenda'])"
-          class="btn btn-danger m-1" title="Desactivar disponibilidad">
-          <fa-icon icon="calendar-times"></fa-icon>&nbsp;Desactivar
-        </button>
-      </div>
+      </button>
     </ng-container>
   </div>
+</ng-template>
+
+<ng-template #popContent>
+  <button type="button" *ngIf="canBook()" (click)="book()"
+    class="btn btn-warning m-1" title="Reservar turno">
+    <fa-icon icon="plus"></fa-icon>&nbsp;Reservar
+  </button>
+
+  <button type="button" *ngIf="canAbsent()"
+    (click)="absent()" class="btn btn-dark m-1" title="Ausentar">
+    <fa-icon icon="user-slash"></fa-icon>&nbsp;Ausentar
+  </button>
+
+  <button type="button" *ngIf="canCancel()"
+    (click)="cancel()" class="btn btn-danger m-1" title="Cancelar">
+    <fa-icon icon="ban"></fa-icon>&nbsp;Cancelar
+  </button>
+
+  <button type="button" *ngIf="canAttend()"
+    (click)="attend()" class="btn btn-info m-1" title="Atender">
+    <fa-icon icon="play"></fa-icon>&nbsp;Atender
+  </button>
+
+  <button type="button" *ngIf="canFinalize()"
+    (click)="finalize()" class="btn btn-success m-1" title="Finalizar">
+    <fa-icon icon="stop"></fa-icon>&nbsp;Finalizar
+  </button>
+
+  <button type="button" *ngIf="canDelete()" (click)="delete()"
+    class="btn btn-danger m-1" title="Eliminar disponibilidad">
+    <fa-icon icon="times"></fa-icon>&nbsp;Eliminar
+  </button>
+
+  <button type="button" *ngIf="canDesactivate()" (click)="desactivate()"
+    class="btn btn-danger m-1" title="Desactivar disponibilidad">
+    <fa-icon icon="calendar-times"></fa-icon>&nbsp;Desactivar
+  </button>
+</ng-template>
+<ng-template #popTitle>
+  <span *ngIf="agendaSelected">
+    {{ agendaSelected.startDate | date: 'dd/MM/yyyy HH:mm' }}<br>
+    {{ agendaSelected.resource.description }}<br>
+    <span *ngIf="agendaSelected.lastAppointment">
+      {{ agendaSelected.lastAppointment.customerBusinessName }} ({{ appointmentStatusTranslate[agendaSelected.lastAppointment.lastAppointmentStatus.status] }})
+    </span>
+  </span>
 </ng-template>
