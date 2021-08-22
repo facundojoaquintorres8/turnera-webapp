@@ -7,7 +7,7 @@
   </h2>
 
   <div class="row text-center">
-    <div class="col-md-8">
+    <div class="col-lg-8">
       <div class="btn-group">
         <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="agendaService.viewDate"
           (viewDateChange)="closeOpenMonthViewDay()">
@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-lg-4">
       <h3>{{ agendaService.viewDate | date: 'MMMM yyyy':'es' | titlecase }}</h3>
     </div>
   </div>

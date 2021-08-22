@@ -4,7 +4,7 @@
         <h2 *ngIf="myForm.get('id')!.value">Editar Recurso</h2>
 
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-lg-4">
                 <div class="form-group">
                     <label class="form-control-label required" for="description">Descripción</label>
                     <input type="text" class="form-control" name="description" id="description"
@@ -17,13 +17,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-lg-4">
                 <div class="form-group">
                     <label class="form-control-label" for="code">Código</label>
                     <input type="text" class="form-control" name="code" id="code" formControlName="code" />
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-lg-4">
                 <div class="form-group">
                     <label class="form-control-label required" for="resourceTypeId">Tipo de Recurso</label>
                     <select class="form-control" name="resourceTypeId" id="resourceTypeId" formControlName="resourceTypeId">
@@ -40,7 +40,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-1" *ngIf="myForm.get('id')!.value">
+            <div class="col-lg-1" *ngIf="myForm.get('id')!.value">
                 <div class="form-group">
                     <label class="form-control-label" for="active">Activo</label>
                     <input type="checkbox" class="form-control checkbox-size-5" name="active" id="active"

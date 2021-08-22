@@ -4,7 +4,7 @@
         <h2 *ngIf="myForm.get('id')!.value">Editar Cliente</h2>
 
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-lg-4">
                 <div class="form-group">
                     <label class="form-control-label required" for="businessName">Razón Social</label>
                     <input type="text" class="form-control" name="businessName" id="businessName"
@@ -17,14 +17,14 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-lg-4">
                 <div class="form-group">
                     <label class="form-control-label" for="brandName">Marca</label>
                     <input type="text" class="form-control" name="brandName" id="brandName"
                         formControlName="brandName" />
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-lg-4">
                 <div class="form-group">
                     <label class="form-control-label" for="cuit">CUIT</label>
                     <input type="text" class="form-control" name="cuit" id="cuit" formControlName="cuit" />
@@ -39,7 +39,7 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-lg-4">
                 <div class="form-group">
                     <label class="form-control-label required" for="email">Correo Electrónico</label>
                     <input type="email" class="form-control" name="email" id="email" formControlName="email" />
@@ -57,7 +57,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-lg-4">
                 <div class="form-group">
                     <label class="form-control-label required" for="phone1">Teléfono 1</label>
                     <input type="text" class="form-control" name="phone1" id="phone1" formControlName="phone1" />
@@ -72,7 +72,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-lg-4">
                 <div class="form-group">
                     <label class="form-control-label" for="phone2">Teléfono 2</label>
                     <input type="text" class="form-control" name="phone2" id="phone2" formControlName="phone2" />
@@ -87,13 +87,13 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-lg-8">
                 <div class="form-group">
                     <label class="form-control-label" for="address">Dirección</label>
                     <input type="text" class="form-control" name="address" id="address" formControlName="address" />
                 </div>
             </div>
-            <div class="col-sm-1" *ngIf="myForm.get('id')!.value">
+            <div class="col-lg-1" *ngIf="myForm.get('id')!.value">
                 <div class="form-group">
                     <label class="form-control-label" for="active">Activo</label>
                     <input type="checkbox" class="form-control checkbox-size-5" name="active" id="active"

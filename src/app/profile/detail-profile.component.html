@@ -11,22 +11,22 @@
   <h3>Permisos</h3>
   <div class="container">
     <div class="row h5 text-center d-none d-sm-flex mb-0">
-      <div class="col-sm-3 border">
+      <div class="col-lg-3 border">
         Entidad
       </div>
-      <div class="col-sm-3 border">
+      <div class="col-lg-3 border">
         Acción
       </div>
-      <div class="col-sm-3 border">
+      <div class="col-lg-3 border">
         Entidad
       </div>
-      <div class="col-sm-3 border">
+      <div class="col-lg-3 border">
         Acción
       </div>
     </div>
     <div class="row">
       <ng-container *ngFor="let permissionByEntity of permissionsByEntities">
-        <div class="col-sm-3 d-flex border">
+        <div class="col-lg-3 d-flex border">
           <span class="lead" [ngSwitch]="permissionByEntity.name">
             <span *ngSwitchCase="'users'" class="badge badge-pill badge-light border border-dark">Usuarios</span>
             <span *ngSwitchCase="'profiles'" class="badge badge-pill badge-light border border-dark">Perfiles</span>
@@ -41,9 +41,9 @@
             <span *ngSwitchCase="'appointments'" class="badge badge-pill badge-light border border-dark">Turnos</span>
           </span>
         </div>
-        <div class="col-sm-3 border">
+        <div class="col-lg-3 border">
           <div class="row" *ngFor="let action of permissionByEntity.actions">
-            <div class="col-sm-12 d-flex">
+            <div class="col-lg-12 d-flex">
               <span class="lead" [ngSwitch]="action.action">
                 <span *ngSwitchCase="'read'" class="badge badge-pill" [class.badge-info]="action.permission['selected']"
                   [class.badge-ligth]="!action.permission['selected']"

@@ -13,7 +13,8 @@ import * as moment from 'moment';
 
 @Component({
   selector: 'app-create-agenda',
-  templateUrl: './create-agenda.component.html'
+  templateUrl: './create-agenda.component.html',
+  styleUrls: ['./agenda.scss']
 })
 export class CreateAgendaComponent implements OnInit {
   isSaving = false;
@@ -29,10 +30,17 @@ export class CreateAgendaComponent implements OnInit {
     id: [],
     resource: [null, [Validators.required]],
     startDate: [this.today, [Validators.required]],
-    endDate: [null, [Validators.required]],
+    endDate: [this.today, [Validators.required]],
     startHour: [{ hour: 8, minute: 0, second: 0 }, [Validators.required]],
-    endHour: [{ hour: 18, minute: 0, second: 0 }, [Validators.required]],
-    duration: [null, [Validators.required, Validators.min(1), Validators.max(1440)]],
+    endHour: [{ hour: 9, minute: 0, second: 0 }, [Validators.required]],
+    zoneId: [null],
+    segmented: [null],
+    // TODO: validar si segmented es true
+    // duration: [null, [Validators.required, Validators.min(1)]],
+    duration: [null],
+    repeat: [null],
+    repeatType: [null],
+    finalize: [null],
     sunday: [false],
     monday: [false],
     tuesday: [false],

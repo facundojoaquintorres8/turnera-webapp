@@ -1,0 +1,61 @@
+@media (min-width: 991px) {
+  ::ng-deep .ngb-tp {
+    margin-top: 29px;
+  }
+
+  .mt-30 {
+    margin-top: 30px;
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 991px) {
+  .grid-container {
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-areas:
+    'sunday monday'
+    'tuesday wednesday'
+    'thursday friday'
+    'saturday .' !important;
+  }
+}
+
+.checkbox {
+  height: 26px;
+  width: 26px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: 1fr auto;
+  grid-template-areas: 'sunday monday tuesday wednesday thursday friday saturday';
+}
+
+.sunday {
+  grid-area: sunday;
+}
+
+.monday {
+  grid-area: monday;
+}
+
+.tuesday {
+  grid-area: tuesday;
+}
+
+.wednesday {
+  grid-area: wednesday;
+}
+
+.thursday {
+  grid-area: thursday;
+}
+
+.friday {
+  grid-area: friday;
+}
+
+.saturday {
+  grid-area: saturday;
+}

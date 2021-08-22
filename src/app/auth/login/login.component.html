@@ -6,7 +6,7 @@
     <div class="card-body">
       <form name="myForm" role="form" novalidate (ngSubmit)="login()" [formGroup]="myForm">
         <div class="row">
-          <div class="col-sm-12">
+          <div class="col-lg-12">
             <div class="form-group">
               <label class="form-control-label required" for="username">Correo Electrónico</label>
               <input type="email" class="form-control" name="username" id="username" formControlName="username" />
@@ -25,7 +25,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-12">
+          <div class="col-lg-12">
             <div class="form-group">
               <label class="form-control-label required" for="password">Contraseña</label>
               <input type="password" class="form-control" name="password" id="password" formControlName="password" />
@@ -40,11 +40,11 @@
         </div>
         <div class="button-form">
           <div class="row">
-            <div class="col-sm-6 small text-left">
+            <div class="col-lg-6 small text-left">
               <a href="/account/register" class="text-white d-block">Registrar Organización</a>
               <a href="/account/password-reset/request" class="text-white d-block">Olvidé mi contraseña</a>
             </div>
-            <div class="col-sm-6">
+            <div class="col-lg-6">
               <button type="submit" [disabled]="myForm.invalid || isSaving" class="btn btn-primary" title="Iniciar Sesión">Iniciar
                 Sesión</button>
             </div>
