@@ -25,9 +25,10 @@
                     <div class="input-group">
                         <input class="form-control" placeholder="yyyy-mm-dd" name="startDate"
                             formControlName="startDate" ngbDatepicker #startDate="ngbDatepicker" [firstDayOfWeek]="7"
-                            [minDate]="today" (ngModelChange)="onStartDateChange()">
+                            (ngModelChange)="onStartDateChange()">
                         <div class="input-group-append">
-                            <button class="btn btn-primary" (click)="startDate.toggle()" type="button" title="Abrir Calendario">
+                            <button class="btn btn-primary" (click)="startDate.toggle()" type="button"
+                                title="Abrir Calendario">
                                 <fa-icon icon="calendar"></fa-icon>
                             </button>
                         </div>
@@ -38,6 +39,7 @@
                             El campo es requerido.
                         </small>
                     </div>
+                    <small class="text-info">{{ myForm.get('zoneId')!.value }}</small>
                 </div>
             </div>
             <div class="col-lg-2">
@@ -59,7 +61,8 @@
                         <input class="form-control" placeholder="yyyy-mm-dd" name="endDate" formControlName="endDate"
                             ngbDatepicker #endDate="ngbDatepicker" [firstDayOfWeek]="7" [minDate]="minDate()">
                         <div class="input-group-append">
-                            <button class="btn btn-primary" (click)="endDate.toggle()" type="button" title="Abrir Calendario">
+                            <button class="btn btn-primary" (click)="endDate.toggle()" type="button"
+                                title="Abrir Calendario">
                                 <fa-icon icon="calendar"></fa-icon>
                             </button>
                         </div>
@@ -84,20 +87,13 @@
                     </div>
                 </div>
             </div>
-
-            <!-- <div class="zoneId">
-                <div class="form-group">
-                    <label class="form-control-label required" for="zoneId">Hora Estandar Argentina</label>
-                    <select class="form-control" name="zoneId" id="zoneId" formControlName="zoneId">
-                    </select>
-                </div>
-            </div> -->
         </div>
         <div class="row">
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="segmented" class="mt-30 d-flex">
-                        <input type="checkbox" class="checkbox mr-1" id="segmented" name="segmented" formControlName="segmented">
+                        <input type="checkbox" class="checkbox mr-1" id="segmented" name="segmented"
+                            formControlName="segmented" (ngModelChange)="onSegmentedChange()">
                         ¿Segmentado?
                     </label>
                 </div>
@@ -107,23 +103,24 @@
                 <div class="form-group" *ngIf="myForm.get('segmented')!.value">
                     <label class="form-control-label required" for="duration">Duración (min.)</label>
                     <input type="number" class="form-control text-right" name="duration" id="duration"
-                        formControlName="duration" />
+                        formControlName="duration" pattern="[0-9]*" />
                     <div
                         *ngIf="myForm.get('duration')!.invalid && (myForm.get('duration')!.dirty || myForm.get('duration')!.touched)">
                         <small class="form-text text-danger" *ngIf="myForm.get('duration')?.errors?.required">
                             El campo es requerido.
                         </small>
                         <small class="form-text text-danger" *ngIf="myForm.get('duration')?.errors?.min">
-                            La Duración debe ser mayor a 0.
+                            La Duración debe ser mayor o igual a 5.
                         </small>
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="repeat" class="mt-30 d-flex">
-                        <input type="checkbox" class="checkbox mr-1" id="repeat" name="repeat" formControlName="repeat">
+                        <input type="checkbox" class="checkbox mr-1" id="repeat" name="repeat" formControlName="repeat"
+                            (ngModelChange)="onRepeatChange()">
                         ¿Se repite?
                     </label>
                 </div>
@@ -132,10 +129,13 @@
             <div class="col-lg-3">
                 <div class="form-group" *ngIf="myForm.get('repeat')!.value">
                     <label class="form-control-label required" for="repeatType">Cada</label>
-                    <select class="form-control" name="repeatType" id="repeatType" formControlName="repeatType">
-                        <!-- <option [ngValue]="resource" *ngFor="let resource of resources">{{ resource.description }}
-                        </option> -->
+                    <select class="form-control" name="repeatType" id="repeatType" formControlName="repeatType"
+                        (change)="onRepeatTypeChange()">
+                        <option [value]="repeatType.key"
+                            *ngFor="let repeatType of repeatTypes | keyvalue: originalOrder">{{ repeatType.value }}
+                        </option>
                     </select>
+                    <small class="text-info">{{ repeatingMonthDay }}</small>
                 </div>
             </div>
 
@@ -144,7 +144,7 @@
                     <label class="form-control-label required">Finaliza</label>
                     <div class="input-group">
                         <input class="form-control" placeholder="yyyy-mm-dd" name="finalize" formControlName="finalize"
-                            ngbDatepicker #finalize="ngbDatepicker" [firstDayOfWeek]="7" [minDate]="today">
+                            ngbDatepicker #finalize="ngbDatepicker" [firstDayOfWeek]="7" [minDate]="minDateToFinalize()">
                         <div class="input-group-append">
                             <button class="btn btn-primary" (click)="finalize.toggle()" type="button" title="Abrir Calendario">
                                 <fa-icon icon="calendar"></fa-icon>
@@ -159,10 +159,21 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
-        <div class="grid-container">
-            <div class="sunday" *ngIf="myForm.get('repeat')!.value">
+
+        <div class="row mb--3" *ngIf="myForm.get('repeat')!.value && showDaysOfWeek">
+            <div class="col-12">
+                <div class="form-group">
+                    <label class="form-control-label required">¿Qué días se repite?</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-container" *ngIf="myForm.get('repeat')!.value && showDaysOfWeek">
+
+            <div class="sunday">
                 <div class="form-group">
                     <label for="sunday" class="mt-30 d-flex">
                         <input type="checkbox" class="checkbox mr-1" id="sunday" name="sunday" formControlName="sunday">
@@ -170,7 +181,7 @@
                     </label>
                 </div>
             </div>
-            <div class="monday" *ngIf="myForm.get('repeat')!.value">
+            <div class="monday">
                 <div class="form-group">
                     <label for="monday" class="mt-30 d-flex">
                         <input type="checkbox" class="checkbox mr-1" id="monday" name="monday" formControlName="monday">
@@ -178,31 +189,34 @@
                     </label>
                 </div>
             </div>
-            <div class="tuesday" *ngIf="myForm.get('repeat')!.value">
+            <div class="tuesday">
                 <div class="form-group">
                     <label for="tuesday" class="mt-30 d-flex">
-                        <input type="checkbox" class="checkbox mr-1" id="tuesday" name="tuesday" formControlName="tuesday">
+                        <input type="checkbox" class="checkbox mr-1" id="tuesday" name="tuesday"
+                            formControlName="tuesday">
                         Martes
                     </label>
                 </div>
             </div>
-            <div class="wednesday" *ngIf="myForm.get('repeat')!.value">
+            <div class="wednesday">
                 <div class="form-group">
                     <label for="wednesday" class="mt-30 d-flex">
-                        <input type="checkbox" class="checkbox mr-1" id="wednesday" name="wednesday" formControlName="wednesday">
+                        <input type="checkbox" class="checkbox mr-1" id="wednesday" name="wednesday"
+                            formControlName="wednesday">
                         Miércoles
                     </label>
                 </div>
             </div>
-            <div class="thursday" *ngIf="myForm.get('repeat')!.value">
+            <div class="thursday">
                 <div class="form-group">
                     <label for="thursday" class="mt-30 d-flex">
-                        <input type="checkbox" class="checkbox mr-1" id="thursday" name="thursday" formControlName="thursday">
+                        <input type="checkbox" class="checkbox mr-1" id="thursday" name="thursday"
+                            formControlName="thursday">
                         Jueves
                     </label>
                 </div>
             </div>
-            <div class="friday" *ngIf="myForm.get('repeat')!.value">
+            <div class="friday">
                 <div class="form-group">
                     <label for="friday" class="mt-30 d-flex">
                         <input type="checkbox" class="checkbox mr-1" id="friday" name="friday" formControlName="friday">
@@ -210,10 +224,11 @@
                     </label>
                 </div>
             </div>
-            <div class="saturday" *ngIf="myForm.get('repeat')!.value">
+            <div class="saturday">
                 <div class="form-group">
                     <label for="saturday" class="mt-30 d-flex">
-                        <input type="checkbox" class="checkbox mr-1" id="saturday" name="saturday" formControlName="saturday">
+                        <input type="checkbox" class="checkbox mr-1" id="saturday" name="saturday"
+                            formControlName="saturday">
                         Sábado
                     </label>
                 </div>
@@ -224,9 +239,13 @@
             <button type="button" class="btn btn-secondary" (click)="previousState()" title="Cancelar">
                 <fa-icon icon="ban"></fa-icon>&nbsp;Cancelar
             </button>
-            <button type="submit" [disabled]="myForm.invalid || isSaving || !hasAnyDaySelected() || !areValidTimes()" 
-                [title]="getButtonCreateTitle(myForm.valid)" class="btn btn-primary">
+            <!-- <button type="submit" [disabled]="myForm.invalid || isSaving || !hasAnyDaySelected() || !areValidTimes()" 
+                 class="btn btn-primary">
                 <fa-icon icon="save"></fa-icon>&nbsp;Guardar
+            </button> -->
+
+            <button type="submit" title="PRUEBA BACK" class="btn btn-primary">
+                <fa-icon icon="save"></fa-icon>&nbsp;Sin validaciones
             </button>
         </div>
     </form>

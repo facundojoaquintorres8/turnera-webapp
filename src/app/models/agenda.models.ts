@@ -17,7 +17,12 @@ export interface ISaveAgenda {
   endDate: string;
   startHour: string;
   endHour: string;
+  zoneId: string;
+  segmented: boolean;
   duration: number;
+  repeat: boolean;
+  repeatType: RepeatTypeEnum;
+  finalize: string;
   sunday: boolean;
   monday: boolean;
   tuesday: boolean;
@@ -25,4 +30,10 @@ export interface ISaveAgenda {
   thursday: boolean;
   friday: boolean;
   saturday: boolean;
+}
+
+export enum RepeatTypeEnum {
+  DAILY = 'Día',
+  WEEKLY = 'Semana',
+  MONTHLY = 'Mes'
 }
