@@ -185,7 +185,7 @@ export class AppointmentTrackingComponent implements OnInit {
 
   canBook(agenda: IAgenda): boolean {
     return (!agenda.lastAppointment || agenda.lastAppointment.lastAppointmentStatus.status.toString() === 'CANCELLED')
-      && new Date(agenda.startDate) > new Date() && checkPermission(this.permissions, ['appointments.book']);
+        && checkPermission(this.permissions, ['appointments.book']);
   }
 
   canAbsent(agenda: IAgenda): boolean {

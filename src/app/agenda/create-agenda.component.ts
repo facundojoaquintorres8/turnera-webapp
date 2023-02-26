@@ -195,7 +195,7 @@ export class CreateAgendaComponent implements OnInit {
     };
   }
 
-  private subscribeToSaveResponse(result: Observable<HttpResponse<ISaveAgenda>>): void {
+  private subscribeToSaveResponse(result: Observable<HttpResponse<boolean>>): void {
     result.subscribe(
       () => this.previousState(),
       () => this.isSaving = false

@@ -5,6 +5,7 @@ import { SERVER_API_URL } from '../app.constants';
 import { AuthService } from '../auth/auth.service';
 import { IAgenda, ISaveAgenda } from '../models/agenda.models';
 import { createRequestOption } from '../shared/request-util';
+import * as momentTimeZone from 'moment-timezone';
 
 @Injectable({ providedIn: 'root' })
 export class AgendaService {
@@ -17,12 +18,13 @@ export class AgendaService {
   findAllByFilter(filter: any): Observable<HttpResponse<IAgenda[]>> {
     filter['organizationId'] = this.organizationId;
     filter['sort'] = filter['sort'] ? filter['sort'] : ['ASC', 'startDate'];
+    filter['zoneId'] = momentTimeZone.tz.guess();
     const options = createRequestOption(filter);
     return this.http.get<IAgenda[]>(`${this.resourceUrl}/findAllByFilter`, { params: options, observe: 'response' });
   }
 
-  create(agenda: ISaveAgenda): Observable<HttpResponse<ISaveAgenda>> {
-    return this.http.post<ISaveAgenda>(this.resourceUrl, agenda, { observe: 'response' });
+  create(agenda: ISaveAgenda): Observable<HttpResponse<boolean>> {
+    return this.http.post<boolean>(this.resourceUrl, agenda, { observe: 'response' });
   }
 
   delete(id: number): Observable<HttpResponse<any>> {
