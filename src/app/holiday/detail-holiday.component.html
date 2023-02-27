@@ -1,0 +1,24 @@
+<div class="container">
+  <h2>Detalle</h2>
+
+  <dl *ngIf="holiday">
+    <dt>Fecha</dt>
+    <dd>{{ holiday.date | date: 'dd/MM/yyyy' }}</dd>
+    <dt>Descripción</dt>
+    <dd>{{ holiday.description }}</dd>
+    <dt>Usar en Agenda</dt>
+    <dd>{{ holiday.useInAgenda ? 'Si' : 'No' }}</dd>
+    <dt>Activo</dt>
+    <dd>{{ holiday.active ? 'Si' : 'No' }}</dd>
+  </dl>
+
+  <div class="button-form">
+    <button type="button" class="btn btn-secondary" (click)="previousState()" title="Volver">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp;Volver
+  </button>
+
+    <button *hasPermission="['holidays.write']" type="button" [routerLink]="['../../', holiday?.id, 'edit']" class="btn btn-primary" title="Editar">
+      <fa-icon icon="pencil-alt"></fa-icon>&nbsp;Editar
+    </button>
+  </div>
+</div>

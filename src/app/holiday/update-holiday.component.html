@@ -1,0 +1,66 @@
+<div class="container">
+    <form name="myForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="myForm">
+        <h2 *ngIf="!myForm.get('id')!.value">Crear Feriado</h2>
+        <h2 *ngIf="myForm.get('id')!.value">Editar Feriado</h2>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label class="form-control-label required">Fecha</label>
+                    <div class="input-group">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="date" formControlName="date"
+                            ngbDatepicker #date="ngbDatepicker" [firstDayOfWeek]="7">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" (click)="date.toggle()" type="button"
+                                title="Abrir Calendario">
+                                <fa-icon icon="calendar"></fa-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <div
+                        *ngIf="myForm.get('date')!.invalid && (myForm.get('date')!.dirty || myForm.get('date')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('date')?.errors?.required">
+                            El campo es requerido.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label class="form-control-label required" for="description">Descripción</label>
+                    <input type="text" class="form-control" name="description" id="description"
+                        formControlName="description" />
+                    <div
+                        *ngIf="myForm.get('description')!.invalid && (myForm.get('description')!.dirty || myForm.get('description')!.touched)">
+                        <small class="form-text text-danger" *ngIf="myForm.get('description')?.errors?.required">
+                            El campo es requerido.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label class="form-control-label required" for="useInAgenda">Usar en Agenda</label>
+                    <input type="checkbox" class="form-control checkbox-size-5" name="useInAgenda" id="useInAgenda"
+                        formControlName="useInAgenda" />
+                </div>
+            </div>
+            <div class="col-lg-1" *ngIf="myForm.get('id')!.value">
+                <div class="form-group">
+                    <label class="form-control-label" for="active">Activo</label>
+                    <input type="checkbox" class="form-control checkbox-size-5" name="active" id="active"
+                        formControlName="active" />
+                </div>
+            </div>
+        </div>
+
+        <div class="button-form mt-4">
+            <button type="button" class="btn btn-secondary" (click)="previousState()" title="Cancelar">
+                <fa-icon icon="ban"></fa-icon>&nbsp;Cancelar
+            </button>
+            <button type="submit" [disabled]="myForm.invalid || isSaving" class="btn btn-primary" title="Guardar">
+                <fa-icon icon="save"></fa-icon>&nbsp;Guardar
+            </button>
+        </div>
+    </form>
+</div>

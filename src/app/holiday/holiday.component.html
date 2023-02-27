@@ -1,0 +1,44 @@
+<div class="container">
+  <h2>
+    <button *hasPermission="['holidays.write']" type="button" [routerLink]="['new']" class="btn btn-primary btn-icon"
+      title="Crear Feriado">
+      <fa-icon icon="plus"></fa-icon>
+    </button> Feriados
+  </h2>
+
+  <app-table [headers]="headers" [bodyTemplate]="customBody" [myForm]="myForm" [sort]="sort" [hasButtons]="true" [queryItems]="query"
+    #tableComponent>
+
+    <ng-template #customBody let-items>
+      <tr *ngFor="let holiday of items">
+        <td>{{ holiday.date | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ holiday.description }}</td>
+        <td>
+          <fa-icon *ngIf="holiday.useInAgenda" [icon]="['far', 'check-square']" class="text-success"></fa-icon>
+          <fa-icon *ngIf="!holiday.useInAgenda" [icon]="['far', 'square']" class="text-danger outline"></fa-icon>
+        </td>
+        <td>
+          <fa-icon *ngIf="holiday.active" [icon]="['far', 'check-square']" class="text-success"></fa-icon>
+          <fa-icon *ngIf="!holiday.active" [icon]="['far', 'square']" class="text-danger outline"></fa-icon>
+        </td>
+        <td class="text-right">
+          <button *hasPermission="['holidays.read']" type="button" [routerLink]="[holiday.id, 'view']"
+            class="btn btn-info btn-icon mr-1" title="Ver">
+            <fa-icon icon="eye"></fa-icon>
+          </button>
+
+          <button *hasPermission="['holidays.write']" type="button" [routerLink]="[holiday.id, 'edit']"
+            class="btn btn-primary btn-icon mr-1" title="Editar">
+            <fa-icon icon="pencil-alt"></fa-icon>
+          </button>
+
+          <button *hasPermission="['holidays.delete']" type="button" (click)="delete(holiday)"
+            class="btn btn-danger btn-icon mr-1" title="Eliminar">
+            <fa-icon icon="times"></fa-icon>
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+
+  </app-table>
+</div>
